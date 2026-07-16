@@ -1,3 +1,5 @@
+[简体中文](lookdev-hookup.zh_CN.md) · **English**
+
 # Lookdev → Renderer hookup notes (for the integrator)
 
 The lookdev pass (terrain/water/sky/post/vfx) was done without touching

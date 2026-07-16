@@ -1,3 +1,5 @@
+[简体中文](spell-balance-framework.zh_CN.md) · **English**
+
 # Spell & ability balance framework
 
 A repeatable, sim-driven way to answer "is this spell pulling its weight?" and to

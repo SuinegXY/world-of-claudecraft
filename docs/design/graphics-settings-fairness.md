@@ -1,3 +1,5 @@
+[简体中文](graphics-settings-fairness.zh_CN.md) · **English**
+
 # Graphics and performance settings are gameplay-neutral
 
 Status: principle adopted and FULLY enforced. The HUD effect tiers shipped in

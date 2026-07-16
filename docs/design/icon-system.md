@@ -1,3 +1,5 @@
+[简体中文](icon-system.zh_CN.md) · **English**
+
 # Procedural Icon System — Design Spec for World of Claudecraft
 
 Everything below is implementable without further design decisions. Sources read: `/Users/reubenhorne/Documents/code/levy-street/world-of-claudecraft/src/sim/data.ts`, `src/sim/types.ts`, `src/ui/hud.ts`, `index.html`.

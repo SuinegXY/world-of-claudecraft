@@ -1,3 +1,5 @@
+[简体中文](ue5-overhaul-plan.zh_CN.md) · **English**
+
 # UE5-Style Asset & Graphics Overhaul — Master Plan
 
 Branch: `feature/ue5-asset-overhaul`. Goal: replace 100% of the procedural assets with

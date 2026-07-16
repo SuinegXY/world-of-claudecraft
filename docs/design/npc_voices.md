@@ -1,3 +1,5 @@
+[简体中文](npc_voices.zh_CN.md) · **English**
+
 # NPC Voice Prompts
 
 Voice-direction reference for every named NPC in World of ClaudeCraft.
