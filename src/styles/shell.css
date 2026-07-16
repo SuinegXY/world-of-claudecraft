@@ -1871,6 +1871,16 @@
     outline: none;
   }
 
+  .homepage-footer .version-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .homepage-footer .version-link:hover #game-version,
+  .homepage-footer .version-link:focus-visible #game-version {
+    color: rgba(255, 209, 0, 0.55);
+  }
+
   .homepage-footer #game-version {
     color: rgba(255, 255, 255, 0.25);
     font-family: var(--font-heading);
@@ -1878,6 +1888,7 @@
     position: static;
     margin: 0;
     text-shadow: none;
+    transition: color 0.2s ease;
   }
 
   .social-link {
