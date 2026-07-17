@@ -42,10 +42,10 @@ export function validateForm(form: HTMLFormElement): boolean {
 
   for (const input of inputs) {
     const fieldValid = syncInputAriaState(input);
-    
+
     // Apply fallback dirty/invalid classes
     input.classList.toggle('user-invalid-fallback', !fieldValid);
-    
+
     // For browsers/tests, toggle error display block
     const errorEl = form.querySelector(`#${input.id}-error`) as HTMLElement | null;
     if (errorEl) {
@@ -85,12 +85,13 @@ export function handleKeyboardActivation(event: KeyboardEvent, callback: () => v
 
 /**
  * Validates a character name client-side using the server's validation rule:
- * Starts with a letter, 2-16 characters, only letters, spaces, hyphens or apostrophes.
+ * Starts with a Unicode letter (\p{L}: Latin, CJK, etc.), 2-16 characters,
+ * only letters, spaces, hyphens or apostrophes. Keep in lockstep with
+ * validCharNameShape in server/auth.ts.
  * @param name The character name string to validate
  * @returns boolean indicating if the name is valid
  */
 export function validateCharacterName(name: string): boolean {
   const trimmed = name.trim();
-  return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(trimmed);
+  return /^\p{L}[\p{L}' -]{1,15}$/u.test(trimmed);
 }
-

@@ -151,8 +151,12 @@ export function validCharName(n: unknown): n is string {
   return validCharNameShape(n) && !offensiveName(n);
 }
 
+// Unicode letters (\p{L}): Latin, CJK, Cyrillic, etc. Keep in lockstep with
+// validateCharacterName in src/ui/auth_utils.ts and sanitizeOfflineName in src/main.ts.
+const CHAR_NAME_SHAPE = /^\p{L}[\p{L}' -]{1,15}$/u;
+
 export function validCharNameShape(n: unknown): n is string {
-  return typeof n === 'string' && /^[A-Za-z][A-Za-z' -]{1,15}$/.test(n);
+  return typeof n === 'string' && CHAR_NAME_SHAPE.test(n);
 }
 
 // Server-side canonical form for a character name: trim the ends and collapse

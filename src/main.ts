@@ -3245,13 +3245,14 @@ async function startGame(
 
 // Offline names go straight into innerHTML paths (quest $N text, char window
 // title), so enforce the server's character-name rule client-side too:
-// strip anything outside [A-Za-z' -], then require /^[A-Za-z][A-Za-z' -]{1,15}$/.
+// strip anything outside letters/spaces/hyphen/apostrophe, then require the
+// same Unicode-letter shape as validCharNameShape (server/auth.ts).
 function sanitizeOfflineName(raw: string): string {
   const stripped = raw
-    .replace(/[^A-Za-z' -]/g, '')
-    .replace(/^[^A-Za-z]+/, '')
+    .replace(/[^\p{L}' -]/gu, '')
+    .replace(/^[^\p{L}]+/u, '')
     .slice(0, 16);
-  return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(stripped) ? stripped : 'Adventurer';
+  return /^\p{L}[\p{L}' -]{1,15}$/u.test(stripped) ? stripped : 'Adventurer';
 }
 
 async function startOffline(
