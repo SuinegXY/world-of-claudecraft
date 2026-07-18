@@ -4000,6 +4000,7 @@ export const id_ID: EnTranslations = {
     "highscores": "Skor Tertinggi",
     "wiki": "Wiki",
     "news": "Berita",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Unduh",
     "loginRegister": "Masuk/Daftar",
     "account": "Akun",

@@ -4000,6 +4000,7 @@ export const zh_CN: EnTranslations = {
     "highscores": "排行榜",
     "wiki": "百科指南",
     "news": "新闻资讯",
+    "exclusiveUpdates": "独家更新",
     "download": "下载客户端",
     "loginRegister": "登录/注册",
     "account": "账户",

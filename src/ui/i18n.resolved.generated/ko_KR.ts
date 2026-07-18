@@ -4000,6 +4000,7 @@ export const ko_KR: EnTranslations = {
     "highscores": "순위표",
     "wiki": "위키",
     "news": "새소식",
+    "exclusiveUpdates": "단독 업데이트",
     "download": "다운로드",
     "loginRegister": "로그인/회원가입",
     "account": "계정",

@@ -8364,6 +8364,10 @@ function wireStartScreens(): void {
     switchMainView('#news-view');
     void loadNews();
   });
+  // Exclusive Chinese changelog page (/changelog), sibling of the News panel.
+  setupNavBtn($('#nav-btn-exclusive'), '', () => {
+    window.location.href = '/changelog';
+  });
   setupNavBtn(navBtnDownload, '#download-view');
   initDesktopDownload();
   setupNavBtn(navBtnLogin, '#hero-view', () => {

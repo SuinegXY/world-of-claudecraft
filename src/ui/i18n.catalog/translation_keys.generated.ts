@@ -6368,6 +6368,7 @@ export type TranslationKeyFlat =
   | 'nav.account'
   | 'nav.donate'
   | 'nav.download'
+  | 'nav.exclusiveUpdates'
   | 'nav.highscores'
   | 'nav.home'
   | 'nav.loginRegister'

@@ -4000,6 +4000,7 @@ export const ja_JP: EnTranslations = {
     "highscores": "ハイスコア",
     "wiki": "Wiki",
     "news": "ニュース",
+    "exclusiveUpdates": "独自更新",
     "download": "ダウンロード",
     "loginRegister": "ログイン/登録",
     "account": "アカウント",

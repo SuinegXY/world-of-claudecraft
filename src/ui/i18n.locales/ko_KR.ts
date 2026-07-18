@@ -1116,6 +1116,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'nav.highscores': '순위표',
   'nav.wiki': '위키',
   'nav.news': '새소식',
+  'nav.exclusiveUpdates': '단독 업데이트',
   'nav.download': '다운로드',
   'nav.loginRegister': '로그인/회원가입',
   'nav.logout': '로그아웃',

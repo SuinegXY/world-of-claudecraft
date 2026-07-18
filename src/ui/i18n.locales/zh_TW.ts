@@ -1081,6 +1081,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'nav.highscores': '排行榜',
   'nav.wiki': '百科指南',
   'nav.news': '最新消息',
+  'nav.exclusiveUpdates': '獨家更新',
   'nav.download': '下載客戶端',
   'nav.loginRegister': '登入/註冊',
   'nav.logout': '登出',

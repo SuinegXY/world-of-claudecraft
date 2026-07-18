@@ -1127,6 +1127,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'nav.highscores': 'Таблицы рекордов',
   'nav.wiki': 'Вики',
   'nav.news': 'Новости',
+  'nav.exclusiveUpdates': 'Эксклюзивные обновления',
   'nav.download': 'Скачать',
   'nav.loginRegister': 'Войти / Зарегистрироваться',
   'nav.logout': 'Выйти',

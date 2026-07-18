@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#08080d" />
-  <title>更新日志 - World of ClaudeCraft</title>
-  <meta name="description" content="World of ClaudeCraft v0.26.0 官方更新与独家服务器调整说明。" />
+  <title>独家更新 - World of ClaudeCraft</title>
+  <meta name="description" content="World of ClaudeCraft 独家服务器调整与 v0.27.0 官方更新说明。" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://worldofclaudecraft.com/changelog" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="World of ClaudeCraft" />
-  <meta property="og:title" content="更新日志 - World of ClaudeCraft" />
-  <meta property="og:description" content="World of ClaudeCraft v0.26.0 官方更新与独家服务器调整说明。" />
+  <meta property="og:title" content="独家更新 - World of ClaudeCraft" />
+  <meta property="og:description" content="World of ClaudeCraft 独家服务器调整与 v0.27.0 官方更新说明。" />
   <meta property="og:url" content="https://worldofclaudecraft.com/changelog" />
   <meta property="og:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
   <meta property="og:image:alt" content="World of ClaudeCraft" />
   <meta property="og:locale" content="zh_CN" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="更新日志 - World of ClaudeCraft" />
-  <meta name="twitter:description" content="World of ClaudeCraft v0.26.0 官方更新与独家服务器调整说明。" />
+  <meta name="twitter:title" content="独家更新 - World of ClaudeCraft" />
+  <meta name="twitter:description" content="World of ClaudeCraft 独家服务器调整与 v0.27.0 官方更新说明。" />
   <meta name="twitter:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -205,6 +205,12 @@
       line-height: 1.25;
     }
     .content h3:first-of-type { margin-top: 0; }
+    .content h4 {
+      margin: 18px 0 8px;
+      font-family: var(--font-display);
+      color: var(--gold-dim);
+      font-size: 17px;
+    }
     .content p { margin: 0 0 14px; }
     .content ul { margin: 0 0 16px; padding-left: 24px; }
     .content li { margin: 7px 0; padding-left: 4px; }
@@ -257,7 +263,7 @@
 </head>
 <body>
   <div class="shell">
-    <nav class="topbar" aria-label="更新日志页面导航">
+    <nav class="topbar" aria-label="独家更新页面导航">
       <a class="brand" href="/" aria-label="World of ClaudeCraft 首页">
         <img src="/woc_logo_square.webp" alt="" />
         <span>World of ClaudeCraft</span>
@@ -267,114 +273,12 @@
     <main>
       <header class="hero">
         <p class="eyebrow">版本公告</p>
-        <h1>更新日志</h1>
-        <p class="updated">发布日期: 2026年7月16日</p>
+        <h1>独家更新</h1>
+        <p class="updated">发布日期: 2026年7月18日 (基于官方 v0.27.0)</p>
       </header>
       <article class="content">
-        <section class="section-block" aria-labelledby="official-heading">
-          <p class="section-label">第一部分</p>
-          <h2 id="official-heading">官方更新 (v0.26.0)</h2>
-
-          <h3>界面优化</h3>
-          <ul>
-            <li>优化角色【查看 (Inspect)】界面的角色展示, 角色现在会以 3/4 身全身像显示, 不再是放大的头像特写。</li>
-            <li>修复【天赋】界面「创建 Build」面板被裁切的问题, 窗口缩放时也能正确自适应。</li>
-            <li>合并游戏内重复的 Discord 入口, 只保留一个统一入口, 并新增「直接加入 Discord 服务器」按钮。</li>
-            <li>修复背包物品右键操作:
-              <ul>
-                <li>右键: 使用/装备物品</li>
-                <li>Shift + 右键: 销毁物品</li>
-              </ul>
-            </li>
-            <li>修复聊天输入框高度计算, 使占位文字和边框显示正常。</li>
-            <li>修复聊天频道颜色显示及默认发送频道提示。</li>
-            <li>修复目标框、聊天框在修改 UI 缩放后拖动位置错误的问题。</li>
-            <li>新增首次进入游戏时的镜头模式选择 (经典模式 / 鼠标镜头模式)。</li>
-            <li>修复网络断开时登录界面显示英文 "Failed to fetch" 的问题, 现在会显示本地化提示。</li>
-          </ul>
-
-          <h3>游戏玩法</h3>
-          <h4 style="margin: 18px 0 8px; font-family: var(--font-display); color: var(--gold-dim); font-size: 17px;">稀有怪物</h4>
-          <ul>
-            <li>调整稀有怪物任务掉落判定。</li>
-            <li>稀有怪任务物品现在按照实际伤害贡献发放, 而不是按照最后 Tap 玩家发放。</li>
-            <li>修复宠物单独击杀稀有怪导致任务奖励归属异常的问题。</li>
-            <li>防止玩家利用宠物长期垄断稀有怪刷新。</li>
-          </ul>
-          <h4 style="margin: 18px 0 8px; font-family: var(--font-display); color: var(--gold-dim); font-size: 17px;">战斗</h4>
-          <ul>
-            <li>修复高速转动镜头时角色朝向不同步的问题。</li>
-            <li>修复矮栅栏错误阻挡法术视线的问题。</li>
-            <li>修复码头平台没有碰撞, 可直接穿过去的问题。</li>
-          </ul>
-          <h4 style="margin: 18px 0 8px; font-family: var(--font-display); color: var(--gold-dim); font-size: 17px;">输入</h4>
-          <p>针对 Firefox:</p>
-          <ul>
-            <li>修复 Pointer Lock 获取失败导致无法正常鼠标视角的问题。</li>
-            <li>修复高 DPI 显示器鼠标视角速度异常的问题。</li>
-            <li>修复不同鼠标按键切换镜头时的多个边缘情况。</li>
-          </ul>
-
-          <h3>音效</h3>
-          <ul>
-            <li>增强 Mob 音效资源检查, 错误命名的音频现在会直接报错, 而不是静默忽略。</li>
-            <li>多个相似怪物现在可以共享同一套语音资源。</li>
-            <li>修复 SFX Studio 发布时错误扫描整个音效目录的问题。</li>
-            <li>新增音效资源规范:
-              <ul>
-                <li>单声道 / 双声道检查</li>
-                <li>文件命名检查</li>
-                <li>统一音效资源标准</li>
-              </ul>
-            </li>
-          </ul>
-
-          <h3>世界</h3>
-          <ul>
-            <li>新增采集成功事件, 为后续采集音效系统提供支持。</li>
-            <li>修复 Gravewyrm Sanctum 可无限刷收益的漏洞。</li>
-            <li>修复 Vale Cup 每日任务奖励在服务器重启后无法正确发放的问题。</li>
-          </ul>
-
-          <h3>本地化</h3>
-          <ul>
-            <li>更新多个语言翻译。</li>
-            <li>修复背包右键提示文字: 从「右键销毁」改为「Shift + 右键销毁」。</li>
-            <li>更新相关非拉丁语言翻译。</li>
-          </ul>
-
-          <h3>性能优化</h3>
-          <ul>
-            <li>优化地形生成, 大幅减少无效噪声计算。</li>
-            <li>新增服务器按区域统计 Mob 更新性能, 便于定位性能瓶颈。</li>
-            <li>增加压力测试覆盖。</li>
-          </ul>
-
-          <h3>测试</h3>
-          <p>新增大量自动化测试, 包括:</p>
-          <ul>
-            <li>稀有怪掉落</li>
-            <li>战利品保留</li>
-            <li>Pointer Lock</li>
-            <li>UI 布局</li>
-            <li>背包右键逻辑</li>
-            <li>服务器连接</li>
-            <li>天赋窗口</li>
-            <li>音效规范</li>
-            <li>采集事件</li>
-            <li>等多个模块</li>
-          </ul>
-
-          <h3>其它</h3>
-          <ul>
-            <li>忽略本地 .worktrees/ 目录。</li>
-            <li>更新 i18n 校验文件。</li>
-            <li>修复若干 UI、注释和代码风格问题。</li>
-          </ul>
-        </section>
-
         <section class="section-block section-block--exclusive" aria-labelledby="exclusive-heading">
-          <p class="section-label">第二部分</p>
+          <p class="section-label">第一部分</p>
           <h2 id="exclusive-heading">独家更新</h2>
           <p>以下为本服务器的独家玩法调整, 仅在本服生效:</p>
           <ul class="exclusive-list">
@@ -383,10 +287,107 @@
             <li>装备额外属性为 5 倍</li>
           </ul>
         </section>
+
+        <section class="section-block" aria-labelledby="official-heading">
+          <p class="section-label">第二部分</p>
+          <h2 id="official-heading">官方更新 (v0.27.0)</h2>
+          <p>v0.27.0 是近期体量最大的版本之一, 覆盖职业、系统与内容约 440 次提交。重点包括战士三专精重做与九职业天赋 2.0、法师时空术治疗专精、专业 2.0 前三阶段、游戏内 Solana 钱包与 Claudium 商店、卡牌对决、桌面欢迎界面、全量自定义音效、附魔大改, 以及可拖动的小队/团队框。</p>
+
+          <h3>亮点</h3>
+          <ul>
+            <li><strong>战士天赋 2.0:</strong> 战士完整重做为战技(武器)/血涌(狂怒)/铁卫(防护)三专精, 各有专属技能、三种姿态与六层抉择行天赋树; 九职业均已切到抉择行体系。</li>
+            <li><strong>法师时空术治疗专精:</strong> 奥术改为完整治疗专精「时空术」, 含时间回响、以太涌动、回溯团队冷却、悬浮沙漏、战斗复活与时间加速; 火焰与冰霜专精全面重做。</li>
+            <li><strong>专业 2.0 一至三阶段:</strong> 原型接纳任务上线, 成对原型头衔, 产出质量改为确定性并保留杰作触发, 组合配方校验修复, 新增多件施法向制造装。</li>
+            <li><strong>游戏内 Solana 钱包与 Claudium 商店:</strong> 浏览器扩展 / 手机深链 / Electron 交接三种连接, 并新增 USDC 支付通道。</li>
+            <li><strong>卡牌对决:</strong> 开局区卡牌大师 NPC 主持权威 1v1 卡牌小游戏, 并有对应事迹。</li>
+            <li><strong>AAA 欢迎界面与桌面启动器:</strong> 登录后欢迎屏展示更新、Discord 与角色展示; Electron 在混合显卡设备上强制独显。</li>
+            <li><strong>自定义音效全量启用:</strong> 130 个手工音效键成为正式音频, 含闲置怪物叫声与事迹解锁音。</li>
+            <li><strong>附魔大改:</strong> 新增 Greater 档, 奥术碎片成为 Greater 唯一材料; 基础档按构筑补齐可选。</li>
+            <li><strong>可配置可拖动小队/团队框:</strong> 成为可锁定位置的 MovableFrame, 界面选项可调样式与缩放。</li>
+          </ul>
+
+          <h3>职业与天赋 2.0</h3>
+          <h4>战士重做</h4>
+          <ul>
+            <li>三专精: 战技(双手 DPS)、血涌(双持狂怒)、铁卫(盾牌坦克), 精通随等级线性成长。</li>
+            <li>姿态: 战斗姿态 / 狂暴姿态 / 戒备姿态; 战士永不无姿态, 姿态栏回归 HUD。</li>
+            <li>共享基础技含冲锋、打断、断筋、怒吼、英勇飞跃、斩杀与破胆怒吼等。</li>
+            <li>各专精拥有完整专属技能与六层抉择行(机动、生存、控制、资源、进攻冷却、终极技)。</li>
+            <li>战士招架与格挡按力量/盾牌进入近战命中表。</li>
+          </ul>
+          <h4>天赋引擎(全职业)</h4>
+          <ul>
+            <li>多充能技能改为每层独立并行充能。</li>
+            <li>触发护栏: 消耗强化不再推进 castNth 链, 未限定技能的强化被拦截。</li>
+            <li>玩家施加的短时昏迷豁免 PvP 递减。</li>
+            <li>多职业抉择行防御技改为按最大生命缩放。</li>
+            <li>法术暴击接入共享暴击加成(装备暴击等级与天赋/套装暴击对施法生效)。</li>
+            <li>恐惧类效果按伤害相对最大生命的比例解除, 不再任意伤害必断。</li>
+          </ul>
+          <h4>法师三专精</h4>
+          <ul>
+            <li>时空术(奥术治疗): 时间回响、以太涌动充能、回溯、时间加速、战斗复活与群体复活、悬浮沙漏。</li>
+            <li>冰霜 / 火焰专精触发引擎与终结技重做, 部分技能更名以避开知识产权词表。</li>
+            <li>闪现降至 5 级, 全专精获得寒冰屏障; 多枚自定义技能图标上线。</li>
+          </ul>
+          <h4>其他职业</h4>
+          <ul>
+            <li>猎人、盗贼、术士、德鲁伊、圣骑士、萨满等抉择行与专精身份调整。</li>
+            <li>天赋窗口支持紧凑预设下拉、三维移动布局, 以及多种天赋触发特效。</li>
+          </ul>
+
+          <h3>专业 2.0 与制造</h3>
+          <ul>
+            <li>「属于你的手艺」接纳任务由东溪铁匠霍尔登发放, 选择成对主修专业。</li>
+            <li>十种成对原型头衔取代单专业头衔; 产出质量确定性, 仅杰作触发保留随机。</li>
+            <li>Greater 附魔档与奥术碎片消耗出口; 六件新施法向制造装补齐空槽。</li>
+            <li>交易保留附魔与制造品质; 制造物品提示显示物品等级与评分。</li>
+          </ul>
+
+          <h3>卡牌对决与社交</h3>
+          <ul>
+            <li>卡牌大师主持权威 1v1 卡牌对决(20 张牌组, 三局两胜), 胜利授予「屋规」事迹。</li>
+            <li>事迹补发、名望榜仅按总名望排序、伤害统计重连去重、聊天与荣誉显示修复。</li>
+            <li>管理员可为每日奖励签发限时禁令。</li>
+          </ul>
+
+          <h3>Claudium 商店与钱包</h3>
+          <ul>
+            <li>浏览器扩展 / 手机深链 / Electron 交接三种 Solana 连接路径。</li>
+            <li>新增 USDC 购买通道; 已绑定但未连接扩展时仍可读链上余额并购买。</li>
+          </ul>
+
+          <h3>桌面客户端与欢迎界面</h3>
+          <ul>
+            <li>登录后欢迎屏展示更新日志、Discord 入口与桌面角色展示。</li>
+            <li>Windows / Linux / Mac 混合显卡强制独显; 软件渲染给出一次性提示。</li>
+          </ul>
+
+          <h3>世界、渲染与音效</h3>
+          <ul>
+            <li>训练假人自定义模型、怪物目标头像、姓名板等级徽章与状态样式、Nythraxis 史诗装。</li>
+            <li>多处场景道具改为 GLB; 世界地图支持双指缩放。</li>
+            <li>自定义音效全量启用、闲置怪物叫声、界面反馈音开关、魔杖普攻独立音效、事迹解锁音。</li>
+          </ul>
+
+          <h3>修复与体验</h3>
+          <ul>
+            <li>可拖动小队/团队框与界面选项。</li>
+            <li>非 ASCII 角色名/聊天/公会名跨分包不再损坏。</li>
+            <li>iOS 后台返回不再掉回登录; 英雄本伤害再平衡与重置冷却系统。</li>
+            <li>英雄标记发放、Boss 召唤怪栓绳、出口威胁清空、交互后停止自动奔跑等。</li>
+            <li>施法套装 2 件正确给予施法推延免疫; 物品对比提示显示评级差值。</li>
+          </ul>
+
+          <h3>本地化</h3>
+          <ul>
+            <li>21 语言发布级满填(0 pending), 含卡牌对决、复活、专业与天赋文案。</li>
+          </ul>
+        </section>
       </article>
     </main>
     <footer>
-      <a href="/changelog">更新日志</a>
+      <a href="/changelog">独家更新</a>
       <a href="/support">支持</a>
       <a href="/privacy">隐私政策</a>
       <a href="/terms">服务条款</a>

@@ -246,6 +246,7 @@ export const en = {
     highscores: 'High Scores',
     wiki: 'Wiki',
     news: 'News',
+    exclusiveUpdates: 'Exclusive Updates',
     download: 'Download',
     loginRegister: 'Login/Register',
     account: 'Account',

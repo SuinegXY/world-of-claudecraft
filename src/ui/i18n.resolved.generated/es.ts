@@ -4000,6 +4000,7 @@ export const es: EnTranslations = {
     "highscores": "Clasificaciones",
     "wiki": "Wiki",
     "news": "Noticias",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Descargar",
     "loginRegister": "Iniciar Sesión/Registrarse",
     "account": "Cuenta",

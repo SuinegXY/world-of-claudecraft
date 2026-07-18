@@ -1115,6 +1115,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'nav.highscores': 'ハイスコア',
   'nav.wiki': 'Wiki',
   'nav.news': 'ニュース',
+  'nav.exclusiveUpdates': '独自更新',
   'nav.download': 'ダウンロード',
   'nav.loginRegister': 'ログイン/登録',
   'nav.logout': 'ログアウト',

@@ -4000,6 +4000,7 @@ export const tr_TR: EnTranslations = {
     "highscores": "En Yüksek Skorlar",
     "wiki": "Wiki",
     "news": "Haberler",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "İndir",
     "loginRegister": "Giriş/Kayıt",
     "account": "Hesap",

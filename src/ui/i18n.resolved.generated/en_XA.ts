@@ -4000,6 +4000,7 @@ export const en_XA: EnTranslations = {
     "highscores": "[Ĥíĝĥ Šçóŕéš]",
     "wiki": "[Ŵíķí]",
     "news": "[Ñéŵš]",
+    "exclusiveUpdates": "[Éẋçļúšíʋé Úþðáţéš]",
     "download": "[Ðóŵñļóáð]",
     "loginRegister": "[Ļóĝíñ/Ŕéĝíšţéŕ]",
     "account": "[Áççóúñţ]",

@@ -1079,6 +1079,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'nav.highscores': '排行榜',
   'nav.wiki': '百科指南',
   'nav.news': '新闻资讯',
+  'nav.exclusiveUpdates': '独家更新',
   'nav.download': '下载客户端',
   'nav.loginRegister': '登录/注册',
   'nav.logout': '退出登录',

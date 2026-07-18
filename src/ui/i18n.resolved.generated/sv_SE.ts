@@ -4000,6 +4000,7 @@ export const sv_SE: EnTranslations = {
     "highscores": "Topplista",
     "wiki": "Wiki",
     "news": "Nyheter",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Ladda ner",
     "loginRegister": "Logga in/Registrera",
     "account": "Konto",

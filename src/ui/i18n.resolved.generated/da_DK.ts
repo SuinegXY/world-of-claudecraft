@@ -4000,6 +4000,7 @@ export const da_DK: EnTranslations = {
     "highscores": "Topresultater",
     "wiki": "Wiki",
     "news": "Nyheder",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Hent",
     "loginRegister": "Log ind/Opret",
     "account": "Konto",

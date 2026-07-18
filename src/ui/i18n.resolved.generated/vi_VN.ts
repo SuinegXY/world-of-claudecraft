@@ -4000,6 +4000,7 @@ export const vi_VN: EnTranslations = {
     "highscores": "Bảng Điểm Cao",
     "wiki": "Wiki",
     "news": "Tin Tức",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Tải Về",
     "loginRegister": "Đăng Nhập/Đăng Ký",
     "account": "Tài Khoản",

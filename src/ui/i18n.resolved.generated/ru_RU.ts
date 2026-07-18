@@ -4000,6 +4000,7 @@ export const ru_RU: EnTranslations = {
     "highscores": "Таблицы рекордов",
     "wiki": "Вики",
     "news": "Новости",
+    "exclusiveUpdates": "Эксклюзивные обновления",
     "download": "Скачать",
     "loginRegister": "Войти / Зарегистрироваться",
     "account": "Аккаунт",

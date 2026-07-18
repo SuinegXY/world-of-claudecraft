@@ -9,25 +9,55 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "nav.exclusiveUpdates"
+  ],
+  "es_ES": [
+    "nav.exclusiveUpdates"
+  ],
+  "fr_FR": [
+    "nav.exclusiveUpdates"
+  ],
+  "fr_CA": [
+    "nav.exclusiveUpdates"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "nav.exclusiveUpdates"
+  ],
+  "de_DE": [
+    "nav.exclusiveUpdates"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "nav.exclusiveUpdates"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "nav.exclusiveUpdates"
+  ],
+  "nl_NL": [
+    "nav.exclusiveUpdates"
+  ],
+  "pl_PL": [
+    "nav.exclusiveUpdates"
+  ],
+  "id_ID": [
+    "nav.exclusiveUpdates"
+  ],
+  "tr_TR": [
+    "nav.exclusiveUpdates"
+  ],
+  "sv_SE": [
+    "nav.exclusiveUpdates"
+  ],
+  "vi_VN": [
+    "nav.exclusiveUpdates"
+  ],
+  "da_DK": [
+    "nav.exclusiveUpdates"
+  ]
 };

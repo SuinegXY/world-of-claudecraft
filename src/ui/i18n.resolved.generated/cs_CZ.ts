@@ -4000,6 +4000,7 @@ export const cs_CZ: EnTranslations = {
     "highscores": "Žebříčky",
     "wiki": "Wiki",
     "news": "Novinky",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Stáhnout",
     "loginRegister": "Přihlášení/Registrace",
     "account": "Účet",
