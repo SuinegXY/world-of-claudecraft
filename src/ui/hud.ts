@@ -68,6 +68,7 @@ import type {
   EquipSlot,
   HonorReason,
   InvSlot,
+  ItemInstancePayload,
   ItemSlot,
   MailResultCode,
   PetMode,
@@ -1393,7 +1394,11 @@ export class Hud {
       hideTooltip: () => this.hideTooltip(),
       attachTooltip: (element, html) => this.attachTooltip(element, html),
       itemIcon: (item) => this.itemIcon(item),
-      itemTooltip: (item) => this.itemTooltip(item),
+      itemTooltip: (
+        item: ItemDef,
+        compare?: boolean,
+        instance?: ItemInstancePayload,
+      ) => this.itemTooltip(item, compare ?? true, instance),
       delveName: delveDisplayName,
       preloadInterior: (event) => this.renderer.handleEvent(event),
     });
@@ -1472,7 +1477,11 @@ export class Hud {
       closeTransient: () => this.closeOtherWindows('#quest-dialog'),
       hideTooltip: () => this.hideTooltip(),
       itemIcon: (item) => this.itemIcon(item),
-      itemTooltip: (item) => this.itemTooltip(item),
+      itemTooltip: (
+        item: ItemDef,
+        compare?: boolean,
+        instance?: ItemInstancePayload,
+      ) => this.itemTooltip(item, compare ?? true, instance),
       attachTooltip: (element, html) => this.attachTooltip(element, html),
       openChronicles: () => this.openDeeds('chronicle'),
       openVendor: (npcId) => this.openVendor(npcId),
@@ -1499,7 +1508,11 @@ export class Hud {
       money: (copper) => this.moneyHtml(copper),
       coinIconUrl: () => iconDataUrl('item', 'coin_gold'),
       itemIcon: (item) => this.itemIcon(item),
-      itemTooltip: (item) => this.itemTooltip(item),
+      itemTooltip: (
+        item: ItemDef,
+        compare?: boolean,
+        instance?: ItemInstancePayload,
+      ) => this.itemTooltip(item, compare ?? true, instance),
       attachTooltip: (element, html) => this.attachTooltip(element, html),
       centerPopup: (element) => this.centerPopupInViewport(element),
       placePopup: (element, x, y, reserveRight, reserveBottom, minLeft, minTop) =>
@@ -1511,7 +1524,11 @@ export class Hud {
       now: () => performance.now(),
       isMobileLayout: () => this.isMobileLayout(),
       itemIcon: (item) => this.itemIcon(item),
-      itemTooltip: (item) => this.itemTooltip(item),
+      itemTooltip: (
+        item: ItemDef,
+        compare?: boolean,
+        instance?: ItemInstancePayload,
+      ) => this.itemTooltip(item, compare ?? true, instance),
       attachTooltip: (element, html) => this.attachTooltip(element, html),
       writers: this.writerFacet,
     });
@@ -3365,7 +3382,11 @@ export class Hud {
   private readonly presentationBag: PainterHostPresentation = {
     itemIcon: (item) => this.itemIcon(item),
     moneyHtml: (copper) => this.moneyHtml(copper),
-    itemTooltip: (item) => this.itemTooltip(item),
+    itemTooltip: (
+      item: ItemDef,
+      compare?: boolean,
+      instance?: ItemInstancePayload,
+    ) => this.itemTooltip(item, compare ?? true, instance),
     attachTooltip: (el, html) => this.attachTooltip(el, html),
   };
   // The interactive talents window. All allocation reads and mutations cross the
@@ -4360,7 +4381,7 @@ export class Hud {
     this.hideTooltip();
   }
 
-  private itemTooltip(item: ItemDef, compare = true): string {
+  private itemTooltip(item: ItemDef, compare = true, instance?: ItemInstancePayload): string {
     const qColor = QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff';
     let html = `<div class="tt-title" style="color:${qColor}">${esc(itemDisplayName(item))}</div>`;
     // Quality/kind line, e.g. "Epic Armor". Heroic items (dungeon upgraded variants
@@ -4464,6 +4485,19 @@ export class Hud {
           stat: t(statNameKey(ratingStat) as TranslationKey),
         }),
       )}</div>`;
+    }
+    // Exclusive secondary affixes on this specific loot copy.
+    if (instance?.secondary) {
+      for (const ratingStat of ['versatilityRating', 'critRating', 'hasteRating'] as const) {
+        const value = instance.secondary[ratingStat] ?? 0;
+        if (value <= 0) continue;
+        html += `<div class="tt-green">${esc(
+          t('itemUi.tooltip.stat', {
+            value: itemNumber(value),
+            stat: t(statNameKey(ratingStat) as TranslationKey),
+          }),
+        )}</div>`;
+      }
     }
     if (item.foodHp)
       html += `<div class="tt-desc">${esc(t('itemUi.tooltip.useFood', { amount: itemNumber(item.foodHp), seconds: itemNumber(CONSUME_DURATION) }))}</div>`;
@@ -4659,6 +4693,7 @@ export class Hud {
       dodgeChance: p.dodgeChance,
       critRating: p.critRating,
       hasteRating: p.hasteRating,
+      versatilityRating: p.versatilityRating,
       hitRating: p.hitRating,
       parryChance: sim.cfg.playerClass === 'warrior' ? warriorParryChance(p.stats.str) : 0,
       dps: weaponDps(wpn?.weapon, p.attackPower),

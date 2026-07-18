@@ -1177,6 +1177,7 @@ export const da_DK: EnTranslations = {
         "spellPower": "Besværgelseskraft",
         "critRating": "Kritvurdering",
         "hasteRating": "Hastevurdering",
+        "versatilityRating": "Versatility",
         "parry": "Parade",
         "hitRating": "Rammevurdering",
         "warfare": "Krigsførelse"
@@ -1196,6 +1197,7 @@ export const da_DK: EnTranslations = {
         "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade.",
         "critRating": "Kritvurdering fra dit udstyr og sætbonusser, der hæver din chance for kritisk slag. Cirka 10 vurdering giver 1% krit.",
         "hasteRating": "Hastevurdering fra dit udstyr og sætbonusser, der fremskynder dine angreb og besværgelser. Cirka 10 vurdering giver 1% hast.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Din chance for helt at parere et frontalt nærkampsangreb uden at tage skade. Et slag bagfra kan ikke pareres.",
         "hitRating": "Rammevurdering fra dit udstyr og sætbonusser, der reducerer, hvor ofte dine angreb misser og dine trylleformularer modstås, navnlig mod fjender af højere niveau. Cirka 10 vurdering giver 1% ramme.",
         "warfare": "Øger skade givet til spillere med {increase}% og reducerer skade modtaget fra spillere med {reduction}%."

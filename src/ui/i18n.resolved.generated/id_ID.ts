@@ -1177,6 +1177,7 @@ export const id_ID: EnTranslations = {
         "spellPower": "Kekuatan Mantra",
         "critRating": "Rating Kritis",
         "hasteRating": "Rating Kecepatan",
+        "versatilityRating": "Versatility",
         "parry": "Tangkis",
         "hitRating": "Rating Pukulan",
         "warfare": "Perang"
@@ -1196,6 +1197,7 @@ export const id_ID: EnTranslations = {
         "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan.",
         "critRating": "Rating kritis dari perlengkapan dan bonus set Anda, menaikkan peluang serangan kritis Anda. Sekitar 10 rating memberi 1% kritis.",
         "hasteRating": "Rating kecepatan dari perlengkapan dan bonus set Anda, mempercepat serangan dan rapalan mantra Anda. Sekitar 10 rating memberi 1% kecepatan.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Peluang Anda untuk sepenuhnya menangkis serangan jarak dekat dari depan, tanpa menerima kerusakan. Pukulan dari belakang tidak dapat ditangkis.",
         "hitRating": "Rating pukulan dari perlengkapan dan bonus setelanmu, mengurangi seberapa sering seranganmu meleset dan mantramu ditangkal, terutama melawan musuh level lebih tinggi. Sekitar 10 rating memberikan 1% hit.",
         "warfare": "Meningkatkan kerusakan yang diberikan kepada pemain sebesar {increase}% dan mengurangi kerusakan yang diterima dari pemain sebesar {reduction}%."

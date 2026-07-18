@@ -46,6 +46,24 @@ import type {
 } from '../types';
 import { dist2d, PARTY_XP_RANGE } from '../types';
 import { LOOT_FFA_DELAY } from './loot_ffa';
+import { rollSecondaryAffix, withSecondaryAffix } from './secondary_affix';
+
+/** Build a corpse loot slot, rolling exclusive secondary affixes on equippable gear. */
+function makeLootItem(
+  ctx: SimContext,
+  itemId: string,
+  fallbackLevel: number,
+  extras?: Omit<LootSlot, 'itemId' | 'count'>,
+): LootSlot {
+  const slot: LootSlot = { itemId, count: 1, ...extras };
+  const item = ITEMS[itemId];
+  if (item) {
+    const secondary = rollSecondaryAffix(ctx.rng, item, fallbackLevel);
+    const instance = withSecondaryAffix(undefined, secondary);
+    if (instance) slot.instance = instance;
+  }
+  return slot;
+}
 
 // How long (seconds) a need-greed roll stays open before it auto-resolves. Sole
 // users are startNeedGreedRoll + pruneCorpseLoot, so the constant lives with them.
@@ -219,6 +237,7 @@ export function rollLoot(
     if (!variant) return id;
     return (itemLevel(variant) ?? 0) > (itemLevel(ITEMS[id]) ?? 0) ? variant.id : id;
   };
+  const fallbackLevel = Math.max(1, mob.level);
   for (const entry of template.loot) {
     // Exclusive groups: a single rng draw is partitioned by the group
     // entries' chances, so at most one matching entry drops.
@@ -231,7 +250,7 @@ export function rollLoot(
       const winner = pickRollGroupWinner(roll, group, awardedItemIds);
       if (winner?.itemId) {
         const resolvedId = heroicItem(winner.itemId);
-        items.push({ itemId: resolvedId, count: 1 });
+        items.push(makeLootItem(ctx, resolvedId, fallbackLevel));
         awardedItemIds.add(winner.itemId);
         awardedItemIds.add(resolvedId);
       }
@@ -257,17 +276,17 @@ export function rollLoot(
       if (questRecipients.length === 0) continue;
       if (!ctx.rng.chance(entry.chance)) continue;
       if (!entry.itemId) continue;
-      items.push({
-        itemId: entry.itemId,
-        count: 1,
-        personalFor: questRecipients.map((m) => m.entityId),
-      });
+      items.push(
+        makeLootItem(ctx, entry.itemId, fallbackLevel, {
+          personalFor: questRecipients.map((m) => m.entityId),
+        }),
+      );
       continue;
     }
     if (!ctx.rng.chance(entry.chance)) continue;
     if (entry.copper)
       copper += ctx.rng.int(Math.ceil(entry.copper * 0.6), Math.ceil(entry.copper * 1.4));
-    if (entry.itemId) items.push({ itemId: heroicItem(entry.itemId), count: 1 });
+    if (entry.itemId) items.push(makeLootItem(ctx, heroicItem(entry.itemId), fallbackLevel));
   }
   // Heroic-only drops: when the mob's claimed instance is heroic and it has a
   // heroic drop table (the final bosses), roll those entries into the SAME
@@ -286,13 +305,13 @@ export function rollLoot(
           const roll = ctx.rng.next();
           const winner = pickRollGroupWinner(roll, group, awardedItemIds);
           if (winner?.itemId) {
-            items.push({ itemId: winner.itemId, count: 1 });
+            items.push(makeLootItem(ctx, winner.itemId, fallbackLevel));
             awardedItemIds.add(winner.itemId);
           }
           continue;
         }
         if (!ctx.rng.chance(entry.chance)) continue;
-        if (entry.itemId) items.push({ itemId: entry.itemId, count: 1 });
+        if (entry.itemId) items.push(makeLootItem(ctx, entry.itemId, fallbackLevel));
       }
     }
   }

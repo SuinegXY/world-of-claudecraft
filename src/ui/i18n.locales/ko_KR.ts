@@ -806,12 +806,15 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '주문력',
   'hudChrome.statInfo.names.critRating': '치명타 등급',
   'hudChrome.statInfo.names.hasteRating': '가속 등급',
+  'hudChrome.statInfo.names.versatilityRating': '유연성',
   'hudChrome.statInfo.names.parry': '무기 막기',
   'hudChrome.statInfo.desc.parry':
     '전방 근접 공격을 완전히 무기로 막아 피해를 입지 않을 확률입니다. 뒤에서 오는 공격은 막을 수 없습니다.',
   'hudChrome.statInfo.names.hitRating': '명중 등급',
   'hudChrome.statInfo.desc.hitRating':
     '장비와 세트 보너스에서 얻는 명중 등급으로 공격이 빗나가거나 주문이 저항되는 빈도를 줄이며, 특히 더 높은 레벨의 적에게 효과적입니다. 약 10등급당 1% 명중.',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '드롭 장비 부 속성인 유연성입니다. 유연성 10당 주는 피해가 1% 증가합니다.',
   'hudChrome.statInfo.names.warfare': '워페어',
   'hudChrome.statInfo.warfareValue': '주는 피해 +{increase}% / 받는 피해 -{reduction}%',
   'hudChrome.statInfo.desc.critRating':

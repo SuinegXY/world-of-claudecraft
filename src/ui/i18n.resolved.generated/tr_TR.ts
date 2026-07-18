@@ -1177,6 +1177,7 @@ export const tr_TR: EnTranslations = {
         "spellPower": "Büyü Gücü",
         "critRating": "Kritik Puanı",
         "hasteRating": "Hız Puanı",
+        "versatilityRating": "Versatility",
         "parry": "Karşılama",
         "hitRating": "İsabetlilik Puanı",
         "warfare": "Harp"
@@ -1196,6 +1197,7 @@ export const tr_TR: EnTranslations = {
         "dodge": "Gelen bir yakın dövüş saldırısından hiç hasar almadan tamamen kaçınma şansın.",
         "critRating": "Teçhizatından ve set bonuslarından gelen kritik puanı, kritik vuruş şansını artırır. Yaklaşık 10 puan %1 kritik sağlar.",
         "hasteRating": "Teçhizatından ve set bonuslarından gelen hız puanı, saldırılarını ve büyü yapmanı hızlandırır. Yaklaşık 10 puan %1 hız sağlar.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Önden gelen bir yakın dövüş saldırısını hiç hasar almadan tümüyle karşılama şansın. Arkadan gelen bir darbe karşılanamaz.",
         "hitRating": "Ekipmanından ve set bonuslarından gelen isabetlilik puanı; özellikle daha yüksek seviyeli düşmanlara karşı saldırılarının ıskalanma ve büyülerinin dirençle engelleme olasılığını azaltır. Her yaklaşık 10 puan, isabetliliği %1 artırır.",
         "warfare": "Oyunculara verilen hasarı {increase}% artırır ve oyunculardan alınan hasarı {reduction}% azaltır."

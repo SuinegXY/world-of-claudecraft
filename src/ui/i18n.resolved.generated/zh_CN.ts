@@ -1177,6 +1177,7 @@ export const zh_CN: EnTranslations = {
         "spellPower": "法术强度",
         "critRating": "暴击等级",
         "hasteRating": "急速等级",
+        "versatilityRating": "全能",
         "parry": "招架",
         "hitRating": "命中等级",
         "warfare": "战争"
@@ -1196,6 +1197,7 @@ export const zh_CN: EnTranslations = {
         "dodge": "你完全躲开来袭近战攻击、不受任何伤害的几率。",
         "critRating": "来自装备和套装奖励的暴击等级，提升你的暴击几率。约每10点等级提供1%暴击。",
         "hasteRating": "来自装备和套装奖励的急速等级，加快你的攻击和施法速度。约每10点等级提供1%急速。",
+        "versatilityRating": "掉落装备副属性中的全能。每10点全能增加1%造成的伤害。",
         "parry": "你完全招架来自正面近战攻击、不受任何伤害的几率。来自背后的攻击无法被招架。",
         "hitRating": "来自装备和套装奖励的命中等级，降低你的攻击被闪避和法术被抵抗的几率，对更高等级的敌人尤其有效。约每10点等级提供1%命中。",
         "warfare": "对玩家造成的伤害提高 {increase}%，受到玩家造成的伤害降低 {reduction}%。"

@@ -1049,6 +1049,7 @@ export const hudChromeStrings = {
       spellPower: 'Spell Power',
       critRating: 'Crit Rating',
       hasteRating: 'Haste Rating',
+      versatilityRating: 'Versatility',
       parry: 'Parry',
       hitRating: 'Hit Rating',
       warfare: 'Warfare',
@@ -1072,6 +1073,8 @@ export const hudChromeStrings = {
         'Crit rating from your gear and set bonuses, raising the critical strike chance of both your attacks and your spells. Every 10 rating grants exactly 1% crit.',
       hasteRating:
         'Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. Every 10 rating grants exactly 1% haste.',
+      versatilityRating:
+        'Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.',
       parry:
         'Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried.',
       hitRating:

@@ -1,5 +1,5 @@
 import { COMPANION_UPGRADE_COSTS, DELVES, ITEMS } from '../../../sim/data';
-import type { ItemDef, SimEvent } from '../../../sim/types';
+import type { ItemDef, ItemInstancePayload, SimEvent } from '../../../sim/types';
 import type { IWorld } from '../../../world_api';
 import { itemDisplayName } from '../../entity_i18n';
 import { esc } from '../../esc';
@@ -19,7 +19,7 @@ export interface DelveBoardControllerDeps {
   hideTooltip(): void;
   attachTooltip(element: HTMLElement, html: () => string): void;
   itemIcon(item: ItemDef): string;
-  itemTooltip(item: ItemDef): string;
+  itemTooltip(item: ItemDef, compare?: boolean, instance?: ItemInstancePayload): string;
   delveName(delveId: string): string;
   preloadInterior(event: Extract<SimEvent, { type: 'delveEntered' }>): void;
 }

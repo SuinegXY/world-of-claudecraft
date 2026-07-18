@@ -1177,6 +1177,7 @@ export const sv_SE: EnTranslations = {
         "spellPower": "Besvärjelsekraft",
         "critRating": "Kritvärde",
         "hasteRating": "Snabbhetsvärde",
+        "versatilityRating": "Versatility",
         "parry": "Parering",
         "hitRating": "Träffvärde",
         "warfare": "Krigföring"
@@ -1196,6 +1197,7 @@ export const sv_SE: EnTranslations = {
         "dodge": "Din chans att helt undvika en inkommande närstridsattack utan att ta skada.",
         "critRating": "Kritvärde från din utrustning och setbonusar, som höjer din chans till kritisk träff. Ungefär 10 i värde ger 1% krit.",
         "hasteRating": "Snabbhetsvärde från din utrustning och setbonusar, som snabbar upp dina attacker och besvärjelser. Ungefär 10 i värde ger 1% snabbhet.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Din chans att helt parera ett närstridsanfall framifrån utan att ta någon skada. Ett slag bakifrån kan inte pareras.",
         "hitRating": "Träffvärde från din utrustning och setbonusar, som minskar hur ofta dina attacker missar och dina besvärjelser motarbetas, framfor allt mot fiender av högre nivå. Ungefär 10 i värde ger 1% träff.",
         "warfare": "Ökar skadan mot spelare med {increase}% och minskar skadan från spelare med {reduction}%."

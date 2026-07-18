@@ -161,6 +161,10 @@ export function dealDamage(
     if (twoHandPct > 0 && mainhand?.kind === 'weapon' && weaponHand(mainhand) === 'twohand') {
       amount = Math.round(amount * (1 + twoHandPct));
     }
+    // Exclusive secondary affix: Versatility increases damage dealt.
+    if (source.versatilityDmgBonus > 0) {
+      amount = Math.round(amount * (1 + source.versatilityDmgBonus));
+    }
   }
 
   // Defensive Stance, classic: deal 10% less, take 10% less (and +30% threat below)

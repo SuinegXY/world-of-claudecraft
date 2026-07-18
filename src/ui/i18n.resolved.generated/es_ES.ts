@@ -1177,6 +1177,7 @@ export const es_ES: EnTranslations = {
         "spellPower": "Poder con hechizos",
         "critRating": "Índice de golpe crítico",
         "hasteRating": "Índice de celeridad",
+        "versatilityRating": "Versatility",
         "parry": "Rechazo",
         "hitRating": "Puntuacion de impacto",
         "warfare": "Pericia bélica"
@@ -1196,6 +1197,7 @@ export const es_ES: EnTranslations = {
         "dodge": "Tu probabilidad de evitar por completo un ataque cuerpo a cuerpo entrante, sin recibir daño.",
         "critRating": "Índice de golpe crítico de tu equipo y bonificaciones de conjunto, que aumenta tu probabilidad de golpe crítico. Unos 10 de índice otorgan un 1% de crítico.",
         "hasteRating": "Índice de celeridad de tu equipo y bonificaciones de conjunto, que acelera tus ataques y lanzamientos de hechizos. Unos 10 de índice otorgan un 1% de celeridad.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Tu probabilidad de rechazar por completo un ataque cuerpo a cuerpo frontal, sin recibir daño. Un golpe por la espalda no se puede rechazar.",
         "hitRating": "Puntuacion de impacto proveniente de tu equipo y bonificaciones de conjunto, que reduce la frecuencia con que tus ataques fallan y tus hechizos son resistidos, especialmente contra enemigos de nivel superior. Aproximadamente 10 puntos de puntuacion otorgan un 1% de impacto.",
         "warfare": "Aumenta un {increase}% el daño infligido a jugadores y reduce un {reduction}% el daño recibido de jugadores."

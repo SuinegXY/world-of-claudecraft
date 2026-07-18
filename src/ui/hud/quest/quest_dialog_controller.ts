@@ -6,6 +6,7 @@ import {
   dist2d,
   type Entity,
   type ItemDef,
+  type ItemInstancePayload,
   isQuestTurnInNpc,
   questObjectiveRequired,
 } from '../../../sim/types';
@@ -46,7 +47,7 @@ export interface QuestDialogControllerDeps {
   closeTransient(): void;
   hideTooltip(): void;
   itemIcon(item: ItemDef): string;
-  itemTooltip(item: ItemDef): string;
+  itemTooltip(item: ItemDef, compare?: boolean, instance?: ItemInstancePayload): string;
   attachTooltip(element: HTMLElement, html: () => string): void;
   openChronicles(): void;
   openVendor(npcId: number): void;

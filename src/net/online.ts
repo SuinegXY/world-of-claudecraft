@@ -1068,6 +1068,8 @@ function blankEntity(id: number): Entity {
     sharedCritBonus: 0,
     critRating: 0,
     hasteRating: 0,
+    versatilityRating: 0,
+    versatilityDmgBonus: 0,
     hitRating: 0,
     hitBonus: 0,
     critDmgSpellBonus: 0,

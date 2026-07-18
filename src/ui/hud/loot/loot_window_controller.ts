@@ -1,6 +1,6 @@
 import type { corpseLootAvailability } from '../../../game/corpse_loot_availability';
 import { ITEMS } from '../../../sim/data';
-import { dist2d, type Entity, type ItemDef } from '../../../sim/types';
+import { dist2d, type Entity, type ItemDef, type ItemInstancePayload } from '../../../sim/types';
 import type { IWorld } from '../../../world_api';
 import { itemDisplayName } from '../../entity_i18n';
 import { esc } from '../../esc';
@@ -25,7 +25,7 @@ export interface LootWindowControllerDeps {
   money(copper: number): string;
   coinIconUrl(): string;
   itemIcon(item: ItemDef): string;
-  itemTooltip(item: ItemDef): string;
+  itemTooltip(item: ItemDef, compare?: boolean, instance?: ItemInstancePayload): string;
   attachTooltip(element: HTMLElement, html: () => string): void;
   centerPopup(element: HTMLElement): void;
   placePopup(

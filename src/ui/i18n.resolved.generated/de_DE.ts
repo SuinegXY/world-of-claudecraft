@@ -1177,6 +1177,7 @@ export const de_DE: EnTranslations = {
         "spellPower": "Zaubermacht",
         "critRating": "Kritische Trefferwertung",
         "hasteRating": "Tempowertung",
+        "versatilityRating": "Versatility",
         "parry": "Parieren",
         "hitRating": "Trefferwertung",
         "warfare": "Kriegsführung"
@@ -1196,6 +1197,7 @@ export const de_DE: EnTranslations = {
         "dodge": "Deine Chance, einem eingehenden Nahkampfangriff vollständig auszuweichen und keinen Schaden zu erleiden.",
         "critRating": "Kritische Trefferwertung aus deiner Ausrüstung und deinen Setboni, die deine kritische Trefferchance erhöht. Etwa 10 Wertung gewähren 1% kritische Trefferchance.",
         "hasteRating": "Tempowertung aus deiner Ausrüstung und deinen Setboni, die deine Angriffe und dein Zaubern beschleunigt. Etwa 10 Wertung gewähren 1% Tempo.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Deine Chance, einen frontalen Nahkampfangriff vollständig zu parieren und keinen Schaden zu erleiden. Ein Schlag von hinten kann nicht pariert werden.",
         "hitRating": "Trefferwertung aus deiner Ausrustung und Setboni, die verringert, wie oft deine Angriffe verfehlen und deine Zauber widerstanden werden, besonders gegen hoher stufige Feinde. Etwa 10 Wertung verleihen 1% Treffer.",
         "warfare": "Erhöht den Spielern zugefügten Schaden um {increase}% und verringert von Spielern erlittenen Schaden um {reduction}%."

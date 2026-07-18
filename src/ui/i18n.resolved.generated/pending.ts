@@ -10,22 +10,34 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "es_ES": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "fr_FR": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "fr_CA": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "en_CA": [],
   "it_IT": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "de_DE": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "zh_CN": [],
@@ -33,31 +45,49 @@ export const pending: Record<string, readonly string[]> = {
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "ru_RU": [],
   "cs_CZ": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "nl_NL": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "pl_PL": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "id_ID": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "tr_TR": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "sv_SE": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "vi_VN": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "da_DK": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
     "nav.exclusiveUpdates"
   ]
 };

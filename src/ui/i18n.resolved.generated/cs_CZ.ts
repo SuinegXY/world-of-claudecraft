@@ -1177,6 +1177,7 @@ export const cs_CZ: EnTranslations = {
         "spellPower": "Síla kouzel",
         "critRating": "Hodnocení kritického zásahu",
         "hasteRating": "Hodnocení rychlosti",
+        "versatilityRating": "Versatility",
         "parry": "Odražení",
         "hitRating": "Hodnocení zásahu",
         "warfare": "Válečnictví"
@@ -1196,6 +1197,7 @@ export const cs_CZ: EnTranslations = {
         "dodge": "Tvoje šance úplně se vyhnout příchozímu útoku na blízko a neutrpět poškození.",
         "critRating": "Hodnocení kritického zásahu z tvé výbavy a bonusů sad, které zvyšuje tvoji šanci na kritický zásah. Přibližně 10 hodnocení dá 1 % kritického zásahu.",
         "hasteRating": "Hodnocení rychlosti z tvé výbavy a bonusů sad, které zrychluje tvé útoky a sesílání kouzel. Přibližně 10 hodnocení dá 1 % rychlosti.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Tvoje šance zcela odrazit čelní útok na blízko a neutrpět žádné poškození. Úder zezadu odrazit nelze.",
         "hitRating": "Hodnocení zásahu z vybavení a bonusů sady, snižující četnost mašení tvých útoků a odolávání tvým kouzlům, zejména proti nepřátelům vyšší úrovně. Přibližně 10 bodů hodnocení přidá 1 % zásahu.",
         "warfare": "Zvýší poškození způsobené hráčům o {increase} % a sníží poškození utrpěné od hráčů o {reduction} %."

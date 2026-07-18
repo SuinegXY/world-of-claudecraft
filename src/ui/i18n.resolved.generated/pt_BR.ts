@@ -1177,6 +1177,7 @@ export const pt_BR: EnTranslations = {
         "spellPower": "Poder Mágico",
         "critRating": "Índice de crítico",
         "hasteRating": "Índice de aceleração",
+        "versatilityRating": "Versatility",
         "parry": "Aparar",
         "hitRating": "Classificação de Acerto",
         "warfare": "Guerra"
@@ -1196,6 +1197,7 @@ export const pt_BR: EnTranslations = {
         "dodge": "Sua chance de esquivar completamente de um ataque corpo a corpo recebido, sem sofrer dano.",
         "critRating": "Índice de crítico dos seus equipamentos e benefícios de conjunto, elevando sua chance de acerto crítico. Cerca de 10 de índice concede 1% de crítico.",
         "hasteRating": "Índice de aceleração dos seus equipamentos e benefícios de conjunto, acelerando seus ataques e conjurações. Cerca de 10 de índice concede 1% de aceleração.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Sua chance de aparar completamente um ataque corpo a corpo frontal, sem sofrer dano. Um golpe pelas costas não pode ser aparado.",
         "hitRating": "Classificação de acerto proveniente de seu equipamento e bônus de conjuntos, reduzindo a frequência com que seus ataques erram e suas magias são resistidas, especialmente contra inimigos de nível superior. Cerca de 10 pontos de classificação concedem 1% de acerto.",
         "warfare": "Aumenta o dano causado aos jogadores em {increase}% e reduz o dano recebido dos jogadores em {reduction}%."

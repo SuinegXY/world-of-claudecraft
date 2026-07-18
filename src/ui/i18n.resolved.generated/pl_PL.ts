@@ -1177,6 +1177,7 @@ export const pl_PL: EnTranslations = {
         "spellPower": "Moc zaklęć",
         "critRating": "Ocena krytyczna",
         "hasteRating": "Ocena pośpiechu",
+        "versatilityRating": "Versatility",
         "parry": "Parowanie",
         "hitRating": "Ocena Trafienia",
         "warfare": "Działania wojenne"
@@ -1196,6 +1197,7 @@ export const pl_PL: EnTranslations = {
         "dodge": "Twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz, bez otrzymania obrażeń.",
         "critRating": "Ocena krytyczna z twojego ekwipunku i bonusów zestawów, zwiększająca szansę na trafienie krytyczne. Około 10 oceny daje 1% trafienia krytycznego.",
         "hasteRating": "Ocena pośpiechu z twojego ekwipunku i bonusów zestawów, przyspieszająca twoje ataki i rzucanie zaklęć. Około 10 oceny daje 1% pośpiechu.",
+        "versatilityRating": "Versatility from dropped gear affixes. Every 10 rating grants exactly 1% damage dealt.",
         "parry": "Twoja szansa na całkowite sparowanie ataku wręcz z przodu, bez otrzymania obrażeń. Ciosu zadanego od tyłu nie można sparować.",
         "hitRating": "Ocena trafienia z wyposażenia i bonusów zestawów, zmniejszająca częstotliwość chybień ataków i oparcia zaklęć, szczególnie przeciwko wrogom wyższego poziomu. Około 10 oceny daje 1% trafienia.",
         "warfare": "Zwiększa obrażenia zadawane graczom o {increase}% i zmniejsza obrażenia otrzymywane od graczy o {reduction}%."
