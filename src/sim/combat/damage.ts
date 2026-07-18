@@ -79,7 +79,11 @@ const BLOODBATH_MAX_STACKS = 5;
 // Baseline uninterruptible casts and a resolved talent modifier can each block
 // classic-era damage pushback. The resolved check is player-only and reads the
 // same flat ability record as casting/tooltips; mobs fall back to authored defs.
+// Exclusive server: every player cast ignores damage pushback (no delay, no
+// channel rollback). Ability interrupts (Pummel etc.) are unchanged. Fishing
+// still cancels via the FISHING_CAST_ID arm in dealDamage.
 function ignoresDamagePushback(ctx: SimContext, target: Entity, abilityId: string): boolean {
+  if (target.kind === 'player') return true;
   return (
     abilityId === 'ghost_wolf' ||
     ABILITIES[abilityId]?.uninterruptible === true ||
