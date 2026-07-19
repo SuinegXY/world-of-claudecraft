@@ -60,6 +60,7 @@ describe('Reown AppKit Solana deploy container contract', () => {
     const source = readFileSync('src/net/wallet_connect.ts', 'utf8');
 
     expect(pkg.dependencies?.['@reown/appkit-adapter-solana']).toBe('1.8.22');
+    expect(pkg.dependencies?.['@solana/web3.js']).toBe('1.98.4');
     expect(pkg.dependencies?.['@reown/appkit-universal-connector']).toBeUndefined();
     expect(source).toContain('new SolanaAdapter');
     expect(source).toContain('createAppKit');
