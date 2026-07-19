@@ -1,19 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { ITEMS } from '../src/sim/data';
+import { ITEMS, MOBS } from '../src/sim/data';
+import { createMob } from '../src/sim/entity';
 import {
   canRollSecondaryAffix,
   distributeSecondaryAffix,
   rollSecondaryAffix,
-  secondaryAffixBudget,
   SECONDARY_AFFIX_KEYS,
+  type SecondaryAffixKey,
+  secondaryAffixBudget,
   withSecondaryAffix,
 } from '../src/sim/loot/secondary_affix';
 import { Rng } from '../src/sim/rng';
 import { Sim } from '../src/sim/sim';
-import {
-  cloneItemInstancePayload,
-  versatilityDamageFractionFromRating,
-} from '../src/sim/types';
+import { cloneItemInstancePayload, versatilityDamageFractionFromRating } from '../src/sim/types';
 
 describe('secondary affix roll', () => {
   it('budgets itemLevel * 3 points', () => {
@@ -63,6 +62,41 @@ describe('secondary affix roll', () => {
     if (!copy.secondary) return;
     copy.secondary.critRating = 99;
     expect(src.secondary.critRating).toBe(12);
+  });
+  it('never rolls hitRating (pool is Versatility / Crit / Haste only)', () => {
+    expect(SECONDARY_AFFIX_KEYS).toEqual(['versatilityRating', 'critRating', 'hasteRating']);
+    expect(SECONDARY_AFFIX_KEYS.includes('hitRating' as SecondaryAffixKey)).toBe(false);
+    const rng = new Rng(7);
+    for (let i = 0; i < 60; i++) {
+      const rolled = distributeSecondaryAffix(rng, 24);
+      expect((rolled as { hitRating?: number }).hitRating).toBeUndefined();
+    }
+  });
+
+  it('survives corpse loot into inventory (grant preserves instance)', () => {
+    const sim = new Sim({ seed: 21, playerClass: 'warrior', autoEquip: false });
+    sim.setPlayerLevel(10);
+    const pid = sim.playerId;
+    const player = sim.entities.get(pid);
+    expect(player).toBeTruthy();
+    if (!player) return;
+    const secondary = { versatilityRating: 18, hasteRating: 12 };
+    const mob = createMob(sim.nextId++, MOBS.forest_wolf, 5, {
+      x: player.pos.x + 1,
+      y: player.pos.y,
+      z: player.pos.z,
+    });
+    mob.dead = true;
+    mob.lootable = true;
+    mob.tappedById = pid;
+    mob.loot = {
+      copper: 0,
+      items: [{ itemId: 'militia_vest', count: 1, instance: { secondary } }],
+    };
+    sim.entities.set(mob.id, mob);
+    expect(sim.lootCorpse(mob.id, pid)).toBe(true);
+    const bag = sim.players.get(pid)?.inventory.find((s) => s.itemId === 'militia_vest');
+    expect(bag?.instance?.secondary).toEqual(secondary);
   });
 });
 

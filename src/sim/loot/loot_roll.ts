@@ -35,6 +35,7 @@ import type {
   CurrencyLootStrategy,
   Entity,
   ItemDef,
+  ItemInstancePayload,
   ItemLootStrategy,
   LootEntry,
   LootRollChoice,
@@ -44,12 +45,12 @@ import type {
   LootStrategies,
   MasterLootThreshold,
 } from '../types';
-import { dist2d, PARTY_XP_RANGE } from '../types';
+import { cloneItemInstancePayload, dist2d, PARTY_XP_RANGE } from '../types';
 import { LOOT_FFA_DELAY } from './loot_ffa';
 import { rollSecondaryAffix, withSecondaryAffix } from './secondary_affix';
 
 /** Build a corpse loot slot, rolling exclusive secondary affixes on equippable gear. */
-function makeLootItem(
+export function makeLootItem(
   ctx: SimContext,
   itemId: string,
   fallbackLevel: number,
@@ -63,6 +64,20 @@ function makeLootItem(
     if (instance) slot.instance = instance;
   }
   return slot;
+}
+
+/** Grant one loot unit, preserving a rolled instance payload when present. */
+export function grantLootItem(
+  ctx: SimContext,
+  itemId: string,
+  pid: number,
+  instance?: ItemInstancePayload,
+): void {
+  if (instance) {
+    ctx.addItemInstance(itemId, cloneItemInstancePayload(instance), pid);
+    return;
+  }
+  ctx.addItem(itemId, 1, pid);
 }
 
 // How long (seconds) a need-greed roll stays open before it auto-resolves. Sole
@@ -85,6 +100,8 @@ export interface PendingLootRoll {
   itemId: string;
   itemName: string;
   quality: ItemDef['quality'];
+  /** Rolled instance payload for this specific drop (secondary affixes, etc.). */
+  instance?: ItemInstancePayload;
   candidates: number[];
   // Name snapshot for every candidate, captured when the roll opened. A winner who
   // disconnects before resolution is gone from ctx.players by then, so loot-line
@@ -362,7 +379,12 @@ export function distributeLootCopper(ctx: SimContext, mob: Entity, looter: Playe
   mob.loot.copper = 0;
 }
 
-function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boolean {
+function startNeedGreedRoll(
+  ctx: SimContext,
+  itemId: string,
+  mob: Entity,
+  instance?: ItemInstancePayload,
+): boolean {
   if (effectiveItemLootStrategy(ctx, itemId, mob) !== 'need-greed') return false;
   const candidates = partyLootCandidatesForMob(ctx, mob);
   if (candidates.length <= 1) return false;
@@ -376,6 +398,7 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
     itemId,
     itemName,
     quality: def?.quality,
+    instance: instance ? cloneItemInstancePayload(instance) : undefined,
     candidates: candidates.map((candidate) => candidate.entityId),
     candidateNames: new Map(candidates.map((candidate) => [candidate.entityId, candidate.name])),
     partyMembers,
@@ -404,7 +427,12 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
 // the drop is at/above the configured threshold. Returns false (so the caller
 // falls through to need/greed or looter-takes-all) when master loot does not
 // apply: disabled, below threshold, a solo looter, or no resolvable looter.
-function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): boolean {
+function startMasterLootRoll(
+  ctx: SimContext,
+  itemId: string,
+  mob: Entity,
+  instance?: ItemInstancePayload,
+): boolean {
   const strategies = partyLootStrategiesForMob(ctx, mob);
   if (!strategies || !strategies.master.enabled) return false;
   const def = ITEMS[itemId];
@@ -422,6 +450,7 @@ function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): bool
     itemId,
     itemName,
     quality: def?.quality,
+    instance: instance ? cloneItemInstancePayload(instance) : undefined,
     candidates: candidates.map((candidate) => candidate.entityId),
     candidateNames: new Map(candidates.map((candidate) => [candidate.entityId, candidate.name])),
     partyMembers: [...party.members],
@@ -450,7 +479,12 @@ function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): bool
 // loot-time in-range set: that is the fairness point. Mirrors
 // tryAwardCopperByFairSplit's shape (strategy check, candidate-count guard,
 // party lookup) but advances a per-party cursor instead of a Fisher-Yates split.
-function tryAwardItemByRoundRobin(ctx: SimContext, itemId: string, mob: Entity): boolean {
+function tryAwardItemByRoundRobin(
+  ctx: SimContext,
+  itemId: string,
+  mob: Entity,
+  instance?: ItemInstancePayload,
+): boolean {
   if (effectiveItemLootStrategy(ctx, itemId, mob) !== 'round-robin') return false;
   const candidates = partyLootCandidatesForMob(ctx, mob);
   if (candidates.length <= 1) return false;
@@ -458,7 +492,7 @@ function tryAwardItemByRoundRobin(ctx: SimContext, itemId: string, mob: Entity):
   if (!party) return false;
   const winner = candidates[party.lootTurn % candidates.length];
   party.lootTurn++;
-  ctx.addItem(itemId, 1, winner.entityId);
+  grantLootItem(ctx, itemId, winner.entityId, instance);
   return true;
 }
 
@@ -473,12 +507,13 @@ export function awardSharedLootItem(
   itemId: string,
   mob: Entity,
   looter: PlayerMeta,
+  instance?: ItemInstancePayload,
 ): boolean {
-  if (startMasterLootRoll(ctx, itemId, mob)) return true;
-  if (startNeedGreedRoll(ctx, itemId, mob)) return true;
-  if (tryAwardItemByRoundRobin(ctx, itemId, mob)) return true;
+  if (startMasterLootRoll(ctx, itemId, mob, instance)) return true;
+  if (startNeedGreedRoll(ctx, itemId, mob, instance)) return true;
+  if (tryAwardItemByRoundRobin(ctx, itemId, mob, instance)) return true;
   if (!ctx.canAddItem(itemId, 1, looter.entityId)) return false;
-  ctx.addItem(itemId, 1, looter.entityId);
+  grantLootItem(ctx, itemId, looter.entityId, instance);
   return true;
 }
 
@@ -627,7 +662,7 @@ export function assignMasterLoot(
         text: `${r.meta.name} assigned [[i:${roll.itemId}]] to ${targetName}.`,
         pid,
       });
-    ctx.addItem(roll.itemId, 1, targets[0]);
+    grantLootItem(ctx, roll.itemId, targets[0], roll.instance);
     return;
   }
   convertMasterRollToNeedGreed(ctx, roll, targets);
@@ -769,7 +804,7 @@ export function resolveLootRoll(ctx: SimContext, roll: PendingLootRoll): void {
       });
     return;
   }
-  ctx.addItem(roll.itemId, 1, winner.pid);
+  grantLootItem(ctx, roll.itemId, winner.pid, roll.instance);
 }
 
 // Whether `pid` is a currently-connected player the loot hub's addItem/resolve
@@ -785,11 +820,22 @@ function returnLootRollItemToCorpse(ctx: SimContext, roll: PendingLootRoll): voi
   const mob = ctx.entities.get(roll.mobId);
   if (!mob?.dead) return;
   if (!mob.loot) mob.loot = { copper: 0, items: [] };
-  const existing = mob.loot.items.find(
-    (slot) => slot.openToAll && slot.itemId === roll.itemId && !slot.personalFor,
-  );
-  if (existing) existing.count += 1;
-  else mob.loot.items.push({ itemId: roll.itemId, count: 1, openToAll: true });
+  // Instanced drops never stack: each rolled secondary copy is its own corpse slot.
+  if (roll.instance) {
+    mob.loot.items.push({
+      itemId: roll.itemId,
+      count: 1,
+      openToAll: true,
+      instance: cloneItemInstancePayload(roll.instance),
+    });
+  } else {
+    const existing = mob.loot.items.find(
+      (slot) =>
+        slot.openToAll && slot.itemId === roll.itemId && !slot.personalFor && !slot.instance,
+    );
+    if (existing) existing.count += 1;
+    else mob.loot.items.push({ itemId: roll.itemId, count: 1, openToAll: true });
+  }
   mob.lootable = true;
 }
 

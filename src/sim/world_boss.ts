@@ -19,6 +19,7 @@
 // loot entries in array order) so the parity gate's rng draw-order log stays stable.
 
 import { MOBS } from './data';
+import { makeLootItem } from './loot/loot_roll';
 import type { PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
 import type { Entity, LootSlot } from './types';
@@ -223,7 +224,7 @@ export function rollWorldBossLoot(ctx: SimContext, mob: Entity, contributors: Pl
           cumulative += g.chance;
           if (roll < cumulative) {
             if (g.itemId && !gearWon) {
-              items.push({ itemId: g.itemId, count: 1, personalFor: [meta.entityId] });
+              items.push(makeLootItem(ctx, g.itemId, mob.level, { personalFor: [meta.entityId] }));
               gearWon = true;
             }
             break;
@@ -233,7 +234,7 @@ export function rollWorldBossLoot(ctx: SimContext, mob: Entity, contributors: Pl
       }
       if (!ctx.rng.chance(entry.chance)) continue;
       if (entry.itemId)
-        items.push({ itemId: entry.itemId, count: 1, personalFor: [meta.entityId] });
+        items.push(makeLootItem(ctx, entry.itemId, mob.level, { personalFor: [meta.entityId] }));
     }
   }
   if (copper > 0 || items.length > 0) {
