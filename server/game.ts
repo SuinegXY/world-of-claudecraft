@@ -5143,6 +5143,7 @@ export class GameServer {
       crat: p.critRating,
       hrat: p.hasteRating,
       hirat: p.hitRating,
+      vrat: p.versatilityRating,
       eat: p.eating ? { remaining: round2(p.eating.remaining) } : null,
       drk: p.drinking ? { remaining: round2(p.drinking.remaining) } : null,
       opUntil: p.overpowerUntil > this.sim.time ? 1 : 0,
@@ -5300,6 +5301,10 @@ export class GameServer {
       maybe('bags', meta.bags);
       maybe('buyback', meta.vendorBuyback);
       maybe('equip', meta.equipment);
+      // Per-slot instance payloads (enchant / masterwork / exclusive secondary
+      // affixes). Rides with equip so the paperdoll tooltip can show rolled
+      // secondaries; omitted keeps the prior mirror like other heavy fields.
+      maybe('eqi', meta.equipmentInstance);
       maybe('cosmetics', anchorSession.accountCosmetics);
       maybe('qlog', [...meta.questLog.values()]);
       maybe('qdone', [...meta.questsDone]);

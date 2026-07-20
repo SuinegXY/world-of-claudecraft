@@ -144,7 +144,7 @@ function bareClient(pid: number, playerClass: PlayerClass = 'warrior'): ClientWo
 }
 
 describe('self stat wire round-trip', () => {
-  it('mirrors crit/haste rating from the self snapshot onto the paper-doll entity', () => {
+  it('mirrors crit/haste/hit/versatility rating from the self snapshot onto the paper-doll entity', () => {
     const client = bareClient(1);
     const internals = client as unknown as { applySnapshot(snapshot: unknown): void };
     internals.applySnapshot({
@@ -168,12 +168,15 @@ describe('self stat wire round-trip', () => {
         crat: 20,
         hrat: 150,
         hirat: 30,
+        vrat: 40,
       },
     });
     // Without the wire fields these read the blankEntity default 0 (the bug this guards).
     expect(client.player.critRating).toBe(20);
     expect(client.player.hasteRating).toBe(150);
     expect(client.player.hitRating).toBe(30);
+    expect(client.player.versatilityRating).toBe(40);
+    expect(client.player.versatilityDmgBonus).toBeCloseTo(0.04, 9);
   });
 
   it('backfills WARFARE fractions when an older server sends the legacy six-field stats shape', () => {
@@ -2686,9 +2689,9 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 48 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 49 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
-// 49th unregistered delta key reddens this gate.
+// 50th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
   'achg',
   'arena',
@@ -2712,6 +2715,7 @@ const ALL_DELTA_KEYS = [
   'drun',
   'dstats',
   'duel',
+  'eqi',
   'equip',
   'gprof',
   'honor',
@@ -2767,6 +2771,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   drun: 'delveRun',
   dstats: 'deedStats',
   duel: 'duelInfo',
+  eqi: 'equippedInstances',
   equip: 'equipment',
   gprof: 'gatheringProficiency',
   inv: 'inventory',
@@ -2862,6 +2867,10 @@ function dirtyEveryDeltaField(): {
   meta.inventory = [{ itemId: 'baked_bread', count: 3 }];
   meta.vendorBuyback = [{ itemId: 'apprentice_staff', count: 1 }];
   meta.equipment = { ...meta.equipment, mainhand: 'zealotsbane_blade' };
+  meta.equipmentInstance = {
+    ...meta.equipmentInstance,
+    mainhand: { secondary: { versatilityRating: 20, critRating: 10 } },
+  };
   meta.questLog.set('q_widows', { questId: 'q_widows', counts: [10, 0], state: 'active' });
   meta.questsDone.add('q_wolves');
   meta.raidLockouts.set('nythraxis_boss_arena', FAR_FUTURE_MS);
@@ -3038,6 +3047,10 @@ describe('full self-state snapshot delta fixture', () => {
     expect(client.inventory).toEqual([{ itemId: 'baked_bread', count: 3 }]); // inv -> inventory
     expect(client.vendorBuyback).toEqual([{ itemId: 'apprentice_staff', count: 1 }]); // buyback -> vendorBuyback
     expect(client.equipment).toMatchObject({ mainhand: 'zealotsbane_blade' }); // equip -> equipment
+    expect(client.player.equippedInstances.mainhand?.secondary).toEqual({
+      versatilityRating: 20,
+      critRating: 10,
+    }); // eqi -> player.equippedInstances
     // cosmetics -> accountCosmetics, asserted against the normalized shape (the input
     // is already the normal {completedQuestIds, mechChromaIds} form, see :192-202)
     expect(client.accountCosmetics).toEqual({
@@ -3202,9 +3215,9 @@ describe('gather node cooldown wire round trip (ncd)', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 48 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(48);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(48);
+  it('ALL_DELTA_KEYS contains exactly 49 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(49);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(49);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -3216,7 +3229,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(48);
+    expect(scraped.size).toBe(49);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

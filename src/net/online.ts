@@ -58,6 +58,7 @@ import {
   type SportRole,
   type VcBracket,
   type VcNationId,
+  versatilityDamageFractionFromRating,
   type WeaponSkinType,
 } from '../sim/types';
 import {
@@ -2345,13 +2346,15 @@ export class ClientWorld implements IWorld {
       e.spellHaste = s.sh ?? 0;
       e.critChance = s.crit ?? 0.05;
       e.dodgeChance = s.dodge ?? 0.05;
-      // Crit/haste/hit RATING are informational paper-doll stats (combat values ride
-      // crit/sh above, and hit resolves server-side); sent always like the other self
-      // stats so the online character sheet shows them instead of the blankEntity 0.
-      // Server-recomputed.
+      // Crit/haste/hit/versatility RATING are informational paper-doll stats (combat
+      // values ride crit/sh above, and hit/versatility resolve server-side); sent
+      // always like the other self stats so the online character sheet shows them
+      // instead of the blankEntity 0. Server-recomputed.
       e.critRating = s.crat ?? 0;
       e.hasteRating = s.hrat ?? 0;
       e.hitRating = s.hirat ?? 0;
+      e.versatilityRating = s.vrat ?? 0;
+      e.versatilityDmgBonus = versatilityDamageFractionFromRating(e.versatilityRating);
       e.weapon = s.weapon ?? e.weapon;
       e.eating = s.eat
         ? { itemId: '', kind: 'food', hpPer2s: 0, manaPer2s: 0, remaining: s.eat.remaining }
@@ -2386,6 +2389,11 @@ export class ClientWorld implements IWorld {
         this.invChanged = true;
       }
       if (s.equip !== undefined) this.equipment = s.equip;
+      // Per-slot instance payloads for the paperdoll (enchant / masterwork /
+      // exclusive secondary affixes). Delta-guarded with equip.
+      if (s.eqi !== undefined) {
+        e.equippedInstances = s.eqi ?? {};
+      }
       // IWorldCosmetics facet (W7) self-decode: cosmetics is delta-guarded (a
       // missing field keeps the prior mirror); normalizeAccountCosmetics rebuilds it.
       if (s.cosmetics !== undefined) {

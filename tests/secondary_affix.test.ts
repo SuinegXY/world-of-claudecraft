@@ -134,6 +134,42 @@ describe('secondary affix combat effects', () => {
     );
   });
 
+  it('raises dealt damage by versatility rating (10 rating = +1%)', () => {
+    const sim = new Sim({ seed: 3, playerClass: 'mage', autoEquip: false });
+    sim.setPlayerLevel(20);
+    const gear = Object.values(ITEMS).find(
+      (i) =>
+        i.kind === 'armor' &&
+        i.slot === 'chest' &&
+        i.armorType === 'cloth' &&
+        (!i.requiredClass || i.requiredClass.includes('mage')),
+    );
+    expect(gear).toBeTruthy();
+    if (!gear) return;
+    const dummy = createMob(sim.nextId++, MOBS.forest_wolf, 1, {
+      x: sim.player.pos.x + 2,
+      y: sim.player.pos.y,
+      z: sim.player.pos.z,
+    });
+    dummy.maxHp = 100_000;
+    dummy.hp = 100_000;
+    sim.entities.set(dummy.id, dummy);
+    const strike = (amount: number): number => {
+      const before = dummy.hp;
+      sim.dealDamage(sim.player, dummy, amount, false, 'arcane', 'Test Bolt', 'hit');
+      return before - dummy.hp;
+    };
+    const without = strike(1000);
+    dummy.hp = dummy.maxHp;
+    sim.addItemInstance(gear.id, { secondary: { versatilityRating: 100 } });
+    sim.equipItem(gear.id);
+    expect(sim.player.versatilityDmgBonus).toBeCloseTo(0.1, 9);
+    const withVers = strike(1000);
+    expect(without).toBeGreaterThan(0);
+    expect(withVers).toBeGreaterThan(without);
+    expect(withVers / without).toBeCloseTo(1.1, 2);
+  });
+
   it('persists secondary on serializeCharacter round-trip', () => {
     const sim = new Sim({ seed: 11, playerClass: 'warrior', autoEquip: false });
     sim.setPlayerLevel(8);
