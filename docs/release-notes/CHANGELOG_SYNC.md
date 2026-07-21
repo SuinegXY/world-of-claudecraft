@@ -7,12 +7,18 @@
 玩家向摘要, 顺序固定为:
 
 1. **独家更新** (本服数值/机制调整, 始终置顶)
-2. **官方更新** (当前版本的中文摘要, 例如 v0.27.0)
+2. **官方更新** (当前版本的中文摘要, 例如 v0.28.0)
+
+Agent 执行同一流程时使用 skill:
+
+- Claude / Cursor: `.claude/skills/changelog-sync/` (`/changelog-sync`)
+- Codex: `.agents/skills/woc-changelog-sync/` (`$woc-changelog-sync`)
 
 ## 同步一次官方版本时的步骤
 
 1. 从官方 Release 取原文  
-   `https://github.com/levy-street/world-of-claudecraft/releases/tag/vX.Y.Z`
+   `https://github.com/levy-street/world-of-claudecraft/releases/tag/vX.Y.Z`  
+   若仓库已有英文源稿 `docs/release-notes/release-notes-vX.Y.Z.md`, 优先用它。
 2. 在 `docs/release-notes/` 写/更新中文源稿  
    `release-notes-vX.Y.md` (只写玩家关心的要点, 可压缩工具链/CI 细节)
 3. 更新 `public/changelog.html`  
@@ -35,6 +41,9 @@
 |---|---|
 | `public/changelog.html` | 线上中文页 |
 | `docs/release-notes/release-notes-v*.md` | 中文源稿 |
+| `docs/release-notes/release-notes-v*.*.*.md` | 官方英文源稿 (若有) |
+| `.claude/skills/changelog-sync/` | Claude / Cursor skill |
+| `.agents/skills/woc-changelog-sync/` | Codex skill |
 | `src/ui/i18n.catalog/index.ts` (`nav.exclusiveUpdates`) | 导航英文键 |
 | `src/ui/i18n.locales/zh_CN.ts` 等 | 导航本地化 |
 | `index.html` / `play.html` | 导航 DOM |

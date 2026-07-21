@@ -48,6 +48,7 @@ Repository skills live in `.agents/skills/` and are invoked as `$skill-name`:
 - `$woc-file-issue`: draft an issue, and file it only with explicit authorization.
 - `$woc-release-merge-audit`: find semantic damage after release integration.
 - `$woc-release-malware-audit`: scan and judge malicious-code risk.
+- `$woc-changelog-sync`: sync `public/changelog.html` after merging an official release.
 - `$woc-codex-audit`: compare the checked-in Codex architecture with current official
   guidance.
 
