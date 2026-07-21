@@ -29,7 +29,6 @@ import {
   zoneAt,
 } from '../src/sim/data';
 import { devTierIndexForMergedPrs } from '../src/sim/dev_tier';
-import { parseRelayCommand } from '../src/sim/discord_relay';
 import {
   isInJailCage,
   JAIL_CENTER,
@@ -140,7 +139,6 @@ import {
 } from './deeds_records';
 import { enqueueActivity } from './discord_activity';
 import { discordFlairForAccount, grantRewardPoints } from './discord_db';
-import { enqueueRelay } from './discord_relay';
 import { formatDuration } from './duration';
 import { mergedPrsForLogin } from './github_contributors';
 import { githubForAccount } from './github_db';
@@ -573,7 +571,6 @@ const HOLDER_TIER_REFRESH_MS = 60_000;
 const PLAYTIME_GRANT_MS = 5 * 60_000;
 const PLAYTIME_POINTS = 10;
 const DAILY_REWARD_ACTIVITY_MS = 60_000;
-const RELAY_COOLDOWN_MS = 8_000; // min gap between a player's "!" community posts
 const ADMIN_LOCATION_POI_RADIUS = 32;
 
 export interface ClientSession {
@@ -1234,7 +1231,6 @@ export class GameServer {
     VcMatch,
     { completionId: string; completedAtIso: string }
   >();
-  private relayCooldown = new Map<number, number>(); // accountId -> last "!" relay post (ms)
   // pids whose holder tier was forced via the dev /woctier command — the chain
   // refresh leaves them alone so the override sticks during testing (dev only).
   private devTierPids = new Set<number>();
@@ -2135,45 +2131,6 @@ export class GameServer {
   /** The chat flair of the session at `pid`, read from the SESSION, never an entity. */
   private chatFlairForPid(pid: number): ChatSenderFlair | undefined {
     return this.clients.get(pid)?.chatFlair;
-  }
-
-  // Intercept a leading "!" community command in chat (lfg/wts/...): broadcast it
-  // in-world and hand it to the bot for Discord cross-post. Returns true when it
-  // consumed the line (so it is not sent as normal chat).
-  private handleRelayCommand(session: ClientSession, text: string): boolean {
-    const parsed = parseRelayCommand(text);
-    if (!parsed) return false; // unknown "!word" -> treat as normal chat
-    const now = Date.now();
-    if (now - (this.relayCooldown.get(session.accountId) ?? 0) < RELAY_COOLDOWN_MS) return true;
-    this.relayCooldown.set(session.accountId, now);
-    const { command, message } = parsed;
-    const e = this.sim.entities.get(session.pid);
-    const cls = e ? e.templateId.charAt(0).toUpperCase() + e.templateId.slice(1) : '';
-    const zone = e
-      ? e.dungeonId
-        ? (DUNGEONS[e.dungeonId]?.name ?? e.dungeonId)
-        : zoneAt(e.pos.z).name
-      : REALM;
-    // In-game: a system broadcast everyone sees (variable-routed; S3 guard skips it).
-    this.broadcastSystem(`[${command.tag}] ${session.name}: ${message || command.label}`);
-    // Out-of-game: hand off to the bot, which posts a rich embed with a Respond button.
-    enqueueRelay({
-      commandId: command.id,
-      tag: command.tag,
-      label: command.label,
-      color: command.color,
-      accountId: session.accountId,
-      characterName: session.name,
-      level: e?.level ?? 1,
-      className: cls,
-      realm: REALM,
-      zone,
-      message,
-      profileUrl: REALM_PUBLIC_ORIGIN
-        ? `${REALM_PUBLIC_ORIGIN}/c/${encodeURIComponent(session.name)}`
-        : null,
-    });
-    return true;
   }
 
   // Update one player's holder-tier flair from their linked wallet's $WOC
@@ -4192,9 +4149,6 @@ export class GameServer {
         // message is routed anywhere. Soft (cosmetic) words are NOT touched here
         // — clients mask those locally when their profanity filter is on.
         if (this.enforceChatPolicy(session, text)) break;
-        // "!" community commands (lfg/wts/...): broadcast in-world + cross-post to
-        // Discord, then stop (not normal chat).
-        if (text.startsWith('!') && this.handleRelayCommand(session, text)) break;
         // guild and officer chat are persistent + cross-zone, so they live in
         // the server's SocialService rather than the sim (no guild concept).
         // MMO convention: /g is guild; /general remains world chat.

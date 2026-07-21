@@ -26,8 +26,6 @@ import { type GuideRoute, hrefFor } from './routes';
 const ORIGIN = 'https://worldofclaudecraft.com';
 const LOGO = `${ORIGIN}/woc_logo_square.webp`;
 const GITHUB_URL = 'https://github.com/levy-street/world-of-claudecraft';
-const DISCORD_URL = 'https://discord.com/invite/worldofclaudecraft';
-
 // The newcomer FAQ on /guide/faq, kept in lockstep with pages/faq.ts so the FAQPage
 // JSON-LD answers the same questions the visible page does. cap rows splice the level
 // cap, exactly like the page (the cap value is resolved by the caller via the same key).
@@ -229,7 +227,7 @@ function videoGameNode(description: string, inLanguage: string): Record<string, 
     image: LOGO,
     description,
     inLanguage,
-    sameAs: [GITHUB_URL, DISCORD_URL],
+    sameAs: [GITHUB_URL],
   };
 }
 

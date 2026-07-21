@@ -141,13 +141,10 @@ export function chatInputTint(channel: ChatInputTintTarget | null): string | nul
 
 // Compose the text actually sent for a message typed while a channel tab is
 // active. An explicit slash command the player typed always wins (so "/w bob hi"
-// from the World tab still whispers); a "!" community command (lfg/wts/event/...)
-// is likewise passed through untouched, so the server's "!" relay intercept still
-// fires (prefixing it as "/say !lfg ..." would hide it from that gate); otherwise
-// the channel prefix is prepended.
+// from the World tab still whispers); otherwise the channel prefix is prepended.
 export function composeChatLine(channel: ChatTabChannel, typed: string): string {
   const text = typed.trim();
-  if (!text || text.startsWith('/') || text.startsWith('!')) return text;
+  if (!text || text.startsWith('/')) return text;
   return channelSendPrefix(channel) + text;
 }
 
@@ -170,15 +167,11 @@ export function composeWhisperReply(typed: string): string {
 // whisper / reply (`/w`, `/r`), emotes (`/me`, `/dance`), rolls (`/roll`),
 // channel membership (`/join`, `/leave`), the ambiguous bare `/g` (general
 // offline, guild online), and any unknown command return null and leave the sticky
-// channel unchanged. A `!` community command (`!lfg`, `!events`) is a transient
-// command like a roll, and it is host-dependent anyway (the server relay gate
-// consumes it online; offline it would land in say), so it also returns null.
-// Host-independent by design: only prefixes that route identically offline and
-// online are mapped (hence `/gu`/`/general`, never `/g`).
+// channel unchanged. Host-independent by design: only prefixes that route
+// identically offline and online are mapped (hence `/gu`/`/general`, never `/g`).
 export function sentLineChannel(line: string): ChatTabChannel | null {
   const text = line.trim();
   if (!text) return null;
-  if (text.startsWith('!')) return null;
   if (!text.startsWith('/')) return 'say';
   if (/^\/p(arty)?\s/i.test(text)) return 'party';
   if (/^\/y(ell)?\s/i.test(text)) return 'yell';

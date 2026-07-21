@@ -7480,8 +7480,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '按下 I 即可開啟活動行事曆。它標示出王國中值得預作規劃的日子，從每週的團隊副本召集到嘉年華之夜，而這裡也是公會安排行程之處：公會會長與幹部可以在上頭預定活動，而每位成員都會在同一頁面上看到它們。',
   'guide.social.calendarHeading': '活動行事曆',
   'guide.social.communityBody':
-    '以驚嘆號開頭起一行聊天，就能發出社群呼叫：!lfg 用來尋找隊伍，!wts 與 !wtb 用來交易，!recruit 為你的公會招募，!event 用來公告團隊副本或聚會，!help 則用來求助。你一輸入驚嘆號，呼叫選單便會彈出。每則呼叫都會在世界中廣播，並同步轉發到社群 Discord，因此連尚未登入的玩家也能收到。社群呼叫是線上遊玩的一部分。',
-  'guide.social.communityHeading': '呼叫整個社群',
+    '想找人一起玩？用 LFG 聊天頻道發組隊請求，用世界或綜合頻道做更大範圍的呼叫，公會事務則走公會聊天。/invite 可以把人拉進小隊，地下城查找器也會為副本自動組隊。組隊與社交都在遊戲內完成。',
+  'guide.social.communityHeading': '在聊天裡找人',
   'guide.social.emotesBody':
     '你的角色也能不用言語表達：輸入諸如 /wave、/dance、/cheer 或 /bow 之類的表情指令，先選定一位朋友即可將它指向對方，或者按住 X 開啟表情輪盤，快速做出一個頭頂表情。',
   'guide.social.slashBody':

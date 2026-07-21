@@ -274,25 +274,20 @@ describe('chat channel tabs — pure model', () => {
     expect(isChatTabChannel(7)).toBe(false);
   });
 
-  it('passes a "!" community command through untouched (never wraps it in a channel prefix)', () => {
-    // The v0.26.0 regression prefixed non-slash lines, so "!lfg ..." became
-    // "/say !lfg ..." and the server "!" relay gate (text.startsWith("!")) missed it.
-    expect(composeChatLine('party', '!lfg need a healer')).toBe('!lfg need a healer');
+  it('prefixes a leading "!" line like any other plain chat (no community-command special case)', () => {
+    // Community "!" relay commands were removed. A typed "!lfg ..." is ordinary
+    // chat and takes the active channel prefix like any other plain line.
+    expect(composeChatLine('party', '!lfg need a healer')).toBe('/p !lfg need a healer');
     expect(composeChatLine('say', '!events raid at the fountain')).toBe(
-      '!events raid at the fountain',
+      '/say !events raid at the fountain',
     );
-    // A plain line still gets the channel prefix; an explicit slash still wins.
     expect(composeChatLine('party', 'hello')).toBe('/p hello');
     expect(composeChatLine('party', '/w Bob hi')).toBe('/w Bob hi');
   });
 
-  it('a "!" community command is transient: it never resets the sticky channel to say', () => {
-    // noteSentChannel runs on every send; if a "!" line mapped like plain text
-    // it would return 'say' and firing "!lfg ..." mid-conversation would drop
-    // your NEXT plain line from party/general to say. It stays null, like the
-    // other transient commands (whispers, emotes, rolls).
-    expect(sentLineTarget('!lfg need a healer')).toBeNull();
-    expect(sentLineChannel('!events raid at the fountain')).toBeNull();
+  it('a leading "!" line is ordinary say for sticky-channel purposes', () => {
+    expect(sentLineTarget('!lfg need a healer')).toBe('say');
+    expect(sentLineChannel('!events raid at the fountain')).toBe('say');
   });
 
   it('sentLineChannel maps the /1 shortcut to General (but never /g, which is guild online)', () => {

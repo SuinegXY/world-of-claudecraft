@@ -192,7 +192,6 @@ import {
   maybeShowFirstRunCameraPrompt,
 } from './ui/camera_prompt';
 import { deleteCharButtonHtml } from './ui/char_delete_button';
-import { ChatCommandMenu } from './ui/chat_command_menu';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
 import { claudiumBalanceAddress } from './ui/claudium_view';
 import { ensureDeedLocalesLoaded } from './ui/deed_i18n';
@@ -1163,7 +1162,6 @@ async function startGame(
     }, 450);
   };
   const closeChat = (): void => {
-    chatCmdMenu.hide();
     chatInput.value = '';
     chatInput.style.display = 'none';
     chatInput.style.height = '';
@@ -1207,11 +1205,6 @@ async function startGame(
   }
   // Fired for every open path (keybind, whisper context menu, mobile toggle)
   // since they all call focus().
-  // Autocomplete dropdown for the in-game "!" community commands (!lfg etc.).
-  const chatCmdMenu = new ChatCommandMenu(chatInput, () => {
-    autosizeChatInput();
-    anchorChatInput();
-  });
   chatInput.addEventListener('focus', () => {
     // Actively replying (issue 1577 round 2 (7)/(8)): the composer is focused, so
     // expand it and fade the chat window behind it. Class is mirror-tied to focus
@@ -1226,7 +1219,6 @@ async function startGame(
   chatInput.addEventListener('input', () => {
     autosizeChatInput();
     anchorChatInput();
-    chatCmdMenu.update(chatInput.value);
   });
   window.addEventListener('resize', () => {
     if (chatInput.style.display === 'block') {
@@ -1236,11 +1228,6 @@ async function startGame(
   });
   chatInput.addEventListener('keydown', (e) => {
     e.stopPropagation();
-    // While the "!" command dropdown is open it owns Arrows/Enter/Tab/Escape.
-    if (chatCmdMenu.onKeydown(e)) {
-      e.preventDefault();
-      return;
-    }
     if (e.key === 'Enter' && !e.isComposing) {
       // single-message semantics (like classic chat): Enter always sends,
       // never inserts a newline into the textarea.
@@ -5325,7 +5312,6 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
   if (jsonLd) {
     const sameAs = [
       'https://github.com/levy-street/world-of-claudecraft',
-      'https://discord.com/invite/worldofclaudecraft',
       'https://www.youtube.com/@WoClaudeCraft',
       'https://x.com/WoClaudecraft',
       'https://www.instagram.com/worldofclaudecraft/',
@@ -6346,8 +6332,9 @@ function flashWalletError(message: string): void {
 // Refreshed after login: ask the server which wallet (if any) this account has
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
-// Discord UI is available on web and native unless explicitly disabled at build time.
-const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
+// Discord UI is off by default (China exclusive: Discord is unreachable). Set
+// VITE_DISCORD_DISABLED=0 at build time to re-enable the login/HUD Discord surface.
+const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '1').trim() !== '1';
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller

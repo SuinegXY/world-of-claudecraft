@@ -7480,8 +7480,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '按 I 打开活动日历。它会标出王国中值得围绕安排的日子，从每周的团队副本召集到嘉年华之夜，也是公会安排日程之处：会长和官员可以在上面预定活动，每位成员都能在同一页面上看到它们。',
   'guide.social.calendarHeading': '活动日历',
   'guide.social.communityBody':
-    '以感叹号开头输入一行聊天，即可发起一次社区呼叫：!lfg 寻找队伍，!wts 与 !wtb 进行交易，!recruit 为你的公会招人，!event 宣告一场团队副本或聚会，!help 请求援手。你一输入这个符号，就会弹出一份呼叫菜单。每次呼叫都会在世界中广播，并同步到社区 Discord，因此它能触及那些甚至尚未登录的玩家。社区呼叫是在线游玩的一部分。',
-  'guide.social.communityHeading': '呼叫整个社区',
+    '想找人一起玩？用 LFG 聊天频道发组队请求，用世界或综合频道做更大范围的呼叫，公会事务则走公会聊天。/invite 可以把人拉进小队，地下城查找器也会为副本自动组队。组队与社交都在游戏内完成。',
+  'guide.social.communityHeading': '在聊天里找人',
   'guide.social.emotesBody':
     '你的角色也能不用言语来表达：输入像 /wave、/dance、/cheer 或 /bow 这样的表情动作，先选中一位好友即可将它指向对方，或者按住 X 打开表情轮盘，快速做出一个头顶表情。',
   'guide.social.slashBody':

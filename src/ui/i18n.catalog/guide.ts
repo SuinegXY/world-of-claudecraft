@@ -1563,9 +1563,9 @@ export const guideStrings = {
       'Belonging to a guild gives you a private guild chat channel and shows your guildmates on a shared roster, so there are always familiar faces online.',
 
     // Community broadcast calls, everyday slash commands, and emotes.
-    communityHeading: 'Calling the whole community',
+    communityHeading: 'Finding players in chat',
     communityBody:
-      'Start a chat line with an exclamation mark to make a community call: !lfg to look for a group, !wts and !wtb to trade, !recruit for your guild, !event to announce a raid or meetup, and !help to ask for a hand. A menu of the calls pops up the moment you type the mark. Each call is broadcast in the world and echoed to the community Discord, so it reaches players who are not even logged in. Community calls are part of online play.',
+      'Looking for players? Use the LFG chat channel for group requests, World or General for broader calls, and Guild chat for your guild. /invite brings someone into your party, and the Dungeon Finder forms groups for dungeon runs. Organized play happens inside the game.',
     slashHeading: 'Handy slash commands',
     slashBody:
       'A few everyday commands are worth memorizing: /w Name sends a whisper and /r answers the last one you received, /invite asks someone into your party, /follow falls in step behind a friend, /roll casts dice for the group to see, /who shows who is online, and /afk marks you away. Type /help in the game for the full list.',
