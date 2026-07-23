@@ -68,6 +68,7 @@ import {
   type SportRole,
   type VcBracket,
   type VcNationId,
+  versatilityDamageFractionFromRating,
   type WeaponSkinType,
 } from '../sim/types';
 import {
@@ -1164,6 +1165,8 @@ function blankEntity(id: number): Entity {
     sharedCritBonus: 0,
     critRating: 0,
     hasteRating: 0,
+    versatilityRating: 0,
+    versatilityDmgBonus: 0,
     hitRating: 0,
     hitBonus: 0,
     critDmgSpellBonus: 0,
@@ -2811,6 +2814,8 @@ export class ClientWorld implements IWorld {
       // Server-recomputed.
       e.critRating = s.crat ?? 0;
       e.hasteRating = s.hrat ?? 0;
+      e.versatilityRating = s.vrat ?? 0;
+      e.versatilityDmgBonus = versatilityDamageFractionFromRating(s.vrat ?? 0);
       e.hitRating = s.hirat ?? 0;
       e.weapon = s.weapon ?? e.weapon;
       // ticksElapsed is a sim-internal sfx-cadence counter (consume_sfx.ts):

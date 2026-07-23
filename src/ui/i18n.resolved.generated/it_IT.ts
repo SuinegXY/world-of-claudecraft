@@ -1210,6 +1210,7 @@ export const it_IT: EnTranslations = {
         "spellPower": "Potere Magico",
         "critRating": "Indice di critico",
         "hasteRating": "Indice di celerità",
+        "versatilityRating": "Versatility",
         "parry": "Parata",
         "hitRating": "Valutazione Colpo",
         "warfare": "Guerra"
@@ -1231,6 +1232,7 @@ export const it_IT: EnTranslations = {
         "hasteRating": "Indice di celerità dal tuo equipaggiamento e dai bonus di set, che accelera i tuoi attacchi e i tuoi lanci. Circa 10 punti conferiscono l'1% di celerità.",
         "parry": "La tua probabilità di parare completamente un attacco in mischia frontale, senza subire danni. Un colpo alle spalle non può essere parato.",
         "hitRating": "Valutazione colpo dall'equipaggiamento e dai bonus di set, che riduce la frequenza con cui i tuoi attacchi mancano e i tuoi incantesimi vengono resistiti, specialmente contro nemici di livello superiore. Circa 10 punti di valutazione concedono l'1% di colpo.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Aumenta il danno inflitto ai giocatori del {increase}% e riduce il danno subito dai giocatori del {reduction}%."
       },
       "effects": {
@@ -4636,6 +4638,7 @@ export const it_IT: EnTranslations = {
     "highscores": "Classifiche",
     "wiki": "Wiki",
     "news": "Novità",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Scarica",
     "loginRegister": "Accedi/Registrati",
     "account": "Account",
@@ -6624,7 +6627,10 @@ export const it_IT: EnTranslations = {
       "dps": "Danni/sec",
       "critChance": "Prob. critico",
       "dodge": "Schivata",
-      "parry": "Parata"
+      "parry": "Parata",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{kind} {quality}",

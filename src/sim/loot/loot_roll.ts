@@ -35,6 +35,7 @@ import type {
   CurrencyLootStrategy,
   Entity,
   ItemDef,
+  ItemInstancePayload,
   ItemLootStrategy,
   LootEntry,
   LootRollChoice,
@@ -44,8 +45,9 @@ import type {
   LootStrategies,
   MasterLootThreshold,
 } from '../types';
-import { dist2d, PARTY_XP_RANGE } from '../types';
+import { cloneItemInstancePayload, dist2d, PARTY_XP_RANGE } from '../types';
 import { LOOT_FFA_DELAY } from './loot_ffa';
+import { rollSecondaryAffix, withSecondaryAffix } from './secondary_affix';
 
 // How long (seconds) a need-greed roll stays open before it auto-resolves. Sole
 // users are startNeedGreedRoll + pruneCorpseLoot, so the constant lives with them.
@@ -74,6 +76,8 @@ export interface PendingLootRoll {
   itemId: string;
   itemName: string;
   quality: ItemDef['quality'];
+  /** Rolled instance payload for this specific drop (secondary affixes, etc.). */
+  instance?: ItemInstancePayload;
   candidates: number[];
   // Name snapshot for every candidate, captured when the roll opened. A winner who
   // disconnects before resolution is gone from ctx.players by then, so loot-line
@@ -185,6 +189,37 @@ function needsQuestDrop(ctx: SimContext, entry: LootEntry, meta: PlayerMeta): bo
   return objIdx >= 0 && ctx.countItem(entry.itemId, meta.entityId) < quest.objectives[objIdx].count;
 }
 
+/** Build a corpse loot slot, rolling exclusive secondary affixes on equippable gear. */
+export function makeLootItem(
+  ctx: SimContext,
+  itemId: string,
+  fallbackLevel: number,
+  extras?: Omit<LootSlot, 'itemId' | 'count'>,
+): LootSlot {
+  const slot: LootSlot = { itemId, count: 1, ...extras };
+  const item = ITEMS[itemId];
+  if (item) {
+    const secondary = rollSecondaryAffix(ctx.rng, item, fallbackLevel);
+    const instance = withSecondaryAffix(undefined, secondary);
+    if (instance) slot.instance = instance;
+  }
+  return slot;
+}
+
+/** Grant one loot unit, preserving a rolled instance payload when present. */
+export function grantLootItem(
+  ctx: SimContext,
+  itemId: string,
+  pid: number,
+  instance?: ItemInstancePayload,
+): void {
+  if (instance) {
+    ctx.addItemInstance(itemId, cloneItemInstancePayload(instance), pid);
+    return;
+  }
+  ctx.addItem(itemId, 1, pid);
+}
+
 export function rollLoot(
   ctx: SimContext,
   mob: Entity,
@@ -226,6 +261,7 @@ export function rollLoot(
     if (!variant) return id;
     return (itemLevel(variant) ?? 0) > (itemLevel(ITEMS[id]) ?? 0) ? variant.id : id;
   };
+  const fallbackLevel = Math.max(1, mob.level);
   for (const entry of template.loot) {
     // Exclusive groups: a single rng draw is partitioned by the group
     // entries' chances, so at most one matching entry drops.
@@ -238,7 +274,7 @@ export function rollLoot(
       const winner = pickRollGroupWinner(roll, group, awardedItemIds);
       if (winner?.itemId) {
         const resolvedId = heroicItem(winner.itemId);
-        items.push({ itemId: resolvedId, count: 1 });
+        items.push(makeLootItem(ctx, resolvedId, fallbackLevel));
         awardedItemIds.add(winner.itemId);
         awardedItemIds.add(resolvedId);
       }
@@ -264,17 +300,17 @@ export function rollLoot(
       if (questRecipients.length === 0) continue;
       if (!ctx.rng.chance(entry.chance)) continue;
       if (!entry.itemId) continue;
-      items.push({
-        itemId: entry.itemId,
-        count: 1,
-        personalFor: questRecipients.map((m) => m.entityId),
-      });
+      items.push(
+        makeLootItem(ctx, entry.itemId, fallbackLevel, {
+          personalFor: questRecipients.map((m) => m.entityId),
+        }),
+      );
       continue;
     }
     if (!ctx.rng.chance(entry.chance)) continue;
     if (entry.copper)
       copper += ctx.rng.int(Math.ceil(entry.copper * 0.6), Math.ceil(entry.copper * 1.4));
-    if (entry.itemId) items.push({ itemId: heroicItem(entry.itemId), count: 1 });
+    if (entry.itemId) items.push(makeLootItem(ctx, heroicItem(entry.itemId), fallbackLevel));
   }
   // Heroic-only drops: when the mob's claimed instance is heroic and it has a
   // heroic drop table (the final bosses), roll those entries into the SAME
@@ -293,13 +329,13 @@ export function rollLoot(
           const roll = ctx.rng.next();
           const winner = pickRollGroupWinner(roll, group, awardedItemIds);
           if (winner?.itemId) {
-            items.push({ itemId: winner.itemId, count: 1 });
+            items.push(makeLootItem(ctx, winner.itemId, fallbackLevel));
             awardedItemIds.add(winner.itemId);
           }
           continue;
         }
         if (!ctx.rng.chance(entry.chance)) continue;
-        if (entry.itemId) items.push({ itemId: entry.itemId, count: 1 });
+        if (entry.itemId) items.push(makeLootItem(ctx, entry.itemId, fallbackLevel));
       }
     }
   }
@@ -350,7 +386,12 @@ export function distributeLootCopper(ctx: SimContext, mob: Entity, looter: Playe
   mob.loot.copper = 0;
 }
 
-function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boolean {
+function startNeedGreedRoll(
+  ctx: SimContext,
+  itemId: string,
+  mob: Entity,
+  instance?: ItemInstancePayload,
+): boolean {
   if (effectiveItemLootStrategy(ctx, itemId, mob) !== 'need-greed') return false;
   const candidates = partyLootCandidatesForMob(ctx, mob);
   if (candidates.length <= 1) return false;
@@ -364,6 +405,7 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
     itemId,
     itemName,
     quality: def?.quality,
+    instance: instance ? cloneItemInstancePayload(instance) : undefined,
     candidates: candidates.map((candidate) => candidate.entityId),
     candidateNames: new Map(candidates.map((candidate) => [candidate.entityId, candidate.name])),
     partyMembers,
@@ -392,7 +434,12 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
 // the drop is at/above the configured threshold. Returns false (so the caller
 // falls through to need/greed or looter-takes-all) when master loot does not
 // apply: disabled, below threshold, a solo looter, or no resolvable looter.
-function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): boolean {
+function startMasterLootRoll(
+  ctx: SimContext,
+  itemId: string,
+  mob: Entity,
+  instance?: ItemInstancePayload,
+): boolean {
   const strategies = partyLootStrategiesForMob(ctx, mob);
   if (!strategies || !strategies.master.enabled) return false;
   const def = ITEMS[itemId];
@@ -410,6 +457,7 @@ function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): bool
     itemId,
     itemName,
     quality: def?.quality,
+    instance: instance ? cloneItemInstancePayload(instance) : undefined,
     candidates: candidates.map((candidate) => candidate.entityId),
     candidateNames: new Map(candidates.map((candidate) => [candidate.entityId, candidate.name])),
     partyMembers: [...party.members],
@@ -438,7 +486,12 @@ function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): bool
 // loot-time in-range set: that is the fairness point. Mirrors
 // tryAwardCopperByFairSplit's shape (strategy check, candidate-count guard,
 // party lookup) but advances a per-party cursor instead of a Fisher-Yates split.
-function tryAwardItemByRoundRobin(ctx: SimContext, itemId: string, mob: Entity): boolean {
+function tryAwardItemByRoundRobin(
+  ctx: SimContext,
+  itemId: string,
+  mob: Entity,
+  instance?: ItemInstancePayload,
+): boolean {
   if (effectiveItemLootStrategy(ctx, itemId, mob) !== 'round-robin') return false;
   const candidates = partyLootCandidatesForMob(ctx, mob);
   if (candidates.length <= 1) return false;
@@ -446,7 +499,7 @@ function tryAwardItemByRoundRobin(ctx: SimContext, itemId: string, mob: Entity):
   if (!party) return false;
   const winner = candidates[party.lootTurn % candidates.length];
   party.lootTurn++;
-  ctx.addItem(itemId, 1, winner.entityId);
+  grantLootItem(ctx, itemId, winner.entityId, instance);
   return true;
 }
 
@@ -461,12 +514,13 @@ export function awardSharedLootItem(
   itemId: string,
   mob: Entity,
   looter: PlayerMeta,
+  instance?: ItemInstancePayload,
 ): boolean {
-  if (startMasterLootRoll(ctx, itemId, mob)) return true;
-  if (startNeedGreedRoll(ctx, itemId, mob)) return true;
-  if (tryAwardItemByRoundRobin(ctx, itemId, mob)) return true;
+  if (startMasterLootRoll(ctx, itemId, mob, instance)) return true;
+  if (startNeedGreedRoll(ctx, itemId, mob, instance)) return true;
+  if (tryAwardItemByRoundRobin(ctx, itemId, mob, instance)) return true;
   if (!ctx.canAddItem(itemId, 1, looter.entityId)) return false;
-  ctx.addItem(itemId, 1, looter.entityId);
+  grantLootItem(ctx, itemId, looter.entityId, instance);
   return true;
 }
 
@@ -615,7 +669,7 @@ export function assignMasterLoot(
         text: `${r.meta.name} assigned [[i:${roll.itemId}]] to ${targetName}.`,
         pid,
       });
-    ctx.addItem(roll.itemId, 1, targets[0]);
+    grantLootItem(ctx, roll.itemId, targets[0], roll.instance);
     return;
   }
   convertMasterRollToNeedGreed(ctx, roll, targets);
@@ -761,7 +815,7 @@ export function resolveLootRoll(ctx: SimContext, roll: PendingLootRoll): void {
       });
     return;
   }
-  ctx.addItem(roll.itemId, 1, winner.pid);
+  grantLootItem(ctx, roll.itemId, winner.pid, roll.instance);
 }
 
 // Whether `pid` is a currently-connected player the loot hub's addItem/resolve
@@ -777,11 +831,21 @@ function returnLootRollItemToCorpse(ctx: SimContext, roll: PendingLootRoll): voi
   const mob = ctx.entities.get(roll.mobId);
   if (!mob?.dead) return;
   if (!mob.loot) mob.loot = { copper: 0, items: [] };
-  const existing = mob.loot.items.find(
-    (slot) => slot.openToAll && slot.itemId === roll.itemId && !slot.personalFor,
-  );
-  if (existing) existing.count += 1;
-  else mob.loot.items.push({ itemId: roll.itemId, count: 1, openToAll: true });
+  // Instanced drops (secondary affixes) never stack: each is unique.
+  if (roll.instance) {
+    mob.loot.items.push({
+      itemId: roll.itemId,
+      count: 1,
+      instance: cloneItemInstancePayload(roll.instance),
+      openToAll: true,
+    });
+  } else {
+    const existing = mob.loot.items.find(
+      (slot) => slot.openToAll && slot.itemId === roll.itemId && !slot.personalFor && !slot.instance,
+    );
+    if (existing) existing.count += 1;
+    else mob.loot.items.push({ itemId: roll.itemId, count: 1, openToAll: true });
+  }
   mob.lootable = true;
 }
 

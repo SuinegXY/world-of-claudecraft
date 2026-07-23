@@ -25,6 +25,7 @@ import {
   hitFractionFromRating,
   SHIELD_BLOCK_BASE,
   SPELL_POWER_PER_INT,
+  versatilityDamageFractionFromRating,
 } from './types';
 
 function baseEntity(id: number, pos: Vec3): Entity {
@@ -76,6 +77,8 @@ function baseEntity(id: number, pos: Vec3): Entity {
     sharedCritBonus: 0,
     critRating: 0,
     hasteRating: 0,
+    versatilityRating: 0,
+    versatilityDmgBonus: 0,
     hitRating: 0,
     hitBonus: 0,
     critDmgSpellBonus: 0,
@@ -272,6 +275,7 @@ export function recalcPlayerStats(
   let bonusSp = 0; // flat Spell Power from gear affixes + buff_spellpower auras
   let bonusCritRating = 0;
   let bonusHasteRating = 0;
+  let bonusVersatilityRating = 0;
   let bonusHitRating = 0;
   let bonusPvpOffenseRating = 0;
   let bonusPvpDefenseRating = 0;
@@ -316,6 +320,13 @@ export function recalcPlayerStats(
       s.int += enchantStats.int ?? 0;
       s.spi += enchantStats.spi ?? 0;
       s.armor += enchantStats.armor ?? 0;
+    }
+    // Exclusive secondary affixes (Versatility/Crit/Haste rolled at loot time).
+    const secondary = equipmentInstance?.[slot]?.secondary;
+    if (secondary) {
+      bonusVersatilityRating += secondary.versatilityRating ?? 0;
+      bonusCritRating += secondary.critRating ?? 0;
+      bonusHasteRating += secondary.hasteRating ?? 0;
     }
   }
   // Item-set bonuses from equipped pieces. Flat primary stats join the gear
@@ -562,6 +573,8 @@ export function recalcPlayerStats(
   e.spellPower = Math.max(0, Math.round(s.int * SPELL_POWER_PER_INT + bonusSp));
   e.critRating = bonusCritRating + setEff.critRating;
   e.hasteRating = bonusHasteRating + setEff.hasteRating;
+  e.versatilityRating = bonusVersatilityRating;
+  e.versatilityDmgBonus = versatilityDamageFractionFromRating(e.versatilityRating);
   // Hit rating (gear + set bonuses) folds into a hit fraction that combat subtracts
   // from miss (swingMissChance) and spell resist (spell_resist.ts). It answers the
   // Heroic +3 above-level penalty; unlike crit it has no higher-level suppression.

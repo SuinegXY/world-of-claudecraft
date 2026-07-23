@@ -952,6 +952,7 @@ function identityFields(e: Entity): Record<string, unknown> {
       if (inst.signer !== undefined) pub.signer = inst.signer;
       if (inst.enchant !== undefined) pub.enchant = inst.enchant;
       if (inst.rolled !== undefined) pub.rolled = inst.rolled;
+      if (inst.secondary !== undefined) pub.secondary = inst.secondary;
       for (const _ in pub) {
         if (eqi === undefined) eqi = {};
         eqi[slot] = pub;
@@ -5726,6 +5727,7 @@ export class GameServer {
       dodge: p.dodgeChance,
       crat: p.critRating,
       hrat: p.hasteRating,
+      vrat: p.versatilityRating,
       hirat: p.hitRating,
       eat: p.eating ? { remaining: round2(p.eating.remaining) } : null,
       drk: p.drinking ? { remaining: round2(p.drinking.remaining) } : null,

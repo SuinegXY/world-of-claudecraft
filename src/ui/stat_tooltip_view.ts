@@ -84,6 +84,7 @@ export function statNameKey(stat: StatTooltipModel['stat']): string {
     stat === 'critRating' ||
     stat === 'hasteRating' ||
     stat === 'hitRating' ||
+    stat === 'versatilityRating' ||
     stat === 'warfare'
     ? `hudChrome.statInfo.names.${stat}`
     : `itemUi.stats.${stat}`;

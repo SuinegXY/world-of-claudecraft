@@ -42,6 +42,7 @@ function inputFor(cls: PlayerClass, p: ReturnType<typeof freshPlayer>): StatTool
     critRating: p.critRating,
     hasteRating: p.hasteRating,
     hitRating: p.hitRating,
+    versatilityRating: p.versatilityRating,
     parryChance: cls === 'warrior' ? warriorParryChance(p.stats.str) : 0,
     dps: 0,
   };
@@ -306,6 +307,7 @@ describe('upstream source breakdown reconciles to the displayed stat', () => {
       critRating: p.critRating,
       hasteRating: p.hasteRating,
       hitRating: p.hitRating,
+      versatilityRating: p.versatilityRating,
       parryChance: cls === 'warrior' ? warriorParryChance(p.stats.str) : 0,
       dps: 0,
       gear,
