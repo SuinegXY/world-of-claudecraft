@@ -59,6 +59,7 @@ export function wornTooltipInstance(
   if (instance.signer !== undefined) worn.signer = instance.signer;
   if (instance.enchant !== undefined) worn.enchant = instance.enchant;
   if (instance.rolled !== undefined) worn.rolled = instance.rolled;
+  if (instance.secondary !== undefined) worn.secondary = instance.secondary;
   return worn;
 }
 
@@ -106,14 +107,31 @@ export function instanceBadgeLines(instance?: ItemInstancePayload): string {
  *  baked enchant stats): distinct green bonus lines after the def's own stats,
  *  reusing the localized stat-line key. */
 export function instanceBonusStatLines(instance?: ItemInstancePayload): string {
-  const bonusStats = instance?.rolled?.stats;
-  if (!bonusStats) return '';
   let html = '';
-  for (const [k, v] of Object.entries(bonusStats)) {
-    if (!v) continue;
-    html += `<div class="tt-green tt-instance-bonus">${esc(
-      t('itemUi.tooltip.stat', { value: itemNumber(v), stat: itemStatName(k) }),
-    )}</div>`;
+  const bonusStats = instance?.rolled?.stats;
+  if (bonusStats) {
+    for (const [k, v] of Object.entries(bonusStats)) {
+      if (!v) continue;
+      html += `<div class="tt-green tt-instance-bonus">${esc(
+        t('itemUi.tooltip.stat', { value: itemNumber(v), stat: itemStatName(k) }),
+      )}</div>`;
+    }
+  }
+  // Exclusive secondary affixes (Versatility / Crit / Haste rating).
+  const sec = instance?.secondary;
+  if (sec) {
+    if (sec.versatilityRating)
+      html += `<div class="tt-green tt-instance-bonus">${esc(
+        t('itemUi.stats.versatilityRating', { value: itemNumber(sec.versatilityRating) }),
+      )}</div>`;
+    if (sec.critRating)
+      html += `<div class="tt-green tt-instance-bonus">${esc(
+        t('itemUi.stats.secondaryCritRating', { value: itemNumber(sec.critRating) }),
+      )}</div>`;
+    if (sec.hasteRating)
+      html += `<div class="tt-green tt-instance-bonus">${esc(
+        t('itemUi.stats.secondaryHasteRating', { value: itemNumber(sec.hasteRating) }),
+      )}</div>`;
   }
   return html;
 }

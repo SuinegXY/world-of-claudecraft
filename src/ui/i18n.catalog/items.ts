@@ -59,6 +59,9 @@ const itemStringsEn = {
       critChance: 'Crit Chance',
       dodge: 'Dodge',
       parry: 'Parry',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
     },
     tooltip: {
       qualityKind: '{quality} {kind}',
@@ -255,6 +258,9 @@ export const itemStrings = {
         critChance: 'Prob. de crítico',
         dodge: 'Esquiva',
         parry: 'Parada',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{kind} {quality}',
@@ -417,6 +423,9 @@ export const itemStrings = {
         critChance: 'Chances de critique',
         dodge: 'Esquive',
         parry: 'Parade',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{kind} {quality}',
@@ -580,6 +589,9 @@ export const itemStrings = {
         critChance: 'Prob. critico',
         dodge: 'Schivata',
         parry: 'Parata',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{kind} {quality}',
@@ -739,6 +751,9 @@ export const itemStrings = {
         critChance: 'Krit. Chance',
         dodge: 'Ausweichen',
         parry: 'Parieren',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{quality} {kind}',
@@ -900,6 +915,9 @@ export const itemStrings = {
         critChance: '暴击几率',
         dodge: '躲闪',
         parry: '招架',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{quality}{kind}',
@@ -1054,6 +1072,9 @@ export const itemStrings = {
         critChance: '暴擊機率',
         dodge: '閃躲',
         parry: '招架',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{quality}{kind}',
@@ -1208,6 +1229,9 @@ export const itemStrings = {
         critChance: '치명타율',
         dodge: '회피',
         parry: '무기 막기',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{quality} {kind}',
@@ -1366,6 +1390,9 @@ export const itemStrings = {
         critChance: 'クリティカル率',
         dodge: '回避',
         parry: '受け流し',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{quality} {kind}',
@@ -1524,6 +1551,9 @@ export const itemStrings = {
         critChance: 'Chance crítica',
         dodge: 'Esquiva',
         parry: 'Aparo',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{kind} {quality}',
@@ -1682,6 +1712,9 @@ export const itemStrings = {
         critChance: 'Шанс крита',
         dodge: 'Уклонение',
         parry: 'Парирование',
+      versatilityRating: '+{value} Versatility',
+      secondaryCritRating: '+{value} Critical Strike',
+      secondaryHasteRating: '+{value} Haste',
       },
       tooltip: {
         qualityKind: '{quality} {kind}',

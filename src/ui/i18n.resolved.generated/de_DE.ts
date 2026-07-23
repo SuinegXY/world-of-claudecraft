@@ -1196,6 +1196,7 @@ export const de_DE: EnTranslations = {
         "spellPower": "Zaubermacht",
         "critRating": "Kritische Trefferwertung",
         "hasteRating": "Tempowertung",
+        "versatilityRating": "Versatility",
         "parry": "Parieren",
         "hitRating": "Trefferwertung",
         "warfare": "Kriegsführung"
@@ -1217,6 +1218,7 @@ export const de_DE: EnTranslations = {
         "hasteRating": "Tempowertung aus deiner Ausrüstung und deinen Setboni, die deine Angriffe und dein Zaubern beschleunigt. Etwa 10 Wertung gewähren 1% Tempo.",
         "parry": "Deine Chance, einen frontalen Nahkampfangriff vollständig zu parieren und keinen Schaden zu erleiden. Ein Schlag von hinten kann nicht pariert werden.",
         "hitRating": "Trefferwertung aus deiner Ausrustung und Setboni, die verringert, wie oft deine Angriffe verfehlen und deine Zauber widerstanden werden, besonders gegen hoher stufige Feinde. Etwa 10 Wertung verleihen 1% Treffer.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Erhöht den Spielern zugefügten Schaden um {increase}% und verringert von Spielern erlittenen Schaden um {reduction}%."
       },
       "effects": {
@@ -4524,6 +4526,7 @@ export const de_DE: EnTranslations = {
     "highscores": "Bestenlisten",
     "wiki": "Wiki",
     "news": "Neuigkeiten",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Herunterladen",
     "loginRegister": "Einloggen/Registrieren",
     "account": "Konto",
@@ -6497,7 +6500,10 @@ export const de_DE: EnTranslations = {
       "dps": "Schaden/Sek.",
       "critChance": "Krit. Chance",
       "dodge": "Ausweichen",
-      "parry": "Parieren"
+      "parry": "Parieren",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

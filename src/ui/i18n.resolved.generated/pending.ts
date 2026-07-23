@@ -9,25 +9,161 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "es_ES": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "fr_FR": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "fr_CA": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "de_DE": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "zh_CN": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating"
+  ],
+  "zh_TW": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "ko_KR": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "ja_JP": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "pt_BR": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "ru_RU": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "cs_CZ": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "nl_NL": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "pl_PL": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "id_ID": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "tr_TR": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "sv_SE": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "vi_VN": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ],
+  "da_DK": [
+    "hudChrome.statInfo.desc.versatilityRating",
+    "hudChrome.statInfo.names.versatilityRating",
+    "itemUi.stats.secondaryCritRating",
+    "itemUi.stats.secondaryHasteRating",
+    "itemUi.stats.versatilityRating",
+    "nav.exclusiveUpdates"
+  ]
 };
