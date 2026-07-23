@@ -1,4 +1,4 @@
----
+﻿---
 name: exclusive-redev
 description: >-
   Re-develop Chinese exclusive-server deltas on top of a fresh official release
@@ -96,7 +96,7 @@ Numerical rules (re-apply on **current** content, not old patch hunks):
 
 - Classes: ×2 `baseStats`, `statsPerLevel`, `baseHp`, `hpPerLevel`, `baseMana`, `manaPerLevel`, `ranged.min/max`
 - Weapons: ×2 `weapon.min` / `weapon.max`; `weaponDpsBudget` → `13.4 + 0.6 * level`
-- Gear: ×5 authored `stats` and item ratings; enchants ×5 `statBonus`
+- Gear: ×5 authored `stats` and item ratings; enchants ×5 `statBonus`; include `profession_items.ts` and raid `heroic_variants` rating constants
 - Do not scale sellValue, mob HP, copper, or official dungeon floors unless product asks
 
 ### 4. Wire / UI adaptation (v0.29+ contract)

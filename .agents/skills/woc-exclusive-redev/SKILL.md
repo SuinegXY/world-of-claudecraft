@@ -1,4 +1,4 @@
----
+﻿---
 name: woc-exclusive-redev
 description: >-
   Re-develop Chinese exclusive-server deltas on top of a fresh official release
@@ -33,3 +33,5 @@ full checklist. This Codex entry is the same workflow under `$woc-exclusive-rede
 - Dropped gear Versatility / Crit / Haste secondaries (itemLevel × 3)
 
 Do not commit or open a PR unless the user explicitly asks.
+
+Include profession_items.ts and heroic_variants raid rating constants in the numerical scale; verify with node scripts/exclusive_gear_audit.mjs.
