@@ -1210,6 +1210,7 @@ export const da_DK: EnTranslations = {
         "spellPower": "Besværgelseskraft",
         "critRating": "Kritvurdering",
         "hasteRating": "Hastevurdering",
+        "versatilityRating": "Versatility",
         "parry": "Parade",
         "hitRating": "Rammevurdering",
         "warfare": "Krigsførelse"
@@ -1231,6 +1232,7 @@ export const da_DK: EnTranslations = {
         "hasteRating": "Hastevurdering fra dit udstyr og sætbonusser, der fremskynder dine angreb og besværgelser. Cirka 10 vurdering giver 1% hast.",
         "parry": "Din chance for helt at parere et frontalt nærkampsangreb uden at tage skade. Et slag bagfra kan ikke pareres.",
         "hitRating": "Rammevurdering fra dit udstyr og sætbonusser, der reducerer, hvor ofte dine angreb misser og dine trylleformularer modstås, navnlig mod fjender af højere niveau. Cirka 10 vurdering giver 1% ramme.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Øger skade givet til spillere med {increase}% og reducerer skade modtaget fra spillere med {reduction}%."
       },
       "effects": {
@@ -4652,6 +4654,7 @@ export const da_DK: EnTranslations = {
     "highscores": "Topresultater",
     "wiki": "Wiki",
     "news": "Nyheder",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Hent",
     "loginRegister": "Log ind/Opret",
     "account": "Konto",
@@ -6640,7 +6643,10 @@ export const da_DK: EnTranslations = {
       "dps": "Skade/sek",
       "critChance": "Kritisk chance",
       "dodge": "Undvigelse",
-      "parry": "Parering"
+      "parry": "Parering",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

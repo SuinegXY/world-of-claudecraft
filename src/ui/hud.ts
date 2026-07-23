@@ -4992,6 +4992,7 @@ export class Hud {
       critRating: p.critRating,
       hasteRating: p.hasteRating,
       hitRating: p.hitRating,
+      versatilityRating: p.versatilityRating,
       parryChance: sim.cfg.playerClass === 'warrior' ? warriorParryChance(p.stats.str) : 0,
       dps: weaponDps(wpn?.weapon, p.attackPower),
       gear,

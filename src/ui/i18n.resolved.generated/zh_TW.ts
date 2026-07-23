@@ -1210,6 +1210,7 @@ export const zh_TW: EnTranslations = {
         "spellPower": "法術強度",
         "critRating": "暴擊等級",
         "hasteRating": "急速等級",
+        "versatilityRating": "Versatility",
         "parry": "招架",
         "hitRating": "命中等級",
         "warfare": "戰爭"
@@ -1231,6 +1232,7 @@ export const zh_TW: EnTranslations = {
         "hasteRating": "來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。",
         "parry": "你招架正面近戰攻擊、完全不受傷害的機率。來自背後的攻擊無法招架。",
         "hitRating": "來自裝備和套裝獎勵的命中等級，降低你的攻擊被閃避和法術被抵抗的機率，對更高等級的敵人尤其有效。約每10點等級提供1%命中。",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "對玩家造成的傷害提高 {increase}%，受到玩家造成的傷害降低 {reduction}%。"
       },
       "effects": {
@@ -4652,6 +4654,7 @@ export const zh_TW: EnTranslations = {
     "highscores": "排行榜",
     "wiki": "百科指南",
     "news": "最新消息",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "下載客戶端",
     "loginRegister": "登入/註冊",
     "account": "帳號",
@@ -6640,7 +6643,10 @@ export const zh_TW: EnTranslations = {
       "dps": "每秒傷害",
       "critChance": "暴擊機率",
       "dodge": "閃躲",
-      "parry": "招架"
+      "parry": "招架",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality}{kind}",

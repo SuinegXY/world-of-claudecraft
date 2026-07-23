@@ -1,0 +1,6 @@
+interface:
+  display_name: "Sync Chinese Changelog"
+  short_description: "Update public/changelog.html after an official release merge"
+  default_prompt: "Use $woc-changelog-sync to sync the Chinese exclusive changelog for the latest merged official version."
+policy:
+  allow_implicit_invocation: true

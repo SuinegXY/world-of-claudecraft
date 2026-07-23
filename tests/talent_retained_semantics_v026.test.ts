@@ -290,7 +290,7 @@ describe('retained v0.26 all-class Talents V2 semantics', () => {
     expect(damage(true)).toBeGreaterThan(damage(false));
   });
 
-  it('Steady Rain prevents damage pushback without changing baseline channels', () => {
+  it('Steady Rain and exclusive pushback immunity leave volley cast remaining untouched', () => {
     const castRemainingAfterHit = (selected: boolean): number => {
       const sim = harness(new Sim({ seed: 2612, playerClass: 'hunter', autoEquip: false }));
       sim.setPlayerLevel(20);
@@ -304,7 +304,8 @@ describe('retained v0.26 all-class Talents V2 semantics', () => {
       return player.castRemaining;
     };
 
-    expect(castRemainingAfterHit(false)).toBeGreaterThan(2);
+    // Exclusive server: player casts ignore damage pushback even without the talent.
+    expect(castRemainingAfterHit(false)).toBe(2);
     expect(castRemainingAfterHit(true)).toBe(2);
   });
 

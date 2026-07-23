@@ -3668,14 +3668,15 @@ async function startGame(
 // ---------------------------------------------------------------------------
 
 // Offline names go straight into innerHTML paths (quest $N text, char window
-// title), so enforce the server's character-name rule client-side too:
-// strip anything outside [A-Za-z' -], then require /^[A-Za-z][A-Za-z' -]{1,15}$/.
+// title), so enforce the server's character-name rule client-side too.
+// Lockstep with server/auth.ts validCharNameShape and
+// src/ui/auth_utils.ts validateCharacterName — all three must use the same pattern.
 function sanitizeOfflineName(raw: string): string {
   const stripped = raw
-    .replace(/[^A-Za-z' -]/g, '')
-    .replace(/^[^A-Za-z]+/, '')
+    .replace(/[^\p{L}' -]/gu, '')
+    .replace(/^[^\p{L}]+/u, '')
     .slice(0, 16);
-  return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(stripped) ? stripped : 'Adventurer';
+  return /^\p{L}[\p{L}' -]{1,15}$/u.test(stripped) ? stripped : 'Adventurer';
 }
 
 async function startOffline(
@@ -6627,7 +6628,8 @@ function flashWalletError(message: string): void {
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
 // Discord UI is available on web and native unless explicitly disabled at build time.
-const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
+// Exclusive server: Discord UI defaults off unless explicitly enabled at build time.
+const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '1').trim() !== '1';
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
@@ -8765,6 +8767,10 @@ function wireStartScreens(): void {
   setupNavBtn(navBtnNews, '#news-view', () => {
     switchMainView('#news-view');
     void loadNews();
+  });
+  // Exclusive Chinese changelog page (/changelog), sibling of the News panel.
+  setupNavBtn($('#nav-btn-exclusive'), '', () => {
+    window.location.href = '/changelog';
   });
   setupNavBtn(navBtnDownload, '#download-view');
   initDesktopDownload();
