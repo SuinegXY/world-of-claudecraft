@@ -828,6 +828,14 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain("'DiscordClick'");
   });
 
+  it('does not ship Cloudflare Turnstile api.js in the HTML head (exclusive CN)', () => {
+    // Unreachable challenges.cloudflare.com hung login/charselect; main.ts injects
+    // the script only when VITE_TURNSTILE_SITEKEY is set at build time.
+    expect(html).not.toContain('challenges.cloudflare.com/turnstile/v0/api.js');
+    expect(mainTs).toContain('TURNSTILE_SCRIPT_SRC');
+    expect(mainTs).toContain('ensureTurnstileScript');
+  });
+
   it('excludes wallet surfaces from native and Steam builds while allowing website desktop', () => {
     expect(hudCss).toContain('body.native-app #nav-btn-download,');
     expect(hudCss).toContain(

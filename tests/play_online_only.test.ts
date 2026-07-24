@@ -102,6 +102,7 @@ describe('/play keeps its tracking and SEO head', () => {
     expect(playHtml).not.toContain('googletagmanager.com');
     expect(playHtml).not.toContain('G-BR5Z7GT7C2');
     expect(playHtml).not.toContain('fonts.googleapis.com');
+    expect(playHtml).not.toContain('challenges.cloudflare.com/turnstile/v0/api.js');
   });
 
   it('play.html keeps its canonical /play SEO surface', () => {
