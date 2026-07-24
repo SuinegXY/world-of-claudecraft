@@ -185,6 +185,7 @@ import {
 } from './github';
 import { configureGithubContributorsRuntime, topContributors } from './github_contributors';
 import { pruneGitHubOAuthStates } from './github_db';
+import { githubOutboundEnabled } from './exclusive_outbound';
 import { createAccessLogSink } from './http/access_log';
 import { setAttackSignalSink } from './http/attack_signals';
 import { registerBusinessMetrics } from './http/business_metrics';
@@ -881,6 +882,8 @@ let releasesCache: { at: number; entries: ReleaseEntry[] } | null = null;
 setUsageCacheSize('github.releases', 0, RELEASES_SIZE);
 
 async function refreshReleases(): Promise<ReleaseEntry[]> {
+  // Exclusive default-off: never dial api.github.com unless opted in.
+  if (!githubOutboundEnabled()) return [];
   recordUsageMetric('github.releases.fetch');
   try {
     const { githubRepo, githubToken } = activeConfig();

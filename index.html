@@ -165,31 +165,8 @@
 <link rel="preload" as="image" href="/loading-screen.jpg" />
 <link rel="preload" as="image" href="./ui/cursors/gauntlet.png" />
 <link rel="preload" as="image" href="./ui/cursors/arrow.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<!-- Google tag (gtag.js) - skipped on localhost so dev sessions don't pollute analytics -->
-<script>
-  if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-BR5Z7GT7C2';
-    document.head.appendChild(s);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ dataLayer.push(arguments); };
-    gtag('js', new Date());
-    gtag('config', 'G-BR5Z7GT7C2');
-  }
-</script>
-<!-- Meta Pixel Code - skipped on localhost so dev sessions don't pollute analytics -->
-<script>
-  if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
-    !((f,b,e,v,n,t,s)=> {if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1692101265042180');
-    fbq('track', 'PageView');
-  }
-</script>
-<!-- End Meta Pixel Code -->
+<!-- Exclusive: Google Analytics, Meta Pixel, and Google Fonts removed. China
+     hosts cannot reach those origins; keep analytics off unless self-hosted. -->
 <link rel="stylesheet" href="/src/styles/index.extra.css" />
 <style>
   /* Game CSS now lives in src/styles/* (the CSS extraction). The shared
@@ -205,7 +182,6 @@
        infra). Targets live inside #game-ui-template, cloned into the page in-game. -->
   <a class="hud-skip" href="#ui" data-i18n="hudChrome.skipLinks.mainHud">Skip to Main HUD</a>
   <a class="hud-skip" href="#chatlog" data-i18n="hudChrome.skipLinks.chat">Skip to Chat</a>
-  <noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=1692101265042180&ev=PageView&noscript=1" /></noscript>
   <canvas id="game-canvas"></canvas>
   <div id="nameplates" aria-hidden="true"></div>
   <img
@@ -290,7 +266,7 @@
              window, which explains when the player is too far from a mailbox. -->
         <button id="mail-indicator" type="button" hidden data-icon="mail" aria-live="polite"><span class="mail-indicator-count">0</span></button>
       </div>
-      <div id="minimap-clock" data-i18n-title="hudChrome.widgets.clockTitle" title="Local time — click to toggle 12/24-hour">--:--</div>
+      <div id="minimap-clock" data-i18n-title="hudChrome.widgets.clockTitle" title="Local time �??click to toggle 12/24-hour">--:--</div>
       <div id="minimap-coords" role="status" data-i18n-title="hudChrome.widgets.worldCoordinates" data-i18n-aria="hudChrome.widgets.coordinates" title="Your current world coordinates" aria-label="Coordinates">0, 0</div>
       <div id="compass" role="img" data-i18n-aria="hudChrome.widgets.heading" aria-label="Heading">
         <div id="compass-strip"><div id="compass-track"></div></div>
@@ -299,7 +275,7 @@
       </div>
       <div id="minimap-zoom">
         <button type="button" class="minimap-zoom-btn" id="minimap-zoom-out" data-i18n-title="hud.core.zoomOut" data-i18n-aria="hud.core.zoomOut" title="Zoom out" aria-label="Zoom out minimap">&minus;</button>
-        <span id="minimap-zoom-label" aria-live="polite">1×</span>
+        <span id="minimap-zoom-label" aria-live="polite">1�?</span>
         <button type="button" class="minimap-zoom-btn" id="minimap-zoom-in" data-i18n-title="hud.core.zoomIn" data-i18n-aria="hud.core.zoomIn" title="Zoom in" aria-label="Zoom in minimap">+</button>
       </div>
     </div>
@@ -339,7 +315,7 @@
             <div class="portrait-wrap">
               <div class="portrait"><canvas id="pf-portrait" width="54" height="54"></canvas></div>
               <div class="level-chip" id="pf-level">1</div>
-              <div class="combat-flash" id="pf-combat" role="status" data-i18n-title="hud.social.status.combat" data-i18n-aria="hud.social.status.combat" title="In Combat" aria-label="In Combat">⚔</div>
+              <div class="combat-flash" id="pf-combat" role="status" data-i18n-title="hud.social.status.combat" data-i18n-aria="hud.social.status.combat" title="In Combat" aria-label="In Combat">�??/div>
               <div class="rest-indicator" id="pf-rest" role="status" data-i18n-title="hudChrome.rest.resting" data-i18n-aria="hudChrome.rest.resting" title="Resting" aria-label="Resting">z</div>
             </div>
             <div class="uf-bars">
@@ -570,7 +546,7 @@
     <div id="start-screen-backdrop" aria-hidden="true">
       <!-- Looping cinematic background video; poster = static key-art for instant paint + fallback. -->
       <!-- The poster (static key-art) paints instantly. The 5.7 MB looping trailer
-           is NOT eagerly fetched: no autoplay/preload/source here — main.ts attaches
+           is NOT eagerly fetched: no autoplay/preload/source here �??main.ts attaches
            the source and plays only on capable devices (see applyLandingBackdrop).
            Phones / Save-Data / reduced-motion / high-contrast keep the poster only. -->
       <video id="bg-home" class="bg-trailer bg-home" loop muted playsinline preload="none" poster="/home-bg.png" aria-hidden="true" data-trailer-src="/home-bg.mp4"></video>
@@ -661,7 +637,7 @@
                   <span class="server-select-value" id="server-select-value" data-i18n="mode.serverOnline">Online</span>
                   <span class="server-select-sub" id="server-select-sub">
                     <span class="server-realm-line" data-mode="online">
-                      <b class="stats-value js-stat-characters">…</b> <span data-i18n="stats.charactersCreated">Characters Created</span>
+                      <b class="stats-value js-stat-characters">�??/b> <span data-i18n="stats.charactersCreated">Characters Created</span>
                     </span>
                     <span class="server-sub-offline" data-mode="offline" data-i18n="mode.serverOfflineSub" hidden>Instant local world</span>
                   </span>
@@ -675,7 +651,7 @@
                     <span class="server-opt-name" data-i18n="mode.serverOnline">Online</span>
                     <span class="server-opt-desc" data-i18n="mode.onlineDesc">Log in to the world. Your characters live on the server and you share the world with everyone else who's on.</span>
                     <span class="server-opt-stats">
-                      <b class="stats-value js-stat-characters">…</b> <span data-i18n="stats.charactersCreated">Characters Created</span>
+                      <b class="stats-value js-stat-characters">�??/b> <span data-i18n="stats.charactersCreated">Characters Created</span>
                     </span>
                   </span>
                   <svg class="server-opt-check" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -714,7 +690,7 @@
             <p class="token-ca-note" data-i18n="mode.caNote">WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel.</p>
           </div>
 
-          <!-- Tip — part of the same play container (divider above). -->
+          <!-- Tip �??part of the same play container (divider above). -->
           <div class="play-tip">
             <p id="performance-tip"><b data-i18n="mode.tipTitle">TIP:</b> <span data-i18n="mode.tipText">For the smoothest experience, turn off ad blocker extensions on this site. Community reports found some blockers can cause lag.</span></p>
           </div>
@@ -1155,7 +1131,7 @@
           <h2 class="skeleton-title" data-i18n="highscores.title">High Scores Leaderboard</h2>
           <p class="skeleton-desc" data-i18n="game.leaderboard.globalSubtitle">Top champions across all worlds</p>
           <div id="hs-leaderboard" class="hs-leaderboard" aria-live="polite">
-            <div class="hs-loading" data-i18n="game.leaderboard.loading">Loading rankings…</div>
+            <div class="hs-loading" data-i18n="game.leaderboard.loading">Loading rankings�??/div>
           </div>
         </div>
       </section>
@@ -1170,7 +1146,7 @@
           <h2 class="skeleton-title" data-i18n="news.title">News & Updates</h2>
           <p class="skeleton-desc" data-i18n="news.desc">Read the latest patch notes, events, and community updates.</p>
           <div id="news-feed" class="news-feed" aria-live="polite">
-            <div class="news-loading" data-i18n="news.loading">Loading the latest updates…</div>
+            <div class="news-loading" data-i18n="news.loading">Loading the latest updates�??/div>
           </div>
         </div>
       </section>
@@ -1428,19 +1404,19 @@
             <option value="en_CA">English (Canada)</option>
             <option value="it_IT">Italiano</option>
             <option value="de_DE">Deutsch</option>
-            <option value="zh_CN">简体中文</option>
-            <option value="zh_TW">繁體中文</option>
-            <option value="ko_KR">한국어</option>
-            <option value="ja_JP">日本語</option>
+            <option value="zh_CN">�?�?中�??/option>
+            <option value="zh_TW">繁�?中�??</option>
+            <option value="ko_KR">�??국�??/option>
+            <option value="ja_JP">�?��?��?/option>
             <option value="pt_BR">Português (Brasil)</option>
-            <option value="ru_RU">Русский</option>
-            <option value="cs_CZ">Čeština</option>
+            <option value="ru_RU">Р�?сский</option>
+            <option value="cs_CZ">�?eština</option>
             <option value="nl_NL">Nederlands</option>
             <option value="pl_PL">Polski</option>
             <option value="id_ID">Bahasa Indonesia</option>
             <option value="tr_TR">Türkçe</option>
             <option value="sv_SE">Svenska</option>
-            <option value="vi_VN">Tiếng Việt</option>
+            <option value="vi_VN">Tiếng Vi�?t</option>
             <option value="da_DK">Dansk</option>
           </select>
           <span id="lang-select-status" class="visually-hidden" role="status" aria-live="polite"></span>
@@ -1546,7 +1522,7 @@
   </div>
   <div id="rotate-device" role="alert">
     <div>
-      <div class="rotate-icon" aria-hidden="true">↻</div>
+      <div class="rotate-icon" aria-hidden="true">�??/div>
       <div class="rotate-title" data-i18n="mobilePreflight.rotateTitle">Rotate to Landscape</div>
       <div class="rotate-sub" data-i18n="mobilePreflight.rotateSub">Portrait mode is not supported. Rotate your device to landscape to continue.</div>
     </div>

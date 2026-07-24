@@ -5943,7 +5943,9 @@ async function authorizeDesktopWalletInBrowser(
 // website-distributed Electron shell opts in through a trusted IPC probe.
 let WALLET_ENABLED = false;
 const walletCapabilityReady = resolveWalletCapability({
-  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() === '1',
+  // Exclusive default-off: Solana wallet UI (and its RPC path) stays hidden unless
+  // the build explicitly sets VITE_WALLET_DISABLED=0.
+  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '1').trim() !== '0',
   nativeApp: NATIVE_APP,
   desktopApp: DESKTOP_APP,
   bridge: DESKTOP_APP ? desktopBridge() : null,
@@ -6532,6 +6534,9 @@ function flashWalletError(message: string): void {
 // Discord UI is available on web and native unless explicitly disabled at build time.
 // Exclusive server: Discord UI defaults off unless explicitly enabled at build time.
 const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '1').trim() !== '1';
+// Exclusive default-off: hide GitHub link UI and skip status fetches (api.github.com
+// is often unreachable in CN). Set VITE_GITHUB_DISABLED=0 to restore.
+const GITHUB_BUILD_ENABLED = String(import.meta.env.VITE_GITHUB_DISABLED ?? '1').trim() !== '1';
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
@@ -6750,7 +6755,7 @@ window.addEventListener('message', (e: MessageEvent) => {
 async function refreshGithubLinkStatus(): Promise<void> {
   const group = document.getElementById('cs-github-group');
   if (!group) return;
-  if (!api.token) {
+  if (!GITHUB_BUILD_ENABLED || !api.token) {
     group.hidden = true;
     return;
   }
@@ -6792,6 +6797,11 @@ async function refreshGithubLinkStatus(): Promise<void> {
 }
 
 function wireGithubLink(): void {
+  if (!GITHUB_BUILD_ENABLED) {
+    const group = document.getElementById('cs-github-group');
+    if (group) group.hidden = true;
+    return;
+  }
   document.getElementById('btn-github')?.addEventListener('click', () => startGithubOAuth());
   document.getElementById('btn-github-unlink')?.addEventListener('click', () => {
     void api

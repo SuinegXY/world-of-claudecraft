@@ -148,12 +148,14 @@ describe('sortContributors', () => {
 // resets the module-local cache so they run cold and independently.
 describe('getContributors / topContributors / mergedPrsForLogin (cached fetch)', () => {
   beforeEach(() => {
+    process.env.GITHUB_OUTBOUND_ENABLED = '1';
     resetContributorsCache();
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
     resetContributorsCache();
+    delete process.env.GITHUB_OUTBOUND_ENABLED;
   });
 
   function mockOnePageResponse(body: unknown): void {
@@ -290,6 +292,7 @@ describe('getContributors / topContributors / mergedPrsForLogin (cached fetch)',
 // providerUsageSnapshot() exactly as the admin dashboard does.
 describe('github_contributors telemetry (provider_usage wiring)', () => {
   beforeEach(() => {
+    process.env.GITHUB_OUTBOUND_ENABLED = '1';
     resetContributorsCache();
     resetProviderUsageForTests();
   });
@@ -298,6 +301,7 @@ describe('github_contributors telemetry (provider_usage wiring)', () => {
     vi.unstubAllGlobals();
     resetContributorsCache();
     resetProviderUsageForTests();
+    delete process.env.GITHUB_OUTBOUND_ENABLED;
   });
 
   function metricCount(key: string): number {
