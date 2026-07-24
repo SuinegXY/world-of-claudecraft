@@ -842,6 +842,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': 'Сила заклинаний',
   'hudChrome.statInfo.names.critRating': 'Рейтинг крит. удара',
   'hudChrome.statInfo.names.hasteRating': 'Рейтинг ускорения',
+  'hudChrome.statInfo.names.versatilityRating': 'Универсальность',
   'hudChrome.statInfo.names.parry': 'Парирование',
   'hudChrome.statInfo.desc.parry':
     'Ваш шанс полностью парировать фронтальную атаку в ближнем бою и не получить урона. Удар со спины парировать нельзя.',
@@ -854,6 +855,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Рейтинг критического удара от снаряжения и бонусов комплекта повышает шанс критического удара. Примерно 10 рейтинга дают 1% крит. удара.',
   'hudChrome.statInfo.desc.hasteRating':
     'Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.',
+  'hudChrome.statInfo.desc.versatilityRating':
+    'Рейтинг универсальности от вторичных аффиксов снаряжения повышает весь наносимый вами урон. Ровно 10 рейтинга дают 1% бонусного урона.',
   'hudChrome.statInfo.desc.spellPower':
     'Увеличивает урон ваших заклинаний и силу исцелений. Каждая единица интеллекта дает немного силы заклинаний, вдобавок к получаемой от снаряжения и усилений.',
   'hudChrome.statInfo.desc.warfare':
