@@ -46,7 +46,7 @@ Also fork-ops (not always in the HTML list):
 - Unicode character names (`\p{L}` lockstep in auth / auth_utils / sanitizeOfflineName)
 - Chinese `/changelog` + nav `nav.exclusiveUpdates`
 - Discord client UI soft-disable (`VITE_DISCORD_DISABLED` default `'1'`); do not delete OAuth/rewards code
-- Foreign outbound soft-disable (CN): no Google Fonts / GA / Meta Pixel in HTML; GitHub API and Solana RPC off unless `GITHUB_OUTBOUND_ENABLED=1` / `SOLANA_OUTBOUND_ENABLED=1`; wallet + GitHub UI default off (`VITE_WALLET_DISABLED` / `VITE_GITHUB_DISABLED`)
+- Foreign outbound soft-disable (CN): no Google Fonts / GA / Meta Pixel / Turnstile api.js in HTML (Turnstile injects only when `VITE_TURNSTILE_SITEKEY` is set); GitHub API and Solana RPC off unless `GITHUB_OUTBOUND_ENABLED=1` / `SOLANA_OUTBOUND_ENABLED=1`; wallet + GitHub UI default off (`VITE_WALLET_DISABLED` / `VITE_GITHUB_DISABLED`)
 
 ## Workflow
 
