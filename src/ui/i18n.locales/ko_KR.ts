@@ -838,6 +838,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '주문력',
   'hudChrome.statInfo.names.critRating': '치명타 등급',
   'hudChrome.statInfo.names.hasteRating': '가속 등급',
+  'hudChrome.statInfo.names.versatilityRating': '유연성',
   'hudChrome.statInfo.names.parry': '무기 막기',
   'hudChrome.statInfo.desc.parry':
     '전방 근접 공격을 완전히 무기로 막아 피해를 입지 않을 확률입니다. 뒤에서 오는 공격은 막을 수 없습니다.',
@@ -850,6 +851,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '장비와 세트 보너스에서 얻는 치명타 등급으로 치명타 확률이 증가합니다. 약 10등급당 1% 치명타.',
   'hudChrome.statInfo.desc.hasteRating':
     '장비와 세트 보너스에서 얻는 가속 등급으로 공격과 시전 속도가 빨라집니다. 약 10등급당 1% 가속.',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '장비의 보조 접두사에서 얻는 유연성 등급으로 가하는 모든 피해가 증가합니다. 등급 10당 정확히 1%의 추가 피해.',
   'hudChrome.statInfo.desc.spellPower':
     '주문의 피해량과 치유량을 증가시킵니다. 지능 1당 장비나 버프로 얻는 양에 더해 약간의 주문력을 부여합니다.',
   'hudChrome.statInfo.desc.warfare':
