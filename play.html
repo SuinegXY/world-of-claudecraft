@@ -125,6 +125,7 @@
 <link rel="preload" as="image" href="./ui/cursors/gauntlet.png" />
 <link rel="preload" as="image" href="./ui/cursors/arrow.png" />
 <!-- Exclusive: Google Analytics and Google Fonts removed (unreachable in CN). -->
+
 <link rel="stylesheet" href="/src/styles/play.extra.css" />
 <style>
   /* Game CSS now lives in src/styles/* (the CSS extraction). This inline block was
@@ -224,7 +225,7 @@
              arrivals are announced; reading them still requires a mailbox). -->
         <div id="mail-indicator" role="status" hidden data-icon="mail"><span class="mail-indicator-count">0</span></div>
       </div>
-      <div id="minimap-clock" data-i18n-title="hudChrome.widgets.clockTitle" title="Local time �?click to toggle 12/24-hour">--:--</div>
+      <div id="minimap-clock" data-i18n-title="hudChrome.widgets.clockTitle" title="Local time — click to toggle 12/24-hour">--:--</div>
       <div id="minimap-coords" data-i18n-title="hudChrome.widgets.worldCoordinates" data-i18n-aria="hudChrome.widgets.coordinates" title="Your current world coordinates" aria-label="Coordinates">0, 0</div>
       <div id="compass" data-i18n-aria="hudChrome.widgets.heading" aria-label="Heading">
         <div id="compass-strip"><div id="compass-track"></div></div>
@@ -273,7 +274,7 @@
             <div class="portrait-wrap">
               <div class="portrait"><canvas id="pf-portrait" width="54" height="54"></canvas></div>
               <div class="level-chip" id="pf-level">1</div>
-              <div class="combat-flash" id="pf-combat" data-i18n-title="hud.social.status.combat" data-i18n-aria="hud.social.status.combat" title="In Combat" aria-label="In Combat">�?/div>
+              <div class="combat-flash" id="pf-combat" data-i18n-title="hud.social.status.combat" data-i18n-aria="hud.social.status.combat" title="In Combat" aria-label="In Combat">⚔</div>
               <div class="rest-indicator" id="pf-rest" data-i18n-title="hudChrome.rest.resting" data-i18n-aria="hudChrome.rest.resting" title="Resting" aria-label="Resting">z</div>
             </div>
             <div class="uf-bars">
@@ -580,7 +581,7 @@
             </button>
             <div class="play-online-status">
               <span class="server-dot" data-mode="online" aria-hidden="true"></span>
-              <b class="stats-value js-stat-characters">�?/b> <span data-i18n="stats.charactersCreated">Characters Created</span>
+              <b class="stats-value js-stat-characters">…</b> <span data-i18n="stats.charactersCreated">Characters Created</span>
             </div>
           </div>
 
@@ -589,7 +590,7 @@
                online-only, so there is no #btn-offline here (index.html keeps both). -->
           <button type="button" id="btn-online" class="play-compat-trigger" tabindex="-1" aria-hidden="true"></button>
 
-          <!-- Tip �?part of the same play container (divider above). -->
+          <!-- Tip — part of the same play container (divider above). -->
           <div class="play-tip">
             <p id="performance-tip"><b data-i18n="mode.tipTitle">TIP:</b> <span data-i18n="mode.tipText">For the smoothest experience, turn off ad blocker extensions on this site. Community reports found some blockers can cause lag.</span></p>
           </div>
@@ -864,7 +865,7 @@
           <h2 class="skeleton-title" data-i18n="highscores.title">High Scores Leaderboard</h2>
           <p class="skeleton-desc" data-i18n="game.leaderboard.globalSubtitle">Top champions across all realms</p>
           <div id="hs-leaderboard" class="hs-leaderboard" aria-live="polite">
-            <div class="hs-loading" data-i18n="game.leaderboard.loading">Loading rankings�?/div>
+            <div class="hs-loading" data-i18n="game.leaderboard.loading">Loading rankings…</div>
           </div>
         </div>
       </section>
@@ -879,7 +880,7 @@
           <h2 class="skeleton-title" data-i18n="news.title">News & Updates</h2>
           <p class="skeleton-desc" data-i18n="news.desc">Read the latest patch notes, events, and community updates.</p>
           <div id="news-feed" class="news-feed" aria-live="polite">
-            <div class="news-loading" data-i18n="news.loading">Loading the latest updates�?/div>
+            <div class="news-loading" data-i18n="news.loading">Loading the latest updates…</div>
           </div>
         </div>
       </section>
@@ -961,10 +962,10 @@
             <option value="en_CA">English (Canada)</option>
             <option value="it_IT">Italiano</option>
             <option value="de_DE">Deutsch</option>
-            <option value="zh_CN">简体中�?/option>
+            <option value="zh_CN">简体中文</option>
             <option value="zh_TW">繁體中文</option>
-            <option value="ko_KR">한국�?/option>
-            <option value="ja_JP">日本�?/option>
+            <option value="ko_KR">한국어</option>
+            <option value="ja_JP">日本語</option>
             <option value="pt_BR">Português (Brasil)</option>
             <option value="ru_RU">Русский</option>
             <option value="cs_CZ">Čeština</option>
@@ -1067,7 +1068,7 @@
   </div>
   <div id="rotate-device" role="alert">
     <div>
-      <div class="rotate-icon" aria-hidden="true">�?/div>
+      <div class="rotate-icon" aria-hidden="true">↻</div>
       <div class="rotate-title" data-i18n="mobilePreflight.rotateTitle">Rotate to Landscape</div>
       <div class="rotate-sub" data-i18n="mobilePreflight.rotateSub">Portrait mode is not supported. Rotate your device to landscape to continue.</div>
     </div>
