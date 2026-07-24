@@ -446,8 +446,16 @@ function saveHomepageMusicMuted(muted: boolean): void {
 // The site key is injected at build time; when it is empty (local/offline dev or
 // a build without the env var) the widget never renders and the token is '', so
 // the server, which also skips verification without its secret, lets requests
-// through unchanged. The api.js <script> is in index.html.
+// through unchanged. Exclusive CN builds leave the sitekey unset and do NOT ship
+// challenges.cloudflare.com in the HTML head (that host hangs DNS/TLS and made
+// login + charselect feel stuck); api.js is injected only when a sitekey exists.
 const TURNSTILE_SITEKEY = String(import.meta.env.VITE_TURNSTILE_SITEKEY ?? '');
+const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+const TURNSTILE_READY_MAX_ATTEMPTS = 50; // 50 * 200ms = 10s, then stop polling
+// Exclusive default-off: hide GitHub link UI and skip status / charselect news
+// fetches (api.github.com is often unreachable in CN). Set VITE_GITHUB_DISABLED=0
+// to restore.
+const GITHUB_BUILD_ENABLED = String(import.meta.env.VITE_GITHUB_DISABLED ?? '1').trim() !== '1';
 
 interface TurnstileApi {
   render: (el: string | HTMLElement, opts: { sitekey: string }) => string;
@@ -455,9 +463,22 @@ interface TurnstileApi {
   reset: (widgetId?: string) => void;
 }
 let turnstileWidgetId: string | undefined;
+let turnstileScriptRequested = false;
+let turnstileReadyAttempts = 0;
 
 function turnstileApi(): TurnstileApi | undefined {
   return (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+}
+
+function ensureTurnstileScript(): void {
+  if (turnstileScriptRequested || typeof document === 'undefined') return;
+  turnstileScriptRequested = true;
+  if (document.querySelector(`script[src="${TURNSTILE_SCRIPT_SRC}"]`)) return;
+  const script = document.createElement('script');
+  script.src = TURNSTILE_SCRIPT_SRC;
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
 }
 
 // Render the widget once, retrying until the async api.js script is ready. Safe to
@@ -468,9 +489,12 @@ function turnstileApi(): TurnstileApi | undefined {
 // the form.
 function ensureTurnstile(): void {
   if (DESKTOP_APP || !TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
+  ensureTurnstileScript();
   const ts = turnstileApi();
   const el = document.getElementById('cf-turnstile-container');
   if (!ts || !el) {
+    if (turnstileReadyAttempts >= TURNSTILE_READY_MAX_ATTEMPTS) return;
+    turnstileReadyAttempts += 1;
     window.setTimeout(ensureTurnstile, 200);
     return;
   }
@@ -4050,9 +4074,15 @@ function show(el: string): void {
 
   // The character-select news panel loads when its screen opens: entry is the
   // moment the player can actually read it, and the NEW-badge marker should
-  // advance only then.
+  // advance only then. Exclusive default skips the request when GitHub UI is
+  // soft-disabled (avoids a hanging /api/releases while the panel is open).
   if (el === '#charselect-panel') {
-    void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    if (GITHUB_BUILD_ENABLED) {
+      void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    } else {
+      const feed = $('#charselect-news-feed');
+      if (feed) feed.innerHTML = '';
+    }
   }
 
   // Reset currently rendered classes to force re-render/animation when opening a panel
@@ -6624,9 +6654,6 @@ function flashWalletError(message: string): void {
 // Discord UI is available on web and native unless explicitly disabled at build time.
 // Exclusive server: Discord UI defaults off unless explicitly enabled at build time.
 const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '1').trim() !== '1';
-// Exclusive default-off: hide GitHub link UI and skip status fetches (api.github.com
-// is often unreachable in CN). Set VITE_GITHUB_DISABLED=0 to restore.
-const GITHUB_BUILD_ENABLED = String(import.meta.env.VITE_GITHUB_DISABLED ?? '1').trim() !== '1';
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
