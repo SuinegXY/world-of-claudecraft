@@ -84,6 +84,11 @@ describe("i18n modulepreload build hook", () => {
       expect(() => injectLocaleChunkMap("<head></head>", {})).toThrow(/sentinel/);
     });
 
+    it("is a no-op when the map was already injected (Vite closeBundle re-entry)", () => {
+      const injected = `<script>map = {"es":"/assets/es-aaaa1111.js"};</script>`;
+      expect(injectLocaleChunkMap(injected, { es: "/assets/es-bbbb.js" })).toBe(injected);
+    });
+
     it("escapes '<' so the inline-script JSON cannot break out of </script>", () => {
       const out = injectLocaleChunkMap(`x=${PLACEHOLDER};`, { es: "/assets/</script><x>-h.js" });
       expect(out).not.toContain("</script>");
