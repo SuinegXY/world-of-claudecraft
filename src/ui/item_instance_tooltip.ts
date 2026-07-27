@@ -125,16 +125,6 @@ export function instanceBonusStatLines(instance?: ItemInstancePayload): string {
   const bonusStats = instance.rolled?.stats;
   const enchantShare = instance.enchant ? ENCHANTS[instance.enchant]?.statBonus : undefined;
   const legacyEnchanted = instance.enchant === undefined && isEnchantedInstance(instance);
-  if (bonusStats) {
-
-
-    for (const [k, v] of Object.entries(bonusStats)) {
-      if (!v) continue;
-      html += `<div class="tt-green tt-instance-bonus">${esc(
-        t('itemUi.tooltip.stat', { value: itemNumber(v), stat: itemStatName(k) }),
-      )}</div>`;
-    }
-  }
   let html = '';
   let attributed = false;
   for (const [stat, value] of Object.entries(bonusStats ?? {})) {
@@ -166,7 +156,6 @@ export function instanceBonusStatLines(instance?: ItemInstancePayload): string {
     html += `<div class="tt-sub" style="color:${QUALITY_COLOR.uncommon}">${esc(
       t('hudChrome.itemTooltip.enchantedFallback'),
     )}</div>`;
-  }
   }
   // Exclusive secondary affixes (Versatility / Crit / Haste rating).
   const sec = instance?.secondary;
