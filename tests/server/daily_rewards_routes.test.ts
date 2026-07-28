@@ -339,6 +339,7 @@ async function runRoute(
 
 const ORIGINAL_OPS_SECRET = process.env[OPS_SECRET_ENV];
 const ORIGINAL_SERVICE_URL = process.env.WOC_DAILY_REWARD_SERVICE_URL;
+const ORIGINAL_OUTBOUND = process.env.DAILY_REWARDS_OUTBOUND_ENABLED;
 
 function restoreEnv(key: string, value: string | undefined): void {
   if (value === undefined) delete process.env[key];
@@ -371,6 +372,8 @@ beforeEach(() => {
   bustDailyRewardBoardCache();
   // Default: the gate secret and the config URL are unset, so the config falls back
   // (no fetch) and the ops gate fails closed unless a test opts in.
+  // Suite exercises the live feature; exclusive zero-config off is pinned below.
+  process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
   delete process.env[OPS_SECRET_ENV];
   delete process.env.WOC_DAILY_REWARD_SERVICE_URL;
 });
@@ -381,12 +384,30 @@ afterEach(() => {
   resetDailyRewardPriceCacheForTests();
   restoreEnv(OPS_SECRET_ENV, ORIGINAL_OPS_SECRET);
   restoreEnv('WOC_DAILY_REWARD_SERVICE_URL', ORIGINAL_SERVICE_URL);
+  restoreEnv('DAILY_REWARDS_OUTBOUND_ENABLED', ORIGINAL_OUTBOUND);
   vi.restoreAllMocks();
 });
 
 // ---------------------------------------------------------------------------
 // 1. The route table shape.
 // ---------------------------------------------------------------------------
+
+describe('exclusive zero-config daily-rewards off', () => {
+  it('returns enabled:false status with no DAILY_REWARDS_OUTBOUND_ENABLED', async () => {
+    delete process.env.DAILY_REWARDS_OUTBOUND_ENABLED;
+    delete process.env.WOC_DAILY_REWARD_SERVICE_URL;
+    resetDailyRewardPriceCacheForTests();
+    authedDb();
+    const r = await runRoute('GET', '/api/daily-rewards', { headers: { authorization: BEARER } });
+    expect(r.status).toBe(200);
+    expect(r.body).toMatchObject({
+      enabled: false,
+      eligibility: { eligible: false, reason: 'price_unavailable' },
+      spin: { claimed: false },
+      tasks: [],
+    });
+  });
+});
 
 describe('daily-rewards route table', () => {
   it('registers the player and payout-operations routes in the declared order', () => {
@@ -655,6 +676,7 @@ describe('ops routes: fail-closed secret gate', () => {
 
     it(`${method} ${path} 401s when the presented secret is WRONG`, async () => {
       process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
       const r = await runRoute(method, path, { headers: { [OPS_HEADER]: 'wrong' } });
       expect(r.status).toBe(401);
       expect(r.body).toEqual({ success: false, data: null, error: 'not authenticated' });
@@ -664,6 +686,7 @@ describe('ops routes: fail-closed secret gate', () => {
 
   it('finalizes one explicit closed day before payout reads', async () => {
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
     stubPriceConfig();
     const r = await runRoute('POST', '/internal/daily-rewards/finalize', {
       headers: OPS_HEADERS,
@@ -685,6 +708,7 @@ describe('ops routes: fail-closed secret gate', () => {
 
   it('runs pending-payouts to a 200 admin envelope on the correct secret', async () => {
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
     h.state.pendingPayouts = [payoutRow(1)];
     const r = await runRoute('POST', '/internal/daily-rewards/pending-payouts', {
       headers: OPS_HEADERS,
@@ -702,6 +726,7 @@ describe('ops routes: fail-closed secret gate', () => {
 
   it('filters pending payouts to a validated reward day', async () => {
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
     const r = await runRoute('POST', '/internal/daily-rewards/pending-payouts', {
       url: '/internal/daily-rewards/pending-payouts?day=2026-07-01&limit=100',
       headers: OPS_HEADERS,
@@ -715,6 +740,7 @@ describe('ops routes: fail-closed secret gate', () => {
     'rejects an invalid pending-payout day filter: %s',
     async (day) => {
       process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
       const r = await runRoute('POST', '/internal/daily-rewards/pending-payouts', {
         url: `/internal/daily-rewards/pending-payouts?day=${encodeURIComponent(day)}`,
         headers: OPS_HEADERS,
@@ -731,6 +757,7 @@ describe('ops routes: fail-closed secret gate', () => {
 
   it('runs payout-history to a 200 admin envelope on the correct secret', async () => {
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
     h.state.recentPayouts = [payoutRow(2)];
     const r = await runRoute('POST', '/internal/daily-rewards/payout-history', {
       headers: OPS_HEADERS,
@@ -747,6 +774,7 @@ describe('ops routes: fail-closed secret gate', () => {
 
   it('runs leaderboard to a 200 admin envelope, passing an explicit ?day verbatim', async () => {
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
     const r = await runRoute('POST', '/internal/daily-rewards/leaderboard', {
       url: '/internal/daily-rewards/leaderboard?day=2026-07-01&page=1&pageSize=25',
       headers: OPS_HEADERS,
@@ -770,6 +798,7 @@ describe('ops routes: fail-closed secret gate', () => {
 describe('ops mark-payout validation', () => {
   beforeEach(() => {
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
   });
 
   it('400s an empty body { } -> invalid payout target', async () => {
@@ -946,6 +975,7 @@ describe('ops mark-payout validation', () => {
 describe('ops payout moderation', () => {
   beforeEach(() => {
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
   });
 
   it.each(['', 'ab', 'x'.repeat(501)])('rejects an invalid void reason', async (reason) => {
@@ -1053,6 +1083,7 @@ describe('body-validation remap deviations', () => {
     // rejects there and escapes to withErrors, which serializes the admin 500 envelope.
     // The legacy ladder counterfactual was a HANG (no outer catch).
     process.env[OPS_SECRET_ENV] = OPS_SECRET;
+      process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const req = makeReq({
       method: 'POST',

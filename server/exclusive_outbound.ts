@@ -21,3 +21,30 @@ export function githubOutboundEnabled(env: NodeJS.ProcessEnv = process.env): boo
 export function solanaOutboundEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
   return exclusiveFlagEnabled(env.SOLANA_OUTBOUND_ENABLED);
 }
+
+/**
+ * Claudium economy service proxy (/api/claudium/*). Default off: the service
+ * lives overseas and CN realms cannot reach it. Even when WOC_ECONOMY_* is set,
+ * call sites must also see CLAUDIUM_OUTBOUND_ENABLED=1 before dialing out.
+ */
+export function claudiumOutboundEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return exclusiveFlagEnabled(env.CLAUDIUM_OUTBOUND_ENABLED);
+}
+
+/**
+ * Daily-rewards payout service (WOC_DAILY_REWARD_SERVICE_URL). Default off:
+ * wallet-gated WOC prizes and the overseas payout service are not used on the
+ * exclusive realm. Opt in with DAILY_REWARDS_OUTBOUND_ENABLED=1.
+ */
+export function dailyRewardsOutboundEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return exclusiveFlagEnabled(env.DAILY_REWARDS_OUTBOUND_ENABLED);
+}
+
+/**
+ * Client perf-report ingestion (/api/perf-report). Default off on exclusive:
+ * same-origin (not overseas), but the community telemetry path is unused here.
+ * Opt in with PERF_REPORT_ENABLED=1.
+ */
+export function perfReportEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return exclusiveFlagEnabled(env.PERF_REPORT_ENABLED);
+}

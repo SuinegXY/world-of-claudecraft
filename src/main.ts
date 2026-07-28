@@ -82,7 +82,6 @@ import { tryNearbyInteraction } from './game/nearby_interaction';
 import { isOfflineModeAvailable } from './game/offline_mode_gate';
 import { createPerfMonitor } from './game/perf';
 import { initPerfNudge } from './game/perf_nudge';
-import { startPerfReporter } from './game/perf_reporter';
 import { adaptiveSelfAlphaLead } from './game/self_alpha_lead';
 import {
   type GameSettings,
@@ -1211,7 +1210,9 @@ async function startGame(
     // constructor ran initGfxTier, so the adapter verdict is resolved by now.
     initSoftwareRenderNotice(DESKTOP_APP);
     hud = new Hud(world, renderer, keybinds, {
-      dailyRewardsEnabled: !NATIVE_APP,
+      // Exclusive: Daily Rewards / WOC Store HUD entry is hard-off (zero config).
+      // Restore only by flipping this constant and DAILY_REWARDS_OUTBOUND_ENABLED=1.
+      dailyRewardsEnabled: false,
       devCommandsEnabled: import.meta.env.DEV,
       constrainedMemory: GFX.constrainedMemory,
     });
@@ -2284,10 +2285,15 @@ async function startGame(
     // fail closed; the SDK itself returns typed unavailable states, never throws.
     // The game therefore boots and plays with the service OFF: snapshot() resolves
     // to the disabled state and the window renders its empty notice.
-    const economy = new EconomyClient({
-      token: () => api.token,
-      base: api.base,
-    });
+    // Exclusive: Claudium client is hard-off (zero config). Never attach hooks and
+    // never poll /api/claudium/balance. Restore by flipping this constant and
+    // CLAUDIUM_OUTBOUND_ENABLED=1 with a reachable WOC_ECONOMY_SERVICE_URL.
+    const claudiumClientEnabled = false;
+    if (claudiumClientEnabled) {
+      const economy = new EconomyClient({
+        token: () => api.token,
+        base: api.base,
+      });
     const wocBalanceBaseUnits = (balance: number | null): string | null => {
       if (balance === null || !Number.isFinite(balance) || balance < 0) return null;
       return String(Math.floor(balance * 1_000_000));
@@ -2499,6 +2505,7 @@ async function startGame(
       ) {
         hud.attachStorePromoCard();
       }
+    }
     }
   }
   function interactKey(): void {
@@ -3636,17 +3643,8 @@ async function startGame(
       window.setTimeout(() => {
         gameInputReady = true;
         perf.reset();
-        startPerfReporter({
-          perf,
-          settings,
-          tokenProvider: () => api.token,
-          characterIdProvider: () => online?.characterId ?? null,
-          worldTelemetryProvider: () => ({
-            zoneId: telemetryZoneId(world.player.pos.x, world.player.pos.z),
-            simEntities: world.entities.size,
-          }),
-          desktopShell: DESKTOP_APP,
-        });
+        // Exclusive: client perf-report poster is hard-off (zero config). The server
+        // also drops /api/perf-report unless PERF_REPORT_ENABLED=1.
         // One-time machine-local performance nudge (packet 0 rulings R14-R16):
         // the assembler polls the same PerfMonitor the reporter reads.
         initPerfNudge({ perf, desktopShell: DESKTOP_APP });

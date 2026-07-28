@@ -17,6 +17,11 @@ export const SECONDARY_AFFIX_KEYS: readonly SecondaryAffixKey[] = [
 
 export type ItemSecondaryAffix = Partial<Record<SecondaryAffixKey, number>>;
 
+/** Neck / ring jewelry (kind 'armor', no armorType). */
+export function isJewelryItem(item: ItemDef): boolean {
+  return item.kind === 'armor' && (item.slot === 'neck' || item.slot === 'ring');
+}
+
 /** Equippable combat gear (not bags, junk, consumables, quest tokens). */
 export function canRollSecondaryAffix(item: ItemDef): boolean {
   if (!item.slot) return false;
@@ -66,4 +71,17 @@ export function withSecondaryAffix(
   const hasAny = SECONDARY_AFFIX_KEYS.some((k) => (secondary[k] ?? 0) > 0);
   if (!hasAny) return instance;
   return { ...(instance ?? {}), secondary: { ...secondary } };
+}
+
+/**
+ * Roll exclusive secondary onto jewelry (and other eligible gear) at grant time.
+ * Returns undefined when the item does not roll, so callers can fall back to
+ * plain addItem.
+ */
+export function rolledSecondaryInstance(
+  rng: Rng,
+  item: ItemDef,
+  fallbackLevel = 1,
+): ItemInstancePayload | undefined {
+  return withSecondaryAffix(undefined, rollSecondaryAffix(rng, item, fallbackLevel));
 }

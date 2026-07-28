@@ -28,9 +28,10 @@ full checklist. This Codex entry is the same workflow under `$woc-exclusive-rede
 
 - Class attributes ×2
 - Weapon damage ×2
-- Equipment bonus stats ×5
+- Equipment bonus stats ×5 (including jewelry primaries and JEWELRY_RATING)
 - Player casts ignore damage pushback
-- Dropped gear Versatility / Crit / Haste secondaries (itemLevel × 3)
+- Dropped gear Versatility / Crit / Haste secondaries (itemLevel × 3); vendor jewelry rolls the same on purchase
+- Soft-disable Claudium / daily-rewards / perf-report / Solana / GitHub outbound (opt-in env flags)
 
 Do not commit or open a PR unless the user explicitly asks.
 

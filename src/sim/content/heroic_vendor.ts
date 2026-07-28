@@ -15,14 +15,15 @@ import type { ItemDef } from '../types';
 // the four heroic-final-boss rewards available during each realm reset cycle.
 //
 // Combat rating: every piece also carries ONE combat rating (hit / crit / haste)
-// at JEWELRY_RATING (25 -> 2.5%), chosen by its stat identity. Ratings are off the
-// primary-stat budget (like spellPower), so the sums above stay budget-enforced.
+// at JEWELRY_RATING (exclusive x5 of the official 25 -> 125 = 12.5% hit or 6.25%
+// crit/haste), chosen by its stat identity. Ratings are off the primary-stat
+// budget (like spellPower), so the sums above stay budget-enforced.
 // This is jewelry's endgame identity; see docs/prd/combat-ratings-and-jewelry.md.
 
 export const HEROIC_VENDOR_NPC_ID = 'heroic_quartermaster';
 
-// One rating per jewelry piece. At 25 rating: 2.5% hit or 1.25% crit/haste.
-const JEWELRY_RATING = 25;
+// One rating per jewelry piece. Exclusive: 5x the official 25.
+const JEWELRY_RATING = 125;
 
 export interface HeroicVendorOffer {
   itemId: string;
