@@ -48,3 +48,12 @@ export function dailyRewardsOutboundEnabled(env: NodeJS.ProcessEnv = process.env
 export function perfReportEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
   return exclusiveFlagEnabled(env.PERF_REPORT_ENABLED);
 }
+
+/**
+ * Site-presence heartbeat (/api/site-presence). Default off on exclusive:
+ * anonymous homepage visitor telemetry for the admin dashboard, unused here.
+ * Opt in with SITE_PRESENCE_ENABLED=1.
+ */
+export function sitePresenceEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return exclusiveFlagEnabled(env.SITE_PRESENCE_ENABLED);
+}

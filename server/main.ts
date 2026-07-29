@@ -177,6 +177,7 @@ import {
 } from './discord';
 import { pruneDiscordOAuthStates, pruneDiscordPendingLogins } from './discord_db';
 import { emailAccountCreated } from './email';
+import { githubOutboundEnabled } from './exclusive_outbound';
 import { GameServer } from './game';
 import {
   handleGitHubCallback,
@@ -186,7 +187,6 @@ import {
 } from './github';
 import { configureGithubContributorsRuntime, topContributors } from './github_contributors';
 import { pruneGitHubOAuthStates } from './github_db';
-import { githubOutboundEnabled } from './exclusive_outbound';
 import { createAccessLogSink } from './http/access_log';
 import { setAttackSignalSink } from './http/attack_signals';
 import { registerBusinessMetrics } from './http/business_metrics';
@@ -300,6 +300,7 @@ import {
 } from './static_cache';
 import { readStaticSfxSnapshot, type StaticSfxSnapshot } from './static_sfx';
 import { stopSteamMirror } from './steam/mirror';
+import { pipeFileToResponse } from './stream_file';
 import { passesTurnstile } from './turnstile';
 import { MAX_ASSET_BYTES } from './user_assets';
 import {
@@ -1145,7 +1146,8 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
     const index = path.join(STATIC_DIR, shell);
     if (fs.existsSync(index)) {
       res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
-      fs.createReadStream(index).pipe(res);
+      // pipeline (not bare .pipe) so a client abort cannot leak the open FD.
+      pipeFileToResponse(index, res);
     } else {
       res.writeHead(404);
       res.end('not found (run `npm run build` to serve the client from the game server)');
@@ -1184,7 +1186,9 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
     res.end(verifiedSfx.bytes);
     return;
   }
-  fs.createReadStream(file).pipe(res);
+  // Same as the SPA fallback: bare .pipe leaks FDs on abort and turns open
+  // failures (EMFILE) into uncaughtException noise once the limit is hit.
+  pipeFileToResponse(file, res);
 }
 
 // ---------------------------------------------------------------------------
