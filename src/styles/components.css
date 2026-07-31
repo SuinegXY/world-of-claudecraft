@@ -7811,7 +7811,12 @@
   /* Closed by default: this @layer components rule outranks `.window { display: none }`
      in @layer layout, so the closed state has to be declared HERE or the empty panel
      sits on screen from boot (same reason #market-window declares it). The painter
-     opens with inline `flex`, which is what the flex-column bounds below assume. */
+     opens with inline `flex`, which is what the flex-column bounds below assume.
+     overflow:hidden (not the shell's overflow-y:auto): the catalogue panes own the
+     scroll. Without it, a tall loot list grows the window past max-height, the shell
+     scrolls, and the sticky .panel-title clips the top of both columns while
+     .df-body-catalogue's overflow:hidden permanently hides the bottom. Mobile restores
+     window scroll in hud.mobile.css (the shared sheet base + the finder block). */
   #dungeon-finder-window {
     width: 640px;
     max-width: 96%;
@@ -7819,9 +7824,19 @@
     display: none;
     flex-direction: column;
     max-height: min(700px, 80vh);
+    overflow: hidden;
+    min-height: 0;
+  }
+  /* flex:none so a tall catalogue cannot crush the chrome. Leave the shared
+     sticky .panel-title alone: desktop no longer scrolls this shell (overflow
+     hidden above), so sticky is inert here, while mobile restores window scroll
+     and still needs the title pinned. */
+  #dungeon-finder-window > .panel-title {
+    flex: none;
   }
   .df-tabs {
     display: flex;
+    flex: none;
     gap: 6px;
     margin: 6px 0 10px;
   }
@@ -7855,12 +7870,18 @@
     display: flex;
     overflow: hidden;
   }
+  /* minmax(0, 1fr) is the load-bearing row track: an implicit `auto` row sizes to
+     the tallest pane's content, so the grid overflows .df-body-catalogue and its
+     overflow:hidden clips the loot list with no inner scrollbar. */
   .df-cols {
     display: grid;
-    grid-template-columns: 236px 1fr;
+    grid-template-columns: 236px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     gap: 10px;
     flex: 1 1 auto;
     min-height: 0;
+    width: 100%;
+    align-self: stretch;
   }
   .df-rail,
   .df-detail {
