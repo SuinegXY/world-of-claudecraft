@@ -985,6 +985,7 @@ function identityFields(e: Entity): Record<string, unknown> {
       if (inst.enchant !== undefined) pub.enchant = inst.enchant;
       if (inst.rolled !== undefined) pub.rolled = inst.rolled;
       if (inst.secondary !== undefined) pub.secondary = inst.secondary;
+      if (inst.exclusiveScaled) pub.exclusiveScaled = true;
       for (const _ in pub) {
         if (eqi === undefined) eqi = {};
         eqi[slot] = pub;

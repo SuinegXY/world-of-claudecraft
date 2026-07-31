@@ -173,17 +173,10 @@ export function lootCorpse(
       continue;
     }
     if (!rights.shared) continue;
+    // Pass instance so exclusive secondary / gear-scale payloads survive need-greed,
+    // master loot, and round-robin (plain addItem would drop them).
     while (s.count > 0 && awardSharedLootItem(ctx, s.itemId, mob, meta, s.instance)) {
-    while (s.count > 0) {
-      if (s.instance) {
-        if (!ctx.canAddItem(s.itemId, 1, meta.entityId)) break;
-        ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
-        s.count--;
-      } else if (awardSharedLootItem(ctx, s.itemId, mob, meta)) {
-        s.count--;
-      } else {
-        break;
-      }
+      s.count--;
       didLoot = true;
     }
     if (s.count > 0) bagsFull = true;

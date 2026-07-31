@@ -4,6 +4,11 @@ import { resolveActiveWeaponSkin } from './content/weapon_skin_rules';
 import { aggregateSetBonuses, CLASSES, ITEMS, MOBS, type NpcDef } from './data';
 import { canDualWield, isShieldItem } from './equipment_rules';
 import { meetsLevelRequirement } from './item_level_req';
+import {
+  effectiveItemRating,
+  effectiveItemStats,
+  effectiveWeapon,
+} from './loot/exclusive_gear_scale';
 import { pvpFractionsFromRatings } from './pvp';
 import type {
   Entity,
@@ -299,19 +304,23 @@ export function recalcPlayerStats(
     // the level gate existed; the equip path blocks equipping over-level gear.
     if (!meetsLevelRequirement(lvl, item)) continue;
     if (item.set) setCounts.set(item.set, (setCounts.get(item.set) ?? 0) + 1);
-    bonusSp += item.spellPower ?? 0;
-    bonusCritRating += item.critRating ?? 0;
-    bonusHasteRating += item.hasteRating ?? 0;
-    bonusHitRating += item.hitRating ?? 0;
-    bonusPvpOffenseRating += item.pvpOffenseRating ?? 0;
-    bonusPvpDefenseRating += item.pvpDefenseRating ?? 0;
-    if (item.stats) {
-      s.str += item.stats.str ?? 0;
-      s.agi += item.stats.agi ?? 0;
-      s.sta += item.stats.sta ?? 0;
-      s.int += item.stats.int ?? 0;
-      s.spi += item.stats.spi ?? 0;
-      s.armor += item.stats.armor ?? 0;
+    const inst = equipmentInstance?.[slot];
+    // Exclusive grant-time stamp: weapon/stats/ratings read through effective*
+    // helpers so official ItemDef tables stay unscaled and trade never re-multiplies.
+    bonusSp += effectiveItemRating(item.spellPower, inst);
+    bonusCritRating += effectiveItemRating(item.critRating, inst);
+    bonusHasteRating += effectiveItemRating(item.hasteRating, inst);
+    bonusHitRating += effectiveItemRating(item.hitRating, inst);
+    bonusPvpOffenseRating += effectiveItemRating(item.pvpOffenseRating, inst);
+    bonusPvpDefenseRating += effectiveItemRating(item.pvpDefenseRating, inst);
+    const gearStats = effectiveItemStats(item, inst);
+    if (gearStats) {
+      s.str += gearStats.str ?? 0;
+      s.agi += gearStats.agi ?? 0;
+      s.sta += gearStats.sta ?? 0;
+      s.int += gearStats.int ?? 0;
+      s.spi += gearStats.spi ?? 0;
+      s.armor += gearStats.armor ?? 0;
     }
     // Instance bonus, additive on top of the item's own base stats, from this
     // specific instance's rolled.stats: an enchant, a Phase 2 masterwork copy's
@@ -319,7 +328,7 @@ export function recalcPlayerStats(
     // rolled.stats as its authoritative aggregate). The equip path carries the
     // consumed inventory instance into equipmentInstance, so every source applies.
     // A plain piece has no entry here, so this is a no-op for the common case.
-    const rolled = equipmentInstance?.[slot]?.rolled?.stats;
+    const rolled = inst?.rolled?.stats;
     if (rolled) {
       s.str += Number.isFinite(rolled.str) ? rolled.str : 0;
       s.agi += Number.isFinite(rolled.agi) ? rolled.agi : 0;
@@ -332,7 +341,7 @@ export function recalcPlayerStats(
       bonusHasteRating += Number.isFinite(rolled.hasteRating) ? rolled.hasteRating : 0;
     }
     // Exclusive secondary affixes (Versatility/Crit/Haste rolled at loot time).
-    const secondary = equipmentInstance?.[slot]?.secondary;
+    const secondary = inst?.secondary;
     if (secondary) {
       bonusVersatilityRating += secondary.versatilityRating ?? 0;
       bonusCritRating += secondary.critRating ?? 0;
@@ -497,17 +506,19 @@ export function recalcPlayerStats(
   // until the wearer is high enough level. The mainhand still stays worn (see
   // e.mainhandItemId below) so the weapon model keeps rendering.
   const mainhand = equipment.mainhand ? ITEMS[equipment.mainhand] : undefined;
+  const mainhandInst = equipmentInstance?.mainhand;
   const weapon =
     mainhand?.weapon && meetsLevelRequirement(lvl, mainhand)
-      ? mainhand.weapon
+      ? (effectiveWeapon(mainhand, mainhandInst) ?? mainhand.weapon)
       : { min: 1, max: 2, speed: 2 };
   e.weapon = weapon;
   const offhand = equipment.offhand ? ITEMS[equipment.offhand] : undefined;
+  const offhandInst = equipmentInstance?.offhand;
   const offhandWeapon =
     canDualWield(cls, mods?.spec) &&
     offhand?.kind === 'weapon' &&
     meetsLevelRequirement(lvl, offhand)
-      ? offhand.weapon
+      ? (effectiveWeapon(offhand, offhandInst) ?? offhand.weapon)
       : null;
   e.offhandWeapon = offhandWeapon;
   e.dualWielding = offhandWeapon !== null;

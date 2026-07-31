@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ITEMS,BUILTIN_WORLD, MOBS } from '../src/sim/data';
+import { ITEMS, BUILTIN_WORLD, MOBS } from '../src/sim/data';
 import { EASTBROOK_BUILDINGS_BY_ID, localToWorld } from '../src/sim/eastbrook_layout';
 import {
   canRollSecondaryAffix,

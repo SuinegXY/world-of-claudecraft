@@ -62,6 +62,7 @@ export function wornTooltipInstance(
   if (instance.enchant !== undefined) worn.enchant = instance.enchant;
   if (instance.rolled !== undefined) worn.rolled = instance.rolled;
   if (instance.secondary !== undefined) worn.secondary = instance.secondary;
+  if (instance.exclusiveScaled) worn.exclusiveScaled = true;
   return worn;
 }
 

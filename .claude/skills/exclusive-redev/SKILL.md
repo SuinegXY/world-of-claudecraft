@@ -91,13 +91,17 @@ For each exclusive feature, record:
 | Cast pushback | `src/sim/combat/damage.ts` `ignoresDamagePushback` | `if (target.kind === 'player') return true;` first |
 | Unicode names | `server/auth.ts`, `src/ui/auth_utils.ts`, `src/main.ts` | Same `\p{L}` regex, three sites |
 | Secondary affix | `src/sim/loot/secondary_affix.ts` + loot/entity/types/damage | Pure leaf module; tests in `tests/secondary_affix.test.ts` |
-| Numerical | `scripts/exclusive_stat_scale.mjs` then content files | Re-run only on unscaled official content; script must skip if already scaled |
+| Numerical | `src/sim/loot/exclusive_gear_scale.ts` (+ classes/enchants/budget scripts) | Gear weapon x2 / stats x5 stamp `exclusiveScaled` once at grant; do NOT content-mutate item tables. Classes x2 + enchant statBonus x5 + weaponDpsBudget still via `scripts/exclusive_stat_scale.mjs`. Unscale items with `scripts/exclusive_stat_unscale_items.mjs` if a tip still has content-scaled gear. |
 
 Numerical rules (re-apply on **current** content, not old patch hunks):
 
 - Classes: ×2 `baseStats`, `statsPerLevel`, `baseHp`, `hpPerLevel`, `baseMana`, `manaPerLevel`, `ranged.min/max`
-- Weapons: ×2 `weapon.min` / `weapon.max`; `weaponDpsBudget` → `13.4 + 0.6 * level`
-- Gear: ×5 authored `stats` and item ratings; enchants ×5 `statBonus`; include `profession_items.ts` and raid `heroic_variants` rating constants
+- `weaponDpsBudget` → `13.4 + 0.6 * level`; enchant `statBonus` ×5 (content script)
+- Gear weapon ×2 and authored stats / ratings / spellPower ×5: **runtime only** via
+  `exclusiveScaled` on `ItemInstancePayload` (`loot/exclusive_gear_scale.ts`), stamped once
+  at grant (loot / vendor / craft / quest / load migration). Official item tables stay
+  unscaled so new upstream gear needs no second pass. Trade / bank / mail / buyback keep
+  the flag and must never multiply again.
 - Do not scale sellValue, mob HP, copper, or official dungeon floors unless product asks
 
 ### 4. Wire / UI adaptation (v0.29+ contract)
@@ -107,8 +111,9 @@ Owner full payloads ride self `inv`.
 
 Exclusive adaptation:
 
-- Add `secondary` to the **eqi allowlist** (display-safe like `rolled`)
-- Pass `secondary` through `wornTooltipInstance` / `instanceBonusStatLines`
+- Add `secondary` and `exclusiveScaled` to the **eqi allowlist** (display-safe like `rolled`)
+- Pass `secondary` / `exclusiveScaled` through `wornTooltipInstance` / `instanceBonusStatLines`
+  (tooltips read weapon/stats through `effectiveWeapon` / `effectiveItemStats`)
 - Self sheet: wire `vrat` next to `crat` / `hrat` / `hirat`
 - **Never** `maybe('eqi', meta.equipmentInstance)` (collides with identity `eqi`)
 - Keep `itemTooltip(item, instance?)`; do not revive a three-arg compare signature
