@@ -966,6 +966,14 @@ export interface ItemInstancePayload {
     critRating?: number;
     hasteRating?: number;
   };
+  /**
+   * Exclusive-server numerical retune stamp. When true, combat/tooltip reads
+   * apply weapon damage x2 and authored primary stats / ratings / spellPower
+   * x5 on top of the official ItemDef. Stamped once at grant (loot, vendor,
+   * craft, quest, load migration); trade / bank / mail / buyback must keep
+   * the flag and never multiply again (see loot/exclusive_gear_scale.ts).
+   */
+  exclusiveScaled?: true;
 
   /** Long-term Rift gear progression. `rolled.stats` is the authoritative
    * aggregate bonus consumed by recalcPlayerStats; this record explains how it
@@ -1005,6 +1013,8 @@ export function cloneItemInstancePayload(src: ItemInstancePayload): ItemInstance
       gems: [...src.rift.gems],
     };
   }
+  if (src.secondary) instance.secondary = { ...src.secondary };
+  if (src.exclusiveScaled) instance.exclusiveScaled = true;
   return instance;
 }
 
