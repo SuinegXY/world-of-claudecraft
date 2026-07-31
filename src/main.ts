@@ -88,7 +88,6 @@ import { tryNearbyInteraction } from './game/nearby_interaction';
 import { isOfflineModeAvailable } from './game/offline_mode_gate';
 import { createPerfMonitor } from './game/perf';
 import { initPerfNudge } from './game/perf_nudge';
-import { startPerfReporter } from './game/perf_reporter';
 import { adaptiveSelfAlphaLead } from './game/self_alpha_lead';
 import {
   type GameSettings,
@@ -491,8 +490,16 @@ function saveHomepageMusicMuted(muted: boolean): void {
 // The site key is injected at build time; when it is empty (local/offline dev or
 // a build without the env var) the widget never renders and the token is '', so
 // the server, which also skips verification without its secret, lets requests
-// through unchanged. The api.js <script> is in index.html.
+// through unchanged. Exclusive CN builds leave the sitekey unset and do NOT ship
+// challenges.cloudflare.com in the HTML head (that host hangs DNS/TLS and made
+// login + charselect feel stuck); api.js is injected only when a sitekey exists.
 const TURNSTILE_SITEKEY = String(import.meta.env.VITE_TURNSTILE_SITEKEY ?? '');
+const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+const TURNSTILE_READY_MAX_ATTEMPTS = 50; // 50 * 200ms = 10s, then stop polling
+// Exclusive default-off: hide GitHub link UI and skip status / charselect news
+// fetches (api.github.com is often unreachable in CN). Set VITE_GITHUB_DISABLED=0
+// to restore.
+const GITHUB_BUILD_ENABLED = String(import.meta.env.VITE_GITHUB_DISABLED ?? '1').trim() !== '1';
 
 interface TurnstileApi {
   render: (el: string | HTMLElement, opts: { sitekey: string }) => string;
@@ -500,9 +507,22 @@ interface TurnstileApi {
   reset: (widgetId?: string) => void;
 }
 let turnstileWidgetId: string | undefined;
+let turnstileScriptRequested = false;
+let turnstileReadyAttempts = 0;
 
 function turnstileApi(): TurnstileApi | undefined {
   return (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+}
+
+function ensureTurnstileScript(): void {
+  if (turnstileScriptRequested || typeof document === 'undefined') return;
+  turnstileScriptRequested = true;
+  if (document.querySelector(`script[src="${TURNSTILE_SCRIPT_SRC}"]`)) return;
+  const script = document.createElement('script');
+  script.src = TURNSTILE_SCRIPT_SRC;
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
 }
 
 // Render the widget once, retrying until the async api.js script is ready. Safe to
@@ -513,9 +533,12 @@ function turnstileApi(): TurnstileApi | undefined {
 // the form.
 function ensureTurnstile(): void {
   if (DESKTOP_APP || !TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
+  ensureTurnstileScript();
   const ts = turnstileApi();
   const el = document.getElementById('cf-turnstile-container');
   if (!ts || !el) {
+    if (turnstileReadyAttempts >= TURNSTILE_READY_MAX_ATTEMPTS) return;
+    turnstileReadyAttempts += 1;
     window.setTimeout(ensureTurnstile, 200);
     return;
   }
@@ -1279,7 +1302,9 @@ async function startGame(
     // constructor ran initGfxTier, so the adapter verdict is resolved by now.
     initSoftwareRenderNotice(DESKTOP_APP);
     hud = new Hud(world, renderer, keybinds, {
-      dailyRewardsEnabled: !NATIVE_APP,
+      // Exclusive: Daily Rewards / WOC Store HUD entry is hard-off (zero config).
+      // Restore only by flipping this constant and DAILY_REWARDS_OUTBOUND_ENABLED=1.
+      dailyRewardsEnabled: false,
       devCommandsEnabled: import.meta.env.DEV,
       constrainedMemory: GFX.constrainedMemory,
     });
@@ -2476,10 +2501,15 @@ async function startGame(
     // fail closed; the SDK itself returns typed unavailable states, never throws.
     // The game therefore boots and plays with the service OFF: snapshot() resolves
     // to the disabled state and the window renders its empty notice.
-    const economy = new EconomyClient({
-      token: () => api.token,
-      base: api.base,
-    });
+    // Exclusive: Claudium client is hard-off (zero config). Never attach hooks and
+    // never poll /api/claudium/balance. Restore by flipping this constant and
+    // CLAUDIUM_OUTBOUND_ENABLED=1 with a reachable WOC_ECONOMY_SERVICE_URL.
+    const claudiumClientEnabled = false;
+    if (claudiumClientEnabled) {
+      const economy = new EconomyClient({
+        token: () => api.token,
+        base: api.base,
+      });
     const wocBalanceBaseUnits = (balance: number | null): string | null => {
       if (balance === null || !Number.isFinite(balance) || balance < 0) return null;
       return String(Math.floor(balance * 1_000_000));
@@ -2691,6 +2721,7 @@ async function startGame(
       ) {
         hud.attachStorePromoCard();
       }
+    }
     }
   }
   function interactKey(): void {
@@ -4021,17 +4052,8 @@ async function startGame(
       window.setTimeout(() => {
         gameInputReady = true;
         perf.reset();
-        startPerfReporter({
-          perf,
-          settings,
-          tokenProvider: () => api.token,
-          characterIdProvider: () => online?.characterId ?? null,
-          worldTelemetryProvider: () => ({
-            zoneId: telemetryZoneId(world.player.pos.x, world.player.pos.z),
-            simEntities: world.entities.size,
-          }),
-          desktopShell: DESKTOP_APP,
-        });
+        // Exclusive: client perf-report poster is hard-off (zero config). The server
+        // also drops /api/perf-report unless PERF_REPORT_ENABLED=1.
         // One-time machine-local performance nudge (packet 0 rulings R14-R16):
         // the assembler polls the same PerfMonitor the reporter reads.
         initPerfNudge({ perf, desktopShell: DESKTOP_APP });
@@ -4088,14 +4110,15 @@ async function startGame(
 // ---------------------------------------------------------------------------
 
 // Offline names go straight into innerHTML paths (quest $N text, char window
-// title), so enforce the server's character-name rule client-side too:
-// strip anything outside [A-Za-z' -], then require /^[A-Za-z][A-Za-z' -]{1,15}$/.
+// title), so enforce the server's character-name rule client-side too.
+// Lockstep with server/auth.ts validCharNameShape and
+// src/ui/auth_utils.ts validateCharacterName — all three must use the same pattern.
 function sanitizeOfflineName(raw: string): string {
   const stripped = raw
-    .replace(/[^A-Za-z' -]/g, '')
-    .replace(/^[^A-Za-z]+/, '')
+    .replace(/[^\p{L}' -]/gu, '')
+    .replace(/^[^\p{L}]+/u, '')
     .slice(0, 16);
-  return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(stripped) ? stripped : 'Adventurer';
+  return /^\p{L}[\p{L}' -]{1,15}$/u.test(stripped) ? stripped : 'Adventurer';
 }
 
 async function startOffline(
@@ -4484,9 +4507,15 @@ function show(el: string): void {
 
   // The character-select news panel loads when its screen opens: entry is the
   // moment the player can actually read it, and the NEW-badge marker should
-  // advance only then.
+  // advance only then. Exclusive default skips the request when GitHub UI is
+  // soft-disabled (avoids a hanging /api/releases while the panel is open).
   if (el === '#charselect-panel') {
-    void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    if (GITHUB_BUILD_ENABLED) {
+      void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    } else {
+      const feed = $('#charselect-news-feed');
+      if (feed) feed.innerHTML = '';
+    }
   }
 
   // Reset currently rendered classes to force re-render/animation when opening a panel
@@ -6483,7 +6512,9 @@ async function authorizeDesktopWalletInBrowser(
 // website-distributed Electron shell opts in through a trusted IPC probe.
 let WALLET_ENABLED = false;
 const walletCapabilityReady = resolveWalletCapability({
-  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() === '1',
+  // Exclusive default-off: Solana wallet UI (and its RPC path) stays hidden unless
+  // the build explicitly sets VITE_WALLET_DISABLED=0.
+  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '1').trim() !== '0',
   nativeApp: NATIVE_APP,
   desktopApp: DESKTOP_APP,
   bridge: DESKTOP_APP ? desktopBridge() : null,
@@ -7070,7 +7101,8 @@ function flashWalletError(message: string): void {
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
 // Discord UI is available on web and native unless explicitly disabled at build time.
-const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
+// Exclusive server: Discord UI defaults off unless explicitly enabled at build time.
+const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '1').trim() !== '1';
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
@@ -7289,7 +7321,7 @@ window.addEventListener('message', (e: MessageEvent) => {
 async function refreshGithubLinkStatus(): Promise<void> {
   const group = document.getElementById('cs-github-group');
   if (!group) return;
-  if (!api.token) {
+  if (!GITHUB_BUILD_ENABLED || !api.token) {
     group.hidden = true;
     return;
   }
@@ -7331,6 +7363,11 @@ async function refreshGithubLinkStatus(): Promise<void> {
 }
 
 function wireGithubLink(): void {
+  if (!GITHUB_BUILD_ENABLED) {
+    const group = document.getElementById('cs-github-group');
+    if (group) group.hidden = true;
+    return;
+  }
   document.getElementById('btn-github')?.addEventListener('click', () => startGithubOAuth());
   document.getElementById('btn-github-unlink')?.addEventListener('click', () => {
     void api
@@ -9208,6 +9245,10 @@ function wireStartScreens(): void {
   setupNavBtn(navBtnNews, '#news-view', () => {
     switchMainView('#news-view');
     void loadNews();
+  });
+  // Exclusive Chinese changelog page (/changelog), sibling of the News panel.
+  setupNavBtn($('#nav-btn-exclusive'), '', () => {
+    window.location.href = '/changelog';
   });
   setupNavBtn(navBtnDownload, '#download-view');
   initDesktopDownload();

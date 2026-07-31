@@ -844,6 +844,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '呪文威力',
   'hudChrome.statInfo.names.critRating': 'クリティカルレーティング',
   'hudChrome.statInfo.names.hasteRating': 'ヘイストレーティング',
+  'hudChrome.statInfo.names.versatilityRating': '多様性',
   'hudChrome.statInfo.names.parry': '受け流し',
   'hudChrome.statInfo.desc.parry':
     '前方からの近接攻撃を完全に受け流し、ダメージを受けない確率です。背後からの一撃は受け流せません。',
@@ -856,6 +857,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '装備とセットボーナスによるクリティカルレーティング。クリティカル率が上昇します。約10レーティングで1%クリティカル。',
   'hudChrome.statInfo.desc.hasteRating':
     '装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '装備の二次アフィックスによる多様性レーティング。与えるすべてのダメージが増加します。レーティング10につきちょうど1%のボーナスダメージ。',
   'hudChrome.statInfo.desc.spellPower':
     '呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。',
   'hudChrome.statInfo.desc.warfare':

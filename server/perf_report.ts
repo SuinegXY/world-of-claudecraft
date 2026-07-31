@@ -5,6 +5,7 @@ import {
   getCharacter,
   insertClientPerfReport,
 } from './db';
+import { perfReportEnabled } from './exclusive_outbound';
 import type { RateLimitOutcome } from './http/types';
 import { json, readBody } from './http_util';
 import { rateLimitNow, requestIp, windowedRateLimitOutcome } from './ratelimit';
@@ -339,6 +340,9 @@ export async function handlePerfReport(
   res: http.ServerResponse,
 ): Promise<void> {
   if (req.method !== 'POST') return json(res, 405, { ok: false });
+  // Exclusive: soft-disable ingestion unless PERF_REPORT_ENABLED=1. Still 200 so
+  // older clients that post do not retry-storm; nothing is stored.
+  if (!perfReportEnabled()) return json(res, 200, { ok: true });
   if (!rateLimitedPerfReport(req).allowed) return json(res, 200, { ok: true });
 
   const devTraceAllowed = allowDevTrace(req);

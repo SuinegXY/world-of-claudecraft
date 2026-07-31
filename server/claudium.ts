@@ -35,6 +35,7 @@ import {
   claudiumUsdcBalance,
 } from './claudium_proxy';
 import { accountAndScopeForToken, grantAccountWeaponSkins, moderationStatusForAccount } from './db';
+import { claudiumOutboundEnabled } from './exclusive_outbound';
 import { ctxAccountId } from './http/context';
 import { type BearerActiveGuardDb, createActiveGuard } from './http/middleware/bearer_active_guard';
 import {
@@ -157,6 +158,7 @@ export async function handleClaudiumStripeWebhook(
   req: http.IncomingMessage,
   res: http.ServerResponse,
 ): Promise<void> {
+  if (!claudiumOutboundEnabled()) return json(res, 400, { received: false });
   const signature = String(req.headers['stripe-signature'] ?? '');
   const rawBody = await readBinaryBody(req, STRIPE_WEBHOOK_MAX_BYTES);
   const result = await claudiumStripeWebhook(rawBody, signature);
@@ -175,6 +177,41 @@ export async function handleClaudiumApi(
   accountId: number,
   options: { rateLimitApplied?: boolean } = {},
 ): Promise<void> {
+  // Exclusive: Claudium stays dark with zero env. Even leftover WOC_ECONOMY_*
+  // values do nothing until CLAUDIUM_OUTBOUND_ENABLED=1.
+  if (!claudiumOutboundEnabled()) {
+    const url = new URL(req.url ?? '/', 'http://localhost');
+    const path = url.pathname;
+    if (req.method === 'GET' && path === '/api/claudium/balance') {
+      return json(res, 200, { available: false, balance: null });
+    }
+    if (req.method === 'GET' && path === '/api/claudium/skus') {
+      return json(res, 200, { available: false, skus: [] });
+    }
+    if (req.method === 'GET' && path === '/api/claudium/store') {
+      return json(res, 200, { available: false, items: [] });
+    }
+    if (req.method === 'GET' && path === '/api/claudium/history') {
+      return json(res, 200, { entries: [] });
+    }
+    if (req.method === 'GET' && path === '/api/claudium/native/rails') {
+      return json(res, 200, { available: false, sol: false, usdc: false, woc: false });
+    }
+    if (req.method === 'GET' && path.startsWith('/api/claudium/price/')) {
+      return json(res, 200, { rail: '', usdPerClaudium: null, wocBaseUnitsPerClaudium: null });
+    }
+    if (req.method === 'GET' && path.startsWith('/api/claudium/native/price/')) {
+      return json(res, 200, { rail: 'sol', claudium: null, amountBase: null, reason: 'unavailable' });
+    }
+    if (req.method === 'GET' && path.startsWith('/api/claudium/native/balance/')) {
+      return json(res, 200, { available: false, balance: null });
+    }
+    if (req.method === 'POST') {
+      return json(res, 200, { ok: false, reason: 'unavailable' });
+    }
+    return json(res, 200, { available: false });
+  }
+
   const url = new URL(req.url ?? '/', 'http://localhost');
   const path = url.pathname;
 

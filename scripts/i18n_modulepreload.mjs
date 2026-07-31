@@ -70,10 +70,13 @@ export function localeChunkMap(manifest, locales, base = '/', dir = GENERATED_DI
 }
 
 // Replace the single sentinel occurrence in index.html with the JSON map literal.
-// Absence of the sentinel is a hard error (the inline boot script would silently never
-// preload), not a no-op.
+// Absence of the sentinel is a hard error UNLESS the file was already templated:
+// Vite 8 / Rolldown can invoke closeBundle more than once per build, and the
+// second pass must not fail after the first wrote the JSON map in place.
 export function injectLocaleChunkMap(html, map, placeholder = PLACEHOLDER) {
   if (!html.includes(placeholder)) {
+    // Already injected: boot script assigns `map = { ... "/assets/..." ... }`.
+    if (/map\s*=\s*\{[\s\S]*?\/assets\//.test(html)) return html;
     throw new Error(`i18n modulepreload: sentinel ${placeholder} not found in index.html`);
   }
   // Escape '<' so the JSON literal embedded in the inline <script> can never break out

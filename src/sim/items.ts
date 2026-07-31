@@ -14,7 +14,9 @@
 // mutated in place verbatim, statements and order preserved.
 //
 // `src/sim`-pure: no DOM/Three/render-ui-game-net imports, no Math.random/Date.now
-// (enforced by tests/architecture.test.ts). This region draws NO rng.
+// (enforced by tests/architecture.test.ts). Vendor buys of jewelry draw ONE exclusive
+// secondary roll through ctx.rng (see loot/secondary_affix.ts); everything else here
+// stays rng-free.
 
 import { addStacked, bagCapacity, bagsFullError, countFit, equipBag as equipBagCmd } from './bags';
 import { ITEMS } from './data';
@@ -32,6 +34,7 @@ import { formatMoney } from './format_money';
 import { moveStackToCell } from './inventory_order';
 import { canStackInstancePayloads, itemInstancePayloadsEqual } from './item_instance_merge';
 import { meetsLevelRequirement, requiredLevelFor } from './item_level_req';
+import { isJewelryItem, rolledSecondaryInstance } from './loot/secondary_affix';
 import { mountOwned, summonMountItem } from './mounts';
 import { learnRiding } from './mounts_training';
 import { battlefieldExperienceTrickle } from './professions/battlefield_xp';
@@ -716,7 +719,14 @@ export function buyItem(ctx: SimContext, npcId: number, itemId: string, pid?: nu
   }
   meta.copper -= copperCost;
   meta.honor -= honorCost;
+  // Exclusive: honor jewelry never drops as corpse loot, so roll secondary here.
+  if (isJewelryItem(def) && qty === 1) {
+    const instance = rolledSecondaryInstance(ctx.rng, def, def.requiredLevel ?? 1);
+    if (instance) ctx.addItemInstance(itemId, instance, meta.entityId, 1);
+    else ctx.addItem(itemId, 1, meta.entityId);
+  } else {
   ctx.addItem(itemId, qty, meta.entityId);
+  }
   ctx.emit({ type: 'vendor', action: 'buy', itemId, pid: meta.entityId });
 }
 

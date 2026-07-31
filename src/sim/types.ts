@@ -57,6 +57,7 @@ export const MIN_GCD = 0.75; // seconds
 export const HASTE_RATING_PER_PCT = 20; // 20 haste rating = 1% faster
 export const CRIT_RATING_PER_PCT = 20; // 20 crit rating = +1% crit chance
 export const HIT_RATING_PER_PCT = 10; // 10 hit rating = +1% hit (less miss/resist)
+export const VERSATILITY_RATING_PER_PCT = 10; // 10 versatility = +1% damage dealt
 export function hasteFractionFromRating(rating: number): number {
   return rating / (HASTE_RATING_PER_PCT * 100);
 }
@@ -68,6 +69,9 @@ export function critFractionFromRating(rating: number): number {
 // stat: a warrior and a mage both want hit. Applied in recalcPlayerStats.
 export function hitFractionFromRating(rating: number): number {
   return rating / (HIT_RATING_PER_PCT * 100);
+}
+export function versatilityDamageFractionFromRating(rating: number): number {
+  return rating / (VERSATILITY_RATING_PER_PCT * 100);
 }
 
 export type HonorReason = 'arena_win' | 'fiesta_kill' | 'fiesta_complete' | 'fiesta_win';
@@ -954,6 +958,15 @@ export interface ItemInstancePayload {
    *  boundTo, nothing item-specific. Additive and JSONB-safe: an absent flag is
    *  an ordinary freely-tradeable instance. */
   bindOnTrade?: boolean;
+  /** Exclusive-server secondary affixes rolled at loot time (Versatility /
+   *  Crit / Haste). Separate from rolled.stats so enchant/masterwork detection
+   *  stays unchanged. Folded into combat ratings in recalcPlayerStats. */
+  secondary?: {
+    versatilityRating?: number;
+    critRating?: number;
+    hasteRating?: number;
+  };
+
   /** Long-term Rift gear progression. `rolled.stats` is the authoritative
    * aggregate bonus consumed by recalcPlayerStats; this record explains how it
    * was earned and lets forge operations rebuild it deterministically. */
@@ -3179,6 +3192,9 @@ export interface Entity extends ClientMirroredEntityFields {
   critChance: number; // 0..1
   critRating: number; // accumulated crit rating from gear + set bonuses
   hasteRating: number; // accumulated haste rating from gear + set bonuses
+  // Exclusive secondary affix: increases damage dealt (+1% per 10 rating).
+  versatilityRating: number;
+  versatilityDmgBonus: number; // fraction from versatilityRating
   hitRating: number; // accumulated hit rating from gear + set bonuses
   hitBonus: number; // hit fraction (hitRating converted): reduces miss/resist, 0..1
   // The class-agnostic crit core every strike shares: crit rating, talent and

@@ -1304,6 +1304,7 @@ export const zh_CN: EnTranslations = {
         "spellPower": "法术强度",
         "critRating": "暴击等级",
         "hasteRating": "急速等级",
+        "versatilityRating": "Versatility",
         "parry": "招架",
         "hitRating": "命中等级",
         "warfare": "战争"
@@ -1325,6 +1326,7 @@ export const zh_CN: EnTranslations = {
         "hasteRating": "来自装备和套装奖励的急速等级，加快你的攻击和施法速度。约每10点等级提供1%急速。",
         "parry": "你完全招架来自正面近战攻击、不受任何伤害的几率。来自背后的攻击无法被招架。",
         "hitRating": "来自装备和套装奖励的命中等级，降低你的攻击被闪避和法术被抵抗的几率，对更高等级的敌人尤其有效。约每10点等级提供1%命中。",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "对玩家造成的伤害提高 {increase}%，受到玩家造成的伤害降低 {reduction}%。"
       },
       "effects": {
@@ -4831,6 +4833,7 @@ export const zh_CN: EnTranslations = {
     "highscores": "排行榜",
     "wiki": "百科指南",
     "news": "新闻资讯",
+    "exclusiveUpdates": "独家更新",
     "download": "下载客户端",
     "loginRegister": "登录/注册",
     "account": "账户",
@@ -6897,7 +6900,10 @@ export const zh_CN: EnTranslations = {
       "dps": "每秒伤害",
       "critChance": "暴击几率",
       "dodge": "躲闪",
-      "parry": "招架"
+      "parry": "招架",
+      "versatilityRating": "+{value} 全能",
+      "secondaryCritRating": "+{value} 暴击",
+      "secondaryHasteRating": "+{value} 急速"
     },
     "tooltip": {
       "qualityKind": "{quality}{kind}",
