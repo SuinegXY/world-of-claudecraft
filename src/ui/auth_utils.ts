@@ -89,8 +89,10 @@ export function handleKeyboardActivation(event: KeyboardEvent, callback: () => v
  * @param name The character name string to validate
  * @returns boolean indicating if the name is valid
  */
+// Lockstep with server/auth.ts validCharNameShape and
+// src/main.ts sanitizeOfflineName — all three must use the same pattern.
 export function validateCharacterName(name: string): boolean {
   const trimmed = name.trim();
-  return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(trimmed);
+  return /^\p{L}[\p{L}' -]{1,15}$/u.test(trimmed);
 }
 

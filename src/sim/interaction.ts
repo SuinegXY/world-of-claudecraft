@@ -41,6 +41,7 @@ import {
   awardSharedLootItem,
   CORPSE_INTERACT_GRACE_SECONDS,
   distributeLootCopper,
+  grantLootItem,
   hasPendingLootRollForMob,
   lootSlotVisibleTo,
   pruneCorpseLoot,
@@ -148,7 +149,7 @@ export function lootCorpse(
         if (s.instance) {
           ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
         } else {
-          ctx.addItem(s.itemId, 1, meta.entityId);
+          grantLootItem(ctx, s.itemId, meta.entityId, s.instance);
         }
         s.count--;
         didLoot = true;
@@ -164,7 +165,7 @@ export function lootCorpse(
       if (s.instance) {
         ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
       } else {
-        ctx.addItem(s.itemId, 1, meta.entityId);
+        grantLootItem(ctx, s.itemId, meta.entityId, s.instance);
       }
       s.personalFor = s.personalFor.filter((id) => id !== meta.entityId);
       tookPersonal = true;
@@ -172,16 +173,10 @@ export function lootCorpse(
       continue;
     }
     if (!rights.shared) continue;
-    while (s.count > 0) {
-      if (s.instance) {
-        if (!ctx.canAddItem(s.itemId, 1, meta.entityId)) break;
-        ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
-        s.count--;
-      } else if (awardSharedLootItem(ctx, s.itemId, mob, meta)) {
-        s.count--;
-      } else {
-        break;
-      }
+    // Pass instance so exclusive secondary / gear-scale payloads survive need-greed,
+    // master loot, and round-robin (plain addItem would drop them).
+    while (s.count > 0 && awardSharedLootItem(ctx, s.itemId, mob, meta, s.instance)) {
+      s.count--;
       didLoot = true;
     }
     if (s.count > 0) bagsFull = true;

@@ -1375,6 +1375,7 @@ export const ja_JP: EnTranslations = {
         "spellPower": "呪文威力",
         "critRating": "クリティカルレーティング",
         "hasteRating": "ヘイストレーティング",
+        "versatilityRating": "Versatility",
         "parry": "受け流し",
         "hitRating": "命中レーティング",
         "warfare": "ウォーフェア"
@@ -1396,6 +1397,7 @@ export const ja_JP: EnTranslations = {
         "hasteRating": "装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。",
         "parry": "前方からの近接攻撃を完全に受け流し、ダメージを受けない確率です。背後からの一撃は受け流せません。",
         "hitRating": "装備とセットボーナスによる命中レーティング。攻撃がミスする頻度と呪文が抵抗される頻度を減らし、特に高レベルの敵に有効です。約10レーティングで1%命中。",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "プレイヤーに与えるダメージが {increase}% 増加し、プレイヤーから受けるダメージが {reduction}% 減少します。"
       },
       "effects": {
@@ -4911,6 +4913,7 @@ export const ja_JP: EnTranslations = {
     "highscores": "ハイスコア",
     "wiki": "Wiki",
     "news": "ニュース",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "ダウンロード",
     "loginRegister": "ログイン/登録",
     "account": "アカウント",
@@ -6985,7 +6988,10 @@ export const ja_JP: EnTranslations = {
       "dps": "秒間ダメージ",
       "critChance": "クリティカル率",
       "dodge": "回避",
-      "parry": "受け流し"
+      "parry": "受け流し",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

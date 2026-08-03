@@ -350,9 +350,8 @@ describe('pushbackCast honors castPushbackReduction', () => {
 });
 
 describe('caster 2-piece: damage never delays a cast (end to end)', () => {
-  // Runs the REAL inbound path: dealDamage's spell-pushback block fires
-  // ctx.pushbackCast on every landed hit against a casting target, and the
-  // 2-piece Mournweave castPushbackReduction of 1 makes it a no-op.
+  // Exclusive server: every player cast already ignores damage pushback, so the
+  // 2-piece is redundant for that path but still must set castPushbackReduction.
   const castThenHit = (equipSet: boolean) => {
     const sim = new Sim({ seed: 77, playerClass: 'mage' });
     sim.setPlayerLevel(20);
@@ -383,9 +382,10 @@ describe('caster 2-piece: damage never delays a cast (end to end)', () => {
     expect(p.castRemaining).toBe(rem0); // and not delayed at all
   });
 
-  it('without the set the same hit delays the cast (control)', () => {
+  it('without the set a landed hit still leaves the player cast untouched (exclusive)', () => {
     const { p, rem0 } = castThenHit(false);
-    expect(p.castRemaining).toBeCloseTo(rem0 + CAST_PUSHBACK_SEC, 9);
+    expect(p.castingAbility).toBe('fireball');
+    expect(p.castRemaining).toBe(rem0);
   });
 });
 

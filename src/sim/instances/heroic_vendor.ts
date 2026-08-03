@@ -12,6 +12,7 @@ import { bagsFullError } from '../bags';
 import { HEROIC_MARK_ITEM_ID } from '../content/dungeon_difficulty';
 import { HEROIC_VENDOR_NPC_ID, HEROIC_VENDOR_STOCK } from '../content/heroic_vendor';
 import { ITEMS } from '../data';
+import { isJewelryItem, rolledSecondaryInstance } from '../loot/secondary_affix';
 import type { SimContext } from '../sim_context';
 import { dist2d, type Entity, INTERACT_RANGE } from '../types';
 
@@ -60,7 +61,15 @@ export function buyHeroicVendorItem(ctx: SimContext, itemId: string, pid?: numbe
     return;
   }
   ctx.removeItem(HEROIC_MARK_ITEM_ID, entry.marks, meta.entityId);
-  ctx.addItem(itemId, 1, meta.entityId);
+  // Exclusive: jewelry is vendor-only (never corpse-loot), so roll secondary
+  // here the same way loot_roll does for dropped gear.
+  if (isJewelryItem(def)) {
+    const instance = rolledSecondaryInstance(ctx.rng, def, def.requiredLevel ?? 20);
+    if (instance) ctx.addItemInstance(itemId, instance, meta.entityId, 1);
+    else ctx.addItem(itemId, 1, meta.entityId);
+  } else {
+    ctx.addItem(itemId, 1, meta.entityId);
+  }
   // Feedback rides the 'vendor' event (the shop window re-renders), matching
   // buyItem and delveBuyShopItem: no raw English log emitted from the sim.
   ctx.emit({ type: 'vendor', action: 'buy', itemId, pid: meta.entityId });

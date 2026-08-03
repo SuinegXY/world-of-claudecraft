@@ -653,6 +653,14 @@ const HOLDER_TIER_REFRESH_MS = 60_000;
 const PLAYTIME_GRANT_MS = 5 * 60_000;
 const PLAYTIME_POINTS = 10;
 const DAILY_REWARD_ACTIVITY_MS = 60_000;
+// Exclusive default-off: these two timers write Postgres for every online
+// account (Discord-tier playtime points + daily-reward online minutes). Set
+// PLAYTIME_REWARD_ENABLED=1 / DAILY_REWARD_ACTIVITY_ENABLED=1 to restore the
+// official cadence. Unset or any other value keeps them off.
+const PLAYTIME_REWARD_ENABLED =
+  String(process.env.PLAYTIME_REWARD_ENABLED ?? '').trim() === '1';
+const DAILY_REWARD_ACTIVITY_ENABLED =
+  String(process.env.DAILY_REWARD_ACTIVITY_ENABLED ?? '').trim() === '1';
 const RELAY_COOLDOWN_MS = 8_000; // min gap between a player's "!" community posts
 const ADMIN_LOCATION_POI_RADIUS = 32;
 
@@ -984,6 +992,8 @@ function identityFields(e: Entity): Record<string, unknown> {
       if (inst.signer !== undefined) pub.signer = inst.signer;
       if (inst.enchant !== undefined) pub.enchant = inst.enchant;
       if (inst.rolled !== undefined) pub.rolled = inst.rolled;
+      if (inst.secondary !== undefined) pub.secondary = inst.secondary;
+      if (inst.exclusiveScaled) pub.exclusiveScaled = true;
       for (const _ in pub) {
         if (eqi === undefined) eqi = {};
         eqi[slot] = pub;
@@ -2122,12 +2132,26 @@ export class GameServer {
       void this.refreshAllHolderTiers();
     }, HOLDER_TIER_REFRESH_MS);
     // Reward in-game playtime: grant points to active online accounts off-loop.
-    this.playtimeInterval = setInterval(() => {
-      void this.grantPlaytimePoints();
-    }, PLAYTIME_GRANT_MS);
-    this.dailyRewardActivityInterval = setInterval(() => {
-      void this.recordDailyRewardActivity();
-    }, DAILY_REWARD_ACTIVITY_MS);
+    // Exclusive: off unless PLAYTIME_REWARD_ENABLED=1 (avoids periodic DB writes).
+    if (PLAYTIME_REWARD_ENABLED) {
+      this.playtimeInterval = setInterval(() => {
+        void this.grantPlaytimePoints();
+      }, PLAYTIME_GRANT_MS);
+    } else {
+      console.log(
+        '[exclusive] playtime reward grants disabled (set PLAYTIME_REWARD_ENABLED=1 to enable)',
+      );
+    }
+    // Exclusive: off unless DAILY_REWARD_ACTIVITY_ENABLED=1.
+    if (DAILY_REWARD_ACTIVITY_ENABLED) {
+      this.dailyRewardActivityInterval = setInterval(() => {
+        void this.recordDailyRewardActivity();
+      }, DAILY_REWARD_ACTIVITY_MS);
+    } else {
+      console.log(
+        '[exclusive] daily-reward activity recording disabled (set DAILY_REWARD_ACTIVITY_ENABLED=1 to enable)',
+      );
+    }
     this.lastKeepaliveSweepAt = Date.now();
     this.keepaliveInterval = setInterval(() => {
       this.pingLiveSessions();
@@ -5993,6 +6017,7 @@ export class GameServer {
       bval: p.blockValue,
       crat: p.critRating,
       hrat: p.hasteRating,
+      vrat: p.versatilityRating,
       hirat: p.hitRating,
       eat: p.eating ? { remaining: round2(p.eating.remaining) } : null,
       drk: p.drinking ? { remaining: round2(p.drinking.remaining) } : null,

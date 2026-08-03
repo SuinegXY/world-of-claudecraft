@@ -256,6 +256,7 @@ import {
   setPartyLootMaster as setPartyLootMasterImpl,
   submitLootRoll as submitLootRollImpl,
 } from './loot/loot_roll';
+import { isExclusiveGearItem, withExclusiveGearScale } from './loot/exclusive_gear_scale';
 import { type MailSave, PostOffice } from './mail/post_office';
 import { Market, type MarketListing, type MarketSave } from './market';
 import { defaultMarketQuery, type MarketQuery } from './market_query';
@@ -2609,7 +2610,21 @@ export class Sim {
         const clean = instance.rift
           ? sanitizeRiftGearInstance(itemId, instance, player.id)
           : cloneItemInstancePayload(instance);
-        if (clean) meta.equipmentInstance[slot] = clean;
+        // Migrate pre-runtime-scale saves: stamp exclusiveScaled once so combat
+        // reads keep weapon x2 / stats x5 after ItemDef tables returned to official.
+        const stamped =
+          clean && ITEMS[itemId] ? withExclusiveGearScale(clean, ITEMS[itemId]) : clean;
+        if (stamped) meta.equipmentInstance[slot as EquipSlot] = stamped;
+      }
+      // Worn gear that never carried an instance (pre-exclusive saves) still needs
+      // the exclusiveScaled stamp so unscaled ItemDef tables grant the retune.
+      for (const slot of EQUIP_SLOTS) {
+        const itemId = meta.equipment[slot];
+        if (!itemId || meta.equipmentInstance[slot]) continue;
+        const def = ITEMS[itemId];
+        if (!def) continue;
+        const stamped = withExclusiveGearScale(undefined, def);
+        if (stamped) meta.equipmentInstance[slot] = stamped;
       }
       // The shared tamper ceiling (bags.ts instancedCountCap, same rule as the
       // bank arm below): a counted instanced slot loads capped at what
@@ -2622,10 +2637,15 @@ export class Sim {
         return slot;
       });
       for (const slot of meta.inventory) {
-        if (!slot.instance?.rift) continue;
+        if (slot.instance?.rift) {
         const clean = sanitizeRiftGearInstance(slot.itemId, slot.instance, player.id);
         if (clean) slot.instance = clean;
         else delete slot.instance;
+      }
+        const def = ITEMS[slot.itemId];
+        if (!def) continue;
+        const stamped = withExclusiveGearScale(slot.instance, def);
+        if (stamped) slot.instance = stamped;
       }
       if (s.bags === undefined) {
         // PRE-BAG save: the character earned this space under the infinite
@@ -2656,9 +2676,21 @@ export class Sim {
         if (slot.instance && !isMergeableInstancePayload(slot.instance)) slot.count = 1;
         return slot;
       });
+      for (const slot of meta.vendorBuyback) {
+        const def = ITEMS[slot.itemId];
+        if (!def) continue;
+        const stamped = withExclusiveGearScale(slot.instance, def);
+        if (stamped) slot.instance = stamped;
+      }
       // Bank sanitizes on load (never destroys items; a pre-bank save has no `bank`
       // field and sanitizes to an empty bank). See bank.ts sanitizeBankState.
       meta.bank = sanitizeBankState(s.bank);
+      for (const slot of meta.bank.inventory) {
+        const def = ITEMS[slot.itemId];
+        if (!def) continue;
+        const stamped = withExclusiveGearScale(slot.instance, def);
+        if (stamped) slot.instance = stamped;
+      }
       for (const q of s.questLog) {
         // Prune unknown quest ids at load (normalize on load, never crash): a save
         // mid a since-deleted quest (e.g. the retirement of
@@ -7492,6 +7524,21 @@ export class Sim {
     if (!r) return;
     const { meta } = r;
     const def = ITEMS[itemId];
+    // Exclusive: equippable gear is always granted as an exclusiveScaled instance
+    // so official ItemDef tables stay unscaled and trade cannot re-multiply.
+    if (def && isExclusiveGearItem(def)) {
+      const stamped = withExclusiveGearScale(undefined, def);
+      if (stamped) {
+        this.addItemInstance(itemId, stamped, pid, count, opts);
+        if (
+          meta.autoEquip &&
+          (def.kind === 'weapon' || def.kind === 'armor' || def.kind === 'held_offhand')
+        ) {
+          this.maybeAutoEquip(itemId, meta);
+        }
+        return;
+      }
+    }
     addStacked(meta.inventory, itemId, count, undefined, opts?.craftedRecipeId);
     // Every grant that reaches the hub is an acquisition for the Book of
     // Deeds discovery ledger (loot, craft, quest reward, vendor, mail, trade).
@@ -7540,6 +7587,11 @@ export class Sim {
     if (count < 1) return;
     const { meta } = r;
     const def = ITEMS[itemId];
+    // Idempotent exclusive numerical stamp (skip if already exclusiveScaled).
+    if (def) {
+      const stamped = withExclusiveGearScale(instance, def);
+      if (stamped) instance = stamped;
+    }
     const stack = stackSizeOf(def);
     for (let i = 0; i < count; i++) {
       const mergeTarget = meta.inventory.find(

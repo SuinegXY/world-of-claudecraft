@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#08080d" />
+  <title>独家更新 - World of ClaudeCraft</title>
+  <meta name="description" content="World of ClaudeCraft 独家服务器调整与 v0.29.0 官方更新说明。" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://worldofclaudecraft.com/changelog" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="World of ClaudeCraft" />
+  <meta property="og:title" content="独家更新 - World of ClaudeCraft" />
+  <meta property="og:description" content="World of ClaudeCraft 独家服务器调整与 v0.29.0 官方更新说明。" />
+  <meta property="og:url" content="https://worldofclaudecraft.com/changelog" />
+  <meta property="og:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
+  <meta property="og:image:alt" content="World of ClaudeCraft" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="独家更新 - World of ClaudeCraft" />
+  <meta name="twitter:description" content="World of ClaudeCraft 独家服务器调整与 v0.29.0 官方更新说明。" />
+  <meta name="twitter:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  
+  
+  
+  <style>
+    :root {
+      color-scheme: dark;
+      --gold: #ffd100;
+      --gold-dim: #c8a838;
+      --gold-soft: #f3dfaa;
+      --ink: #f0ebd8;
+      --muted: #c4b899;
+      --border: #6f5a2a;
+      --line: rgba(215, 181, 109, 0.32);
+      --line-soft: rgba(215, 181, 109, 0.14);
+      --bg: #08080d;
+      --panel-top: rgba(20, 20, 30, 0.94);
+      --panel-bottom: rgba(6, 6, 11, 0.96);
+      --exclusive-top: rgba(40, 28, 8, 0.92);
+      --exclusive-bottom: rgba(18, 12, 4, 0.96);
+      --font-display: 'Cinzel', 'Palatino Linotype', Palatino, Georgia, serif;
+      --font-ui: 'Alegreya Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-serif: 'Alegreya', 'Palatino Linotype', Palatino, Georgia, serif;
+      --r-sm: 4px;
+      --r-md: 8px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      color: var(--ink);
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+      background:
+        linear-gradient(90deg, rgba(5, 7, 12, 0.90), rgba(5, 7, 12, 0.56) 52%, rgba(5, 7, 12, 0.92)),
+        radial-gradient(circle at 50% 8%, rgba(255, 209, 0, 0.16), transparent 40%),
+        var(--bg) url('/loading-screen.jpg') center / cover fixed no-repeat;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        max(22px, env(safe-area-inset-bottom))
+        max(16px, env(safe-area-inset-left));
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.018) 50%, rgba(0,0,0,0.035) 50%),
+        radial-gradient(circle at 50% 100%, rgba(0,0,0,0.58), transparent 48%);
+      background-size: 100% 4px, auto;
+    }
+    .shell { position: relative; z-index: 1; width: min(1040px, 100%); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 800;
+      letter-spacing: 0.4px;
+    }
+    .brand img {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      box-shadow: 0 0 18px rgba(255, 209, 0, 0.22);
+    }
+    .back-link {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      color: var(--gold-soft);
+      background: rgba(8, 8, 13, 0.72);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .back-link:hover,
+    .back-link:focus-visible {
+      color: var(--gold);
+      border-color: var(--gold);
+      outline: none;
+      box-shadow: 0 0 14px rgba(255, 209, 0, 0.18);
+    }
+    main {
+      border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      background: linear-gradient(180deg, var(--panel-top), var(--panel-bottom));
+      box-shadow: 0 22px 70px rgba(0,0,0,0.62), inset 0 1px 0 rgba(255,255,255,0.05);
+      overflow: hidden;
+    }
+    .hero {
+      padding: clamp(22px, 5vw, 44px) clamp(18px, 5vw, 52px) clamp(16px, 3vw, 26px);
+      border-bottom: 1px solid var(--line-soft);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(255, 209, 0, 0.12), transparent 32%),
+        linear-gradient(180deg, rgba(255,255,255,0.035), transparent);
+    }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--gold-dim);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      color: var(--gold);
+      font-family: var(--font-display);
+      font-size: clamp(31px, 6vw, 58px);
+      line-height: 1.05;
+      text-shadow: 0 3px 18px rgba(0,0,0,0.65);
+    }
+    .updated { margin: 12px 0 0; color: var(--muted); font-size: 15px; }
+    .content {
+      padding: clamp(20px, 4vw, 42px) clamp(18px, 5vw, 52px) clamp(30px, 5vw, 56px);
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1.68;
+    }
+    .section-block {
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .section-block:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .section-block--exclusive {
+      margin-top: 8px;
+      padding: clamp(18px, 3vw, 28px);
+      border: 1px solid rgba(255, 209, 0, 0.42);
+      border-radius: var(--r-md);
+      background: linear-gradient(180deg, var(--exclusive-top), var(--exclusive-bottom));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 0 28px rgba(255, 209, 0, 0.08);
+    }
+    .section-block--exclusive .section-label {
+      color: var(--gold);
+    }
+    .section-label {
+      margin: 0 0 6px;
+      color: var(--gold-dim);
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .content h2 {
+      margin: 0 0 18px;
+      font-family: var(--font-display);
+      color: var(--gold-soft);
+      font-size: clamp(24px, 3.5vw, 34px);
+      line-height: 1.22;
+    }
+    .content h3 {
+      margin: 26px 0 10px;
+      font-family: var(--font-display);
+      color: var(--gold-soft);
+      font-size: clamp(19px, 2.5vw, 24px);
+      line-height: 1.25;
+    }
+    .content h3:first-of-type { margin-top: 0; }
+    .content h4 {
+      margin: 18px 0 8px;
+      font-family: var(--font-display);
+      color: var(--gold-dim);
+      font-size: 17px;
+    }
+    .content p { margin: 0 0 14px; }
+    .content ul { margin: 0 0 16px; padding-left: 24px; }
+    .content li { margin: 7px 0; padding-left: 4px; }
+    .content li ul { margin-top: 8px; margin-bottom: 8px; }
+    .exclusive-list {
+      list-style: disc;
+      margin: 0 0 8px;
+      padding-left: 24px;
+      display: block;
+    }
+    .exclusive-list li {
+      margin: 8px 0;
+      padding: 0 0 0 4px;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.68;
+      color: var(--ink);
+    }
+    footer {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer a { color: var(--gold-soft); text-decoration: none; }
+    footer a:hover,
+    footer a:focus-visible { color: var(--gold); outline: none; }
+    @media (max-width: 640px) {
+      body { padding-left: 12px; padding-right: 12px; background-attachment: scroll; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .back-link { width: 100%; }
+      .content { font-size: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="独家更新页面导航">
+      <a class="brand" href="/" aria-label="World of ClaudeCraft 首页">
+        <img src="/woc_logo_square.webp" alt="" />
+        <span>World of ClaudeCraft</span>
+      </a>
+      <a class="back-link" href="/">返回游戏</a>
+    </nav>
+    <main>
+      <header class="hero">
+        <p class="eyebrow">版本公告</p>
+        <h1>独家更新</h1>
+        <p class="updated">发布日期: 2026年7月23日 (基于官方 v0.29.0)</p>
+      </header>
+      <article class="content">
+        <section class="section-block section-block--exclusive" aria-labelledby="exclusive-heading">
+          <p class="section-label">第一部分</p>
+          <h2 id="exclusive-heading">独家更新</h2>
+          <p>以下为本服务器的独家玩法调整, 仅在本服生效:</p>
+          <ul class="exclusive-list">
+            <li>职业属性全部翻倍</li>
+            <li>武器伤害翻倍</li>
+            <li>装备额外属性为 5 倍</li>
+            <li>施放法术不会因受伤而被打断、延长施法时间或回退施法进度</li>
+            <li>掉落装备随机附加全能 / 暴击 / 急速副属性 (总点数 = 物品等级 x 3, 分配到随机两项; 每 10 点全能 +1% 伤害, 每 10 点暴击 +1% 暴击率, 每 10 点急速 +1% 攻击与施法速度)</li>
+          </ul>
+        </section>
+
+        <section class="section-block" aria-labelledby="official-heading">
+          <p class="section-label">第二部分</p>
+          <h2 id="official-heading">官方更新 (v0.29.0)</h2>
+          <p>v0.29.0 收官专业 2.0, 将其打造成完整、平衡的制造成长与经济体系。本版本会一次性重置每位角色的专业技能等级至 0, 使所有人从最终精通曲线重新起步。同时重调地下城与团队副本难度、补齐职业掉落缺口、大改多块界面、上线重制原声, 并落地一批服务端稳定性与安全加固。</p>
+
+          <h3>亮点</h3>
+          <ul>
+            <li><strong>专业 2.0 收官:</strong> 精通曲线与技能上限、采集施法、钓鱼小游戏、委托制造与工匠契约、附魔、接纳任务、专业事迹与定制美术全部齐备。</li>
+            <li><strong>专业技能一次性清零:</strong> 请查收游戏内邮件。物品、配方、工具、材料、银行、金币、接纳进度、头衔、事迹、名望与任务全部保留。</li>
+            <li><strong>副本与 Nythraxis 难度/经济重调:</strong> 含英雄难度专属 Onrush 冲锋与首领控制免疫。</li>
+            <li><strong>界面重设计:</strong> 制造窗分页展示书, 角色面板、世界市场、任务日志与商人窗一并更新。</li>
+            <li><strong>音效与镜头:</strong> 区域与战斗音乐改为流式重制原声; 追逐镜头为跳跃、落地与进区增加重量感。</li>
+          </ul>
+
+          <h3>专业 2.0</h3>
+          <ul>
+            <li>首次登录 v0.29.0 时, 每名角色的制造与采集熟练度清零一次, 其余进度不动; 受影响角色会收到公会大厅说明信。</li>
+            <li>制造熟练度改为四态精通曲线, 并按专业封顶 (采矿/伐木/草药 100, 制造与附魔 125, 钓鱼 200)。</li>
+            <li>采集节点改为计时施法; 钓鱼新增咬钩小游戏。</li>
+            <li>委托制造使成品为交易绑定; 工作台大师提供按档收费的工匠契约解绑。</li>
+            <li>新增专业事迹与定制美术; 材料、附魔、头衔启用原创名称 (物品 id 不变)。</li>
+          </ul>
+
+          <h3>职业、战斗与遭遇</h3>
+          <ul>
+            <li>地下城与团队副本难度重调: 普通 Gravewyrm Sanctum 与英雄五人本怪物生命翻倍, 伤害下限上调; Nythraxis 生命与伤害重调。</li>
+            <li>九种近战战士/守卫型英雄五人本怪物获得 Onrush; 最终首领与具名中段首领免疫控制与减速。</li>
+            <li>掉落补齐约 41 件开放世界 / 地下城 / 团队装, 填补职业与专精缺口。</li>
+            <li>对尸体一次交互可同时采集与拾取; 带充能技能显示金色充能角标。</li>
+          </ul>
+
+          <h3>界面与社交</h3>
+          <ul>
+            <li>角色面板与检视改为展示式布局; 世界市场改为横屏多列网格。</li>
+            <li>登录后进入角色选择; 「新闻与更新」栏取代旧欢迎屏。</li>
+            <li>动作条布局按角色存服务器; 邮件包裹 30 天后过期并退回发件人一次。</li>
+            <li>职员聊天行带服务器盖章的彩色角色标签; 持有者 / 贡献者徽章升级为 Ascendant Sigils。</li>
+          </ul>
+
+          <h3>镜头、渲染、音效与服务端</h3>
+          <ul>
+            <li>追逐镜头为跳跃、落地与进区增加重量感; 区域与战斗音乐改为流式重制原声。</li>
+            <li>鉴权令牌作用域在 WebSocket 与管理边界严格校验; 夜间留存清扫控制数据库体积。</li>
+          </ul>
+        </section>
+</article>
+    </main>
+    <footer>
+      <a href="/changelog">独家更新</a>
+      <a href="/support">支持</a>
+      <a href="/privacy">隐私政策</a>
+      <a href="/terms">服务条款</a>
+      <a href="/links">官方链接</a>
+    </footer>
+  </div>
+</body>
+</html>

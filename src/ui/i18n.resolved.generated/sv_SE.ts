@@ -1375,6 +1375,7 @@ export const sv_SE: EnTranslations = {
         "spellPower": "Besvärjelsekraft",
         "critRating": "Kritvärde",
         "hasteRating": "Snabbhetsvärde",
+        "versatilityRating": "Versatility",
         "parry": "Parering",
         "hitRating": "Träffvärde",
         "warfare": "Krigföring"
@@ -1396,6 +1397,7 @@ export const sv_SE: EnTranslations = {
         "hasteRating": "Snabbhetsvärde från din utrustning och setbonusar, som snabbar upp dina attacker och besvärjelser. Ungefär 10 i värde ger 1% snabbhet.",
         "parry": "Din chans att helt parera ett närstridsanfall framifrån utan att ta någon skada. Ett slag bakifrån kan inte pareras.",
         "hitRating": "Träffvärde från din utrustning och setbonusar, som minskar hur ofta dina attacker missar och dina besvärjelser motarbetas, framfor allt mot fiender av högre nivå. Ungefär 10 i värde ger 1% träff.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Ökar skadan mot spelare med {increase}% och minskar skadan från spelare med {reduction}%."
       },
       "effects": {
@@ -4911,6 +4913,7 @@ export const sv_SE: EnTranslations = {
     "highscores": "Topplista",
     "wiki": "Wiki",
     "news": "Nyheter",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Ladda ner",
     "loginRegister": "Logga in/Registrera",
     "account": "Konto",
@@ -6985,7 +6988,10 @@ export const sv_SE: EnTranslations = {
       "dps": "Skada/sek",
       "critChance": "Kritisk chans",
       "dodge": "Undvikande",
-      "parry": "Parering"
+      "parry": "Parering",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

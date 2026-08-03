@@ -816,16 +816,11 @@ describe('client HTML shell', () => {
     expect(serverMain).toContain("['/support', '/support.html']");
   });
 
-  it('loads Meta Pixel outside local development and tracks level 5', () => {
-    expect(html).toContain('https://connect.facebook.net/en_US/fbevents.js');
-    expect(html).toContain("fbq('init', '1692101265042180');");
-    expect(html).toContain("fbq('track', 'PageView');");
-    expect(html).toContain(
-      'https://www.facebook.com/tr?id=1692101265042180&ev=PageView&noscript=1',
-    );
-    expect(html).toContain(
-      "if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {",
-    );
+  it('loads no Meta Pixel / Facebook beacons (exclusive CN unreachable hosts)', () => {
+    expect(html).not.toContain('https://connect.facebook.net/en_US/fbevents.js');
+    expect(html).not.toContain("fbq('init'");
+    expect(html).not.toContain('https://www.facebook.com/tr?');
+    // Client trackMetaPixel helpers remain as no-ops when fbq is absent.
     expect(hudTs).toContain("if (options) fbq('trackCustom', eventName, data ?? {}, options);");
     expect(hudTs).toContain("else fbq('trackCustom', eventName, data ?? {});");
     expect(hudTs).toContain('if (ev.level === 5) {');
@@ -837,6 +832,14 @@ describe('client HTML shell', () => {
     );
     expect(mainTs).toContain("'GitHubClick'");
     expect(mainTs).toContain("'DiscordClick'");
+  });
+
+  it('does not ship Cloudflare Turnstile api.js in the HTML head (exclusive CN)', () => {
+    // Unreachable challenges.cloudflare.com hung login/charselect; main.ts injects
+    // the script only when VITE_TURNSTILE_SITEKEY is set at build time.
+    expect(html).not.toContain('challenges.cloudflare.com/turnstile/v0/api.js');
+    expect(mainTs).toContain('TURNSTILE_SCRIPT_SRC');
+    expect(mainTs).toContain('ensureTurnstileScript');
   });
 
   it('excludes wallet surfaces from native and Steam builds while allowing website desktop', () => {
