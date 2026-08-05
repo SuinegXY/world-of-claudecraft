@@ -10,9 +10,15 @@ import {
 } from '../content/rift/items';
 import { ITEMS } from '../data';
 import { refusedWhileDead } from '../dead_gate';
+import { withExclusiveGearScale } from '../loot/exclusive_gear_scale';
+import {
+  rollSecondaryAffix,
+  SECONDARY_AFFIX_KEYS,
+  withSecondaryAffix,
+} from '../loot/secondary_affix';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
-import type { Entity, ItemInstancePayload, PlayerClass, RiftTier } from '../types';
+import type { Entity, ItemInstancePayload, LootSlot, PlayerClass, RiftTier } from '../types';
 import { riftHeroicClearPool, riftNormalClearPool } from './loot_pools';
 import { riftRankForBaseLevel } from './ranks';
 
@@ -146,8 +152,53 @@ export function sanitizeRiftGearInstance(
       gems: [...gems],
     },
   };
+  // Exclusive secondary affixes and the exclusiveScaled stamp are grant-time
+  // identity, not forge inputs: preserve them across the rebuild so a login
+  // never strips Versatility/Crit/Haste or the x5 numerical retune.
+  const secondary = sanitizePreservedSecondary(input.secondary);
+  if (secondary) clean.secondary = secondary;
+  if (input.exclusiveScaled) clean.exclusiveScaled = true;
   rebuildRolledStats(clean);
-  return clean;
+  const def = ITEMS[itemId];
+  return (def && withExclusiveGearScale(clean, def)) || clean;
+}
+
+/** Keep exclusive secondary ratings that are already on a persisted copy. */
+function sanitizePreservedSecondary(
+  input: ItemInstancePayload['secondary'],
+): ItemInstancePayload['secondary'] | undefined {
+  if (!input) return undefined;
+  const out: NonNullable<ItemInstancePayload['secondary']> = {};
+  let any = false;
+  for (const key of SECONDARY_AFFIX_KEYS) {
+    const value = input[key];
+    if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) continue;
+    out[key] = Math.min(Math.floor(value), 9999);
+    any = true;
+  }
+  return any ? out : undefined;
+}
+
+/**
+ * Attach exclusive secondary affixes onto already-selected corpse slots.
+ * APPEND-ONLY relative to addRiftClearGearLoot's existing draw order: roll after
+ * every item/mount/chance draw so clear parity and mount rates stay intact.
+ */
+function stampSecondaryOnLootSlots(
+  ctx: SimContext,
+  slots: LootSlot[],
+  fallbackLevel: number,
+): void {
+  for (const slot of slots) {
+    if (!slot.itemId || slot.instance?.secondary) continue;
+    const item = ITEMS[slot.itemId];
+    if (!item) continue;
+    const instance = withSecondaryAffix(
+      slot.instance,
+      rollSecondaryAffix(ctx.rng, item, fallbackLevel),
+    );
+    if (instance) slot.instance = instance;
+  }
 }
 
 export function createRiftGearInstance(
@@ -265,6 +316,8 @@ export function addRiftClearGearLoot(ctx: SimContext, boss: Entity, baseLevel: n
     const pool = riftNormalClearPool();
     loot.items.push({ itemId: pool[ctx.rng.int(0, pool.length - 1)], count: 1 });
     loot.copper = (loot.copper ?? 0) + RIFT_COIN_BONUS_C;
+    // Secondary rolls AFTER the pool pick (append-only; see stamp helper).
+    stampSecondaryOnLootSlots(ctx, loot.items, baseLevel);
     boss.loot = loot;
     boss.lootable = true;
     return;
@@ -313,6 +366,10 @@ export function addRiftClearGearLoot(ctx: SimContext, boss: Entity, baseLevel: n
     rank === 'B' ? RIFT_COIN_BONUS_B : rank === 'A' ? RIFT_COIN_BONUS_A : RIFT_COIN_BONUS_S;
   loot.copper = (loot.copper ?? 0) + coinBonus;
 
+  // Secondary rolls AFTER every clear-time pick/chance (append-only). Mounts and
+  // non-gear skip canRollSecondaryAffix and stay instance-free.
+  stampSecondaryOnLootSlots(ctx, loot.items, baseLevel);
+
   boss.loot = loot;
   if (loot.items.length > 0 || loot.copper > 0) boss.lootable = true;
 }
@@ -339,10 +396,18 @@ export function addRiftProgressionLoot(
     const meta = ctx.players.get(pid);
     if (!meta) continue;
     const gear = createRiftGearInstance(eventId, tier, meta.cls, pid);
+    // Exclusive secondary on the personal ring (budget off requiredLevel / ilvl).
+    const shell = ITEMS[gear.itemId];
+    const withSecondary = shell
+      ? withSecondaryAffix(
+          gear.instance,
+          rollSecondaryAffix(ctx.rng, shell, shell.requiredLevel ?? 20),
+        )
+      : gear.instance;
     loot.items.push({
       itemId: gear.itemId,
       count: 1,
-      instance: gear.instance,
+      instance: withSecondary ?? gear.instance,
       personalFor: [pid],
     });
     for (let essence = 0; essence < essenceCount; essence++) {

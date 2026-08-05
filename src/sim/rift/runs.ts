@@ -29,6 +29,7 @@ import {
   takeCombatExit,
 } from '../instance_exit_memory';
 import type { LootTier } from '../lockpick';
+import { makeLootItem } from '../loot/loot_roll';
 import { RIFT_MECHANIC_SPACING_SEC } from '../mob/mechanic_spacing';
 import { retargetMob } from '../mob/targeting';
 import { cancelProfessionSessionOnDisplacement } from '../professions/session_teardown';
@@ -1210,7 +1211,16 @@ export function riftOpenTreasure(ctx: SimContext, objectId: number, pid?: number
     inst?.tier === 'S' ? 'premium' : inst?.tier === 'A' || inst?.tier === 'B' ? 'medium' : 'low';
   const cls = ctx.players.get(r.meta.entityId)?.cls ?? 'warrior';
   const items = delveChestItemsForTier(tier, cls, ctx.rng, false);
-  for (const it of items) ctx.addItem(it.itemId, it.count, r.meta.entityId);
+  // Exclusive: stamp secondary at grant (same budget rule as corpse loot), then
+  // route through addItemInstance so exclusiveScaled lands with the payload.
+  for (const it of items) {
+    const lootSlot = makeLootItem(ctx, it.itemId, inst?.baseLevel ?? r.e.level);
+    if (lootSlot.instance) {
+      ctx.addItemInstance(it.itemId, lootSlot.instance, r.meta.entityId, it.count);
+    } else {
+      ctx.addItem(it.itemId, it.count, r.meta.entityId);
+    }
+  }
   chest.templateId = 'rift_treasure_open';
   chest.name = 'Opened Cache';
   chest.lootable = false;

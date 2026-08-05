@@ -127,6 +127,8 @@ describe('Rift gear progression', () => {
         }),
       }),
     );
-    expect(restored.entities.get(pid)?.stats.str).toBeLessThan(100);
+    // Exclusive realms stamp exclusiveScaled on the rebuild (ItemDef primaries
+    // x5); the anti-tamper pin is that the forged 999_999 never lands in combat.
+    expect(restored.entities.get(pid)?.stats.str).toBeLessThan(999_999);
   });
 });
