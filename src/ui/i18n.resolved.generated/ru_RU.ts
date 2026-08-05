@@ -1411,6 +1411,7 @@ export const ru_RU: EnTranslations = {
         "spellPower": "Сила заклинаний",
         "critRating": "Рейтинг крит. удара",
         "hasteRating": "Рейтинг ускорения",
+        "versatilityRating": "Versatility",
         "parry": "Парирование",
         "hitRating": "Рейтинг меткости",
         "warfare": "Боевая мощь"
@@ -1432,6 +1433,7 @@ export const ru_RU: EnTranslations = {
         "hasteRating": "Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.",
         "parry": "Ваш шанс полностью парировать фронтальную атаку в ближнем бою и не получить урона. Удар со спины парировать нельзя.",
         "hitRating": "Рейтинг меткости от снаряжения и бонусов комплекта снижает частоту промахов ваших атак и сопротивления вашим заклинаниям, особенно против противников более высокого уровня. Примерно 10 рейтинга дают 1% меткости.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Увеличивает урон по игрокам на {increase}% и снижает получаемый от игроков урон на {reduction}%."
       },
       "effects": {
@@ -5058,6 +5060,7 @@ export const ru_RU: EnTranslations = {
     "highscores": "Таблицы рекордов",
     "wiki": "Вики",
     "news": "Новости",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Скачать",
     "loginRegister": "Войти / Зарегистрироваться",
     "account": "Аккаунт",
@@ -7157,7 +7160,10 @@ export const ru_RU: EnTranslations = {
       "dps": "Урон/сек",
       "critChance": "Шанс крита",
       "dodge": "Уклонение",
-      "parry": "Парирование"
+      "parry": "Парирование",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

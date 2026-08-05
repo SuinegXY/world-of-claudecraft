@@ -1411,6 +1411,7 @@ export const vi_VN: EnTranslations = {
         "spellPower": "Sức Mạnh Phép Thuật",
         "critRating": "Chỉ Số Chí Mạng",
         "hasteRating": "Chỉ Số Thần Tốc",
+        "versatilityRating": "Versatility",
         "parry": "Gạt Đòn",
         "hitRating": "Chỉ Số Trúng Đòn",
         "warfare": "Chiến Tranh"
@@ -1432,6 +1433,7 @@ export const vi_VN: EnTranslations = {
         "hasteRating": "Chỉ số thần tốc từ trang bị và phần thưởng bộ trang bị của bạn, đẩy nhanh các đòn tấn công và việc thi triển phép của bạn. Khoảng 10 điểm chỉ số ban 1% thần tốc.",
         "parry": "Cơ hội để bạn gạt trọn vẹn một đòn cận chiến từ phía trước, không nhận chút sát thương nào. Đòn đánh từ phía sau không thể bị gạt.",
         "hitRating": "Chỉ số trúng đòn từ trang bị và các chỉ số bộ của bạn, giảm tần suất tấn công bị hụt và phép thuật bị kháng, đặc biệt khi đối mặt với kẻ địch cấp cao hơn. Khoảng 10 chỉ số cho 1% trúng đòn.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Tăng sát thương gây ra cho người chơi thêm {increase}% và giảm sát thương nhận từ người chơi thêm {reduction}%."
       },
       "effects": {
@@ -5058,6 +5060,7 @@ export const vi_VN: EnTranslations = {
     "highscores": "Bảng Điểm Cao",
     "wiki": "Wiki",
     "news": "Tin Tức",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Tải Về",
     "loginRegister": "Đăng Nhập/Đăng Ký",
     "account": "Tài Khoản",
@@ -7157,7 +7160,10 @@ export const vi_VN: EnTranslations = {
       "dps": "Sát thương/giây",
       "critChance": "Tỉ Lệ Chí Mạng",
       "dodge": "Né Tránh",
-      "parry": "Đỡ Đòn"
+      "parry": "Đỡ Đòn",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

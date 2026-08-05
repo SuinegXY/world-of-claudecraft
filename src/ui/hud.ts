@@ -69,6 +69,11 @@ import { canEquipItem, weaponHand } from '../sim/equipment_rules';
 import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
 import { requiredLevelFor } from '../sim/item_level_req';
 import type { Ante, PickAction } from '../sim/lockpick';
+import {
+  effectiveItemRating,
+  effectiveItemStats,
+  effectiveWeapon,
+} from '../sim/loot/exclusive_gear_scale';
 import { petCanForceTaunt } from '../sim/pet/pet_taunt_gate';
 import { FOCUS_POINT_BUDGET, isInTownZone } from '../sim/professions/focus';
 import { inRangeStationTypes, stationTypesSignature } from '../sim/professions/stations';
@@ -5259,13 +5264,14 @@ export class Hud {
     // seal and the enchanted marker (item_instance_tooltip.ts owns the copy
     // rules, incl. never claiming a quality-rank upgrade).
     html += instanceBadgeLines(instance);
-    if (item.weapon) {
-      const dps = (item.weapon.min + item.weapon.max) / 2 / item.weapon.speed;
+    const weapon = effectiveWeapon(item, instance) ?? item.weapon;
+    if (weapon) {
+      const dps = (weapon.min + weapon.max) / 2 / weapon.speed;
       html += `<div class="tt-stat">${esc(
         t('itemUi.tooltip.damageSpeed', {
-          min: itemNumber(item.weapon.min),
-          max: itemNumber(item.weapon.max),
-          speed: itemNumber(item.weapon.speed, 1),
+          min: itemNumber(weapon.min),
+          max: itemNumber(weapon.max),
+          speed: itemNumber(weapon.speed, 1),
         }),
       )}</div>`;
       html += `<div class="tt-stat">${esc(t('itemUi.tooltip.dps', { dps: itemNumber(dps, 1) }))}</div>`;
@@ -5273,8 +5279,9 @@ export class Hud {
       // every other weapon, so the old standalone "Dagger" sub-line is gone. The
       // item.weapon.dagger DATA field still drives Backstab; only this line went.
     }
-    if (item.stats) {
-      for (const [k, v] of Object.entries(item.stats)) {
+    const gearStats = effectiveItemStats(item, instance) ?? item.stats;
+    if (gearStats) {
+      for (const [k, v] of Object.entries(gearStats)) {
         if (v === undefined) continue;
         if (k === 'armor') {
           html += `<div class="tt-stat">${esc(t('itemUi.tooltip.armorStat', { value: itemNumber(v) }))}</div>`;
@@ -5306,7 +5313,10 @@ export class Hud {
         }),
       )}</div>`;
     }
-    const warfareRating = Math.min(item.pvpOffenseRating ?? 0, item.pvpDefenseRating ?? 0);
+    const warfareRating = Math.min(
+      effectiveItemRating(item.pvpOffenseRating, instance),
+      effectiveItemRating(item.pvpDefenseRating, instance),
+    );
     if (warfareRating > 0) {
       html += `<div class="tt-green">${esc(
         t('itemUi.tooltip.stat', {
@@ -5319,7 +5329,7 @@ export class Hud {
     // sharing the character-sheet HUD-chrome labels. Hit answers the higher-level
     // miss/resist penalty; crit and haste add throughput.
     for (const ratingStat of ['hitRating', 'critRating', 'hasteRating'] as const) {
-      const value = item[ratingStat] ?? 0;
+      const value = effectiveItemRating(item[ratingStat], instance);
       if (value <= 0) continue;
       html += `<div class="tt-green">${esc(
         t('itemUi.tooltip.stat', {
@@ -5560,6 +5570,7 @@ export class Hud {
       critRating: p.critRating,
       hasteRating: p.hasteRating,
       hitRating: p.hitRating,
+      versatilityRating: p.versatilityRating,
       parryChance: sim.cfg.playerClass === 'warrior' ? warriorParryChance(p.stats.str) : 0,
       dps: weaponDps(wpn?.weapon, p.attackPower),
       gear,

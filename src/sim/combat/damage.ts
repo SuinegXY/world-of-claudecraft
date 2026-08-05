@@ -89,6 +89,8 @@ const PET_STEALTH_DETECTION_RADIUS = 50;
 // classic-era damage pushback. The resolved check is player-only and reads the
 // same flat ability record as casting/tooltips; mobs fall back to authored defs.
 function ignoresDamagePushback(ctx: SimContext, target: Entity, abilityId: string): boolean {
+  // Exclusive server: every player cast ignores damage pushback.
+  if (target.kind === 'player') return true;
   return (
     abilityId === 'ghost_wolf' ||
     ABILITIES[abilityId]?.uninterruptible === true ||
@@ -223,6 +225,11 @@ export function dealDamage(
     if (twoHandPct > 0 && mainhand?.kind === 'weapon' && weaponHand(mainhand) === 'twohand') {
       amount = Math.round(amount * (1 + twoHandPct));
     }
+  }
+
+  // Exclusive secondary affix: Versatility increases all damage dealt.
+  if (source && source.versatilityDmgBonus > 0 && amount > 0) {
+    amount = Math.round(amount * (1 + source.versatilityDmgBonus));
   }
 
   // Defensive Stance, classic: deal 10% less, take 10% less (and +30% threat below)

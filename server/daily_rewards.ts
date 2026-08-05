@@ -25,6 +25,7 @@ import {
 } from './daily_rewards_db';
 import { buildSeedKey, runSeedOnce } from './daily_rewards_seed_gate';
 import { accountAndScopeForToken, moderationStatusForAccount, walletForAccount } from './db';
+import { dailyRewardsOutboundEnabled } from './exclusive_outbound';
 import { ctxAccountId } from './http/context';
 import { HttpError } from './http/errors';
 import { createActiveGuard } from './http/middleware/bearer_active_guard';
@@ -376,6 +377,15 @@ function dailyRewardServiceUrl(): string {
   return (process.env.WOC_DAILY_REWARD_SERVICE_URL ?? '').trim();
 }
 
+/** Exclusive soft-off: no outbound and no local fallback "enabled" board. */
+function exclusiveDailyRewardsDisabled(): boolean {
+  return !dailyRewardsOutboundEnabled();
+}
+
+function disabledRuntimeConfig(): DailyRewardRuntimeConfig {
+  return { ...fallbackRuntimeConfig(), enabled: false };
+}
+
 function dailyRewardServiceHeaders(): Record<string, string> {
   const secret = dailyRewardServiceSecret();
   return secret ? { 'x-woc-daily-reward-secret': secret } : {};
@@ -416,6 +426,7 @@ function logRuntimeConfigFailure(err: unknown): void {
 }
 
 async function fetchDailyRewardSchedule(): Promise<number> {
+  if (exclusiveDailyRewardsDisabled()) return DEFAULT_DAY_START_UTC_MINUTES;
   const serviceUrl = dailyRewardServiceUrl();
   if (!serviceUrl) return DEFAULT_DAY_START_UTC_MINUTES;
   const url = new URL('/daily-schedule', serviceUrl.endsWith('/') ? serviceUrl : `${serviceUrl}/`);
@@ -434,6 +445,9 @@ async function fetchDailyRewardRuntimeConfig(
   day: string,
   strict = false,
 ): Promise<DailyRewardRuntimeConfig> {
+  // Exclusive default: feature stays off with zero env. Opt in with
+  // DAILY_REWARDS_OUTBOUND_ENABLED=1 (local fallback when the URL is unset).
+  if (exclusiveDailyRewardsDisabled()) return disabledRuntimeConfig();
   const serviceUrl = dailyRewardServiceUrl();
   if (!serviceUrl) return fallbackRuntimeConfig();
   const url = new URL('/daily-config', serviceUrl.endsWith('/') ? serviceUrl : `${serviceUrl}/`);
@@ -1743,6 +1757,11 @@ export async function handleDailyRewardInternalApi(
   if (!url.pathname.startsWith('/internal/daily-rewards/')) return false;
   if (!internalAuthorized(req)) {
     json(res, 401, { success: false, data: null, error: 'not authenticated' });
+    return true;
+  }
+  // Exclusive: ops surface stays locked unless DAILY_REWARDS_OUTBOUND_ENABLED=1.
+  if (exclusiveDailyRewardsDisabled()) {
+    json(res, 503, { success: false, data: null, error: 'daily rewards unavailable' });
     return true;
   }
   if (req.method === 'POST' && url.pathname === '/internal/daily-rewards/finalize') {

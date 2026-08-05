@@ -82,19 +82,15 @@ function navigationAllowed(
   return false;
 }
 
-// Third-party origins the shipped index.html actually uses. The desktop shell keeps
-// the same behavior as the web build (chosen posture), so the CSP allow-lists exactly
-// these and nothing more. Grouped by the directive each feeds.
+// Third-party origins the shipped index.html actually uses. Exclusive China
+// builds strip Google Analytics, Meta Pixel, and Google Fonts (unreachable),
+// so those hosts are intentionally absent from the CSP allow-list. WalletConnect
+// and Turnstile stay listed for desktop opt-in surfaces that may still load them.
 const CSP_ORIGINS = {
-  // <script src> that index.html loads: Google Tag Manager (gtag) and the Meta Pixel
-  // loader. Cloudflare Turnstile's api.js is added separately (it also needs frame-src).
-  script: ['https://www.googletagmanager.com', 'https://connect.facebook.net'],
-  // fetch/beacon endpoints those tags talk to.
+  // No third-party analytics script hosts in the exclusive build.
+  script: [],
+  // fetch/beacon endpoints for remaining opt-in wallet surfaces.
   connect: [
-    'https://www.google-analytics.com',
-    'https://www.googletagmanager.com',
-    'https://connect.facebook.net',
-    'https://www.facebook.com',
     'https://*.walletconnect.com',
     'wss://*.walletconnect.com',
     'https://*.walletconnect.org',
@@ -102,19 +98,14 @@ const CSP_ORIGINS = {
     'https://api.web3modal.org',
     'https://pulse.walletconnect.org',
   ],
-  // tracking-pixel image beacons.
+  // Wallet modal images only (no Facebook / GA pixel beacons).
   img: [
-    'https://www.google-analytics.com',
-    'https://www.facebook.com',
     'https://secure.walletconnect.com',
     'https://secure.walletconnect.org',
     'https://api.web3modal.org',
   ],
   // Cloudflare Turnstile: api.js (script) plus the challenge iframe (frame).
   turnstile: 'https://challenges.cloudflare.com',
-  // Google Fonts: the stylesheet origin (style-src) and the font-file origin (font-src).
-  fontsStyle: 'https://fonts.googleapis.com',
-  fontsFile: 'https://fonts.gstatic.com',
   reownFonts: 'https://fonts.reown.com',
   walletFrames: [
     'https://secure.walletconnect.com',
@@ -194,8 +185,8 @@ function buildContentSecurityPolicy({ apiOrigin, scriptHashes = [] } = {}) {
     scriptSrc,
     connectSrc,
     imgSrc,
-    `style-src 'self' 'unsafe-inline' ${CSP_ORIGINS.fontsStyle}`,
-    `font-src 'self' ${CSP_ORIGINS.fontsFile} ${CSP_ORIGINS.reownFonts}`,
+    `style-src 'self' 'unsafe-inline'`,
+    `font-src 'self' ${CSP_ORIGINS.reownFonts}`,
     "worker-src 'self' blob:",
     `frame-src ${CSP_ORIGINS.turnstile} ${CSP_ORIGINS.walletFrames.join(' ')}`,
     "object-src 'none'",

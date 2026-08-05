@@ -1411,6 +1411,7 @@ export const ko_KR: EnTranslations = {
         "spellPower": "주문력",
         "critRating": "치명타 등급",
         "hasteRating": "가속 등급",
+        "versatilityRating": "Versatility",
         "parry": "무기 막기",
         "hitRating": "명중 등급",
         "warfare": "워페어"
@@ -1432,6 +1433,7 @@ export const ko_KR: EnTranslations = {
         "hasteRating": "장비와 세트 보너스에서 얻는 가속 등급으로 공격과 시전 속도가 빨라집니다. 약 10등급당 1% 가속.",
         "parry": "전방 근접 공격을 완전히 무기로 막아 피해를 입지 않을 확률입니다. 뒤에서 오는 공격은 막을 수 없습니다.",
         "hitRating": "장비와 세트 보너스에서 얻는 명중 등급으로 공격이 빗나가거나 주문이 저항되는 빈도를 줄이며, 특히 더 높은 레벨의 적에게 효과적입니다. 약 10등급당 1% 명중.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "플레이어에게 주는 피해가 {increase}% 증가하고 플레이어에게 받는 피해가 {reduction}% 감소합니다."
       },
       "effects": {
@@ -5058,6 +5060,7 @@ export const ko_KR: EnTranslations = {
     "highscores": "순위표",
     "wiki": "위키",
     "news": "새소식",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "다운로드",
     "loginRegister": "로그인/회원가입",
     "account": "계정",
@@ -7157,7 +7160,10 @@ export const ko_KR: EnTranslations = {
       "dps": "초당 피해",
       "critChance": "치명타율",
       "dodge": "회피",
-      "parry": "무기 막기"
+      "parry": "무기 막기",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

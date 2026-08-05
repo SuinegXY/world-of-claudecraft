@@ -310,6 +310,7 @@ function rewardConfig(overrides: Partial<DailyRewardRuntimeConfig> = {}): DailyR
 function stubRewardConfig(config: Partial<DailyRewardRuntimeConfig> = {}) {
   process.env.WOC_DAILY_REWARD_SERVICE_URL = 'https://payout.test';
   process.env.WOC_DAILY_REWARD_SERVICE_SECRET = 'secret';
+  process.env.DAILY_REWARDS_OUTBOUND_ENABLED = '1';
   vi.stubGlobal(
     'fetch',
     vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {

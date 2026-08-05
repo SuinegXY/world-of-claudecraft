@@ -828,6 +828,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '法術強度',
   'hudChrome.statInfo.names.critRating': '暴擊等級',
   'hudChrome.statInfo.names.hasteRating': '急速等級',
+  'hudChrome.statInfo.names.versatilityRating': '全能等級',
   'hudChrome.statInfo.names.parry': '招架',
   'hudChrome.statInfo.desc.parry':
     '你招架正面近戰攻擊、完全不受傷害的機率。來自背後的攻擊無法招架。',
@@ -840,6 +841,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '來自裝備和套裝加成的暴擊等級，提升你的暴擊機率。約每10點等級提供1%暴擊。',
   'hudChrome.statInfo.desc.hasteRating':
     '來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '來自裝備次要詞綴的全能等級，提高你造成的所有傷害。每10點等級恰好提供1%額外傷害。',
   'hudChrome.statInfo.desc.spellPower':
     '提高你法術造成的傷害與治療的強度。每點智力都會提供少量法術強度，此外還有來自裝備與增益的加成。',
   'hudChrome.statInfo.desc.warfare':

@@ -98,10 +98,11 @@ describe('/play uses the landing hero backdrop', () => {
 });
 
 describe('/play keeps its tracking and SEO head', () => {
-  it('play.html keeps the Google tag with the localhost guard', () => {
-    expect(playHtml).toContain('googletagmanager.com/gtag/js?id=G-BR5Z7GT7C2');
-    expect(playHtml).toContain("gtag('config', 'G-BR5Z7GT7C2')");
-    expect(playHtml).toContain("['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)");
+  it('play.html ships without Google Analytics (exclusive CN unreachable host)', () => {
+    expect(playHtml).not.toContain('googletagmanager.com');
+    expect(playHtml).not.toContain('G-BR5Z7GT7C2');
+    expect(playHtml).not.toContain('fonts.googleapis.com');
+    expect(playHtml).not.toContain('challenges.cloudflare.com/turnstile/v0/api.js');
   });
 
   it('play.html keeps its canonical /play SEO surface', () => {
