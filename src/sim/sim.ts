@@ -2832,16 +2832,17 @@ export class Sim {
         for (const d of dropped) droppedInstanceJunk.push(`equip.${slot}.${d}`);
         if (clean) meta.equipmentInstance[slot] = clean;
       }
-      // Worn gear that never carried an instance (pre-exclusive saves) still needs
-      // the exclusiveScaled stamp so unscaled ItemDef tables grant the retune.
-      // Live ALL_EQUIP_SLOTS (includes offhand), never the frozen launch list:
-      // EQUIP_SLOTS was removed and left this path as ReferenceError on login.
+      // Exclusive numerical stamp on EVERY worn slot, including copies that
+      // already carry an instance (rift rebuild, enchant, masterwork). The old
+      // "only stamp when no instance" arm left rift gear permanently unscaled
+      // after login because sanitizeRiftGearInstance rebuilds a fresh payload
+      // and historically dropped exclusiveScaled. Idempotent.
       for (const slot of ALL_EQUIP_SLOTS) {
         const itemId = meta.equipment[slot];
-        if (!itemId || meta.equipmentInstance[slot]) continue;
+        if (!itemId) continue;
         const def = ITEMS[itemId];
         if (!def) continue;
-        const stamped = withExclusiveGearScale(undefined, def);
+        const stamped = withExclusiveGearScale(meta.equipmentInstance[slot], def);
         if (stamped) meta.equipmentInstance[slot] = stamped;
       }
       // The shared tamper ceiling (bags.ts instancedCountCap, same rule as the
@@ -2871,10 +2872,7 @@ export class Sim {
         if (slot.instance?.rift) {
           const rebuilt = sanitizeRiftGearInstance(slot.itemId, slot.instance, player.id);
           if (rebuilt) slot.instance = rebuilt;
-          else {
-            delete slot.instance;
-            continue;
-          }
+          else delete slot.instance;
         }
         // The payload bound covers BAGS too (the review round: the mint sites
         // put signed instances into bags in the common case, so an
@@ -2886,6 +2884,14 @@ export class Sim {
           for (const d of dropped) droppedInstanceJunk.push(`bag.${slot.itemId}.${d}`);
           if (payload) slot.instance = payload;
           else delete slot.instance;
+        }
+        // Same exclusiveScaled heal as worn gear: a bag copy whose instance
+        // lost the stamp (pre-fix rift sanitize) must not stay at official
+        // ItemDef numbers after login.
+        const def = ITEMS[slot.itemId];
+        if (def) {
+          const stamped = withExclusiveGearScale(slot.instance, def);
+          if (stamped) slot.instance = stamped;
         }
       }
       if (s.bags === undefined) {
