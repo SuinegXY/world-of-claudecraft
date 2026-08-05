@@ -58,8 +58,11 @@ Everything else is a sibling module in one of these families:
   moves). All display-only, all gated by the reduced-motion switch; driven
   from `renderer.ts` `updateCamera` and the hud event hooks
   (`tests/camera_*_core.test.ts`).
-- `voxel_terrain.ts`: verification-only prototype (proposal #1611, driven by
-  `scripts/`, NOT the live path); live terrain is `terrain.ts` sampling sim heights.
+- `static_matrix.ts`: freeze helpers for never-moving subtrees, plus
+  `commitManualMatrixWorld` for objects that set `matrixWorldAutoUpdate = false`
+  (the chase camera). Three r165's `updateMatrixWorld` does not write
+  `matrixWorld` under that flag; forgetting the commit freezes the view at the
+  boot pose (the v0.33 camera regression).
 
 ## Module-first: pure core + thin painter (where NEW render logic lands)
 New per-frame decision logic (visibility, anchors, interpolation, region/LOD

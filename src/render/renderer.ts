@@ -330,7 +330,11 @@ import {
   type SkyView,
 } from './sky';
 import { nearestSloppyPickId, type SloppyPickCandidate } from './sloppy_pick';
-import { freezeStaticMatrices, freezeStaticSubtreeMatrices } from './static_matrix';
+import {
+  commitManualMatrixWorld,
+  freezeStaticMatrices,
+  freezeStaticSubtreeMatrices,
+} from './static_matrix';
 import { buildStationProps } from './stations';
 import { shouldRenderStealthGhost } from './stealth';
 import { createStepSmooth, type StepSmoothState, stepSmoothHeight } from './step_smooth_core';
@@ -1869,8 +1873,11 @@ export class Renderer {
       this.farVista.enabled ? 0.2 : 0.1,
       this.farVista.enabled ? this.farVista.cameraFar : 950,
     );
-    // updateCamera owns the one explicit camera matrix refresh. Prevent each
-    // WebGLRenderer pass from repeating it for an unchanged camera.
+    // updateCamera owns the one explicit camera matrix refresh (via
+    // commitManualMatrixWorld). Prevent each WebGLRenderer pass from repeating
+    // it for an unchanged camera. Three r165 will NOT write matrixWorld from
+    // updateMatrixWorld when this flag is false, so every pose change must
+    // call commitManualMatrixWorld, never bare updateMatrixWorld.
     this.camera.matrixWorldAutoUpdate = false;
     // Nameplate Three/DOM ownership lives in the painter; it reads the
     // viewport / mob-nameplate toggle lazily (the renderer reassigns viewport on
@@ -9892,7 +9899,7 @@ export class Renderer {
       this.valeCupStadium.updateShadowVisibility(this.camera, this.shadowLightDirection, true);
     }
     this.updateOpaqueDrawOrder(dt);
-    if (shakeX !== 0 || shakeY !== 0) this.camera.updateMatrixWorld();
+    if (shakeX !== 0 || shakeY !== 0) commitManualMatrixWorld(this.camera);
     this.vfx.prepareDraw(this.camera);
     if (this.post) {
       // screen-fx pass state (ripple re-projection, flash decay) advances
@@ -9990,7 +9997,7 @@ export class Renderer {
   async captureScreenshot(maxEdge = 1280, quality = 0.7): Promise<string | null> {
     if (this.shutdownStarted) return null;
     try {
-      this.camera.updateMatrixWorld();
+      commitManualMatrixWorld(this.camera);
       this.vfx.prepareDraw(this.camera);
       if (this.post) this.post.render();
       else this.webgl.render(this.scene, this.camera);
@@ -10374,7 +10381,7 @@ export class Renderer {
         this.camera.updateProjectionMatrix();
       }
       this.camera.lookAt(this.cameraLookAt);
-      this.camera.updateMatrixWorld();
+      commitManualMatrixWorld(this.camera);
       return;
     }
     const p = this.sim.player;
@@ -10485,7 +10492,7 @@ export class Renderer {
     }
     this.cameraLookAt.set(px, eyeY, pz);
     this.camera.lookAt(this.cameraLookAt);
-    this.camera.updateMatrixWorld();
+    commitManualMatrixWorld(this.camera);
 
     // Spatial-audio listener (at the camera, facing the player) + ambience state.
     const sink = this.audioSink;

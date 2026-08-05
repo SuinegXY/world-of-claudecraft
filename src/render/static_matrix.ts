@@ -34,3 +34,23 @@ export function freezeStaticSubtreeMatrices(root: THREE.Object3D): void {
   freezeStaticMatrices(root);
   root.matrixWorldAutoUpdate = false;
 }
+
+/**
+ * Write an Object3D's local transform into `matrixWorld` when the object has
+ * opted out of auto world-matrix refresh (`matrixWorldAutoUpdate = false`).
+ *
+ * Three r165's `updateMatrixWorld` / `updateWorldMatrix` only copy into
+ * `matrixWorld` when `matrixWorldAutoUpdate === true`. Calling them on a
+ * manually-managed camera therefore leaves `matrixWorld` at identity forever:
+ * the chase view sticks at the boot pose (the v0.33 camera freeze). After every
+ * pose write on such an object, call this instead of `updateMatrixWorld()`.
+ */
+export function commitManualMatrixWorld(obj: THREE.Object3D): void {
+  if (obj.matrixAutoUpdate) obj.updateMatrix();
+  if (obj.parent === null) {
+    obj.matrixWorld.copy(obj.matrix);
+  } else {
+    obj.matrixWorld.multiplyMatrices(obj.parent.matrixWorld, obj.matrix);
+  }
+  obj.matrixWorldNeedsUpdate = false;
+}
