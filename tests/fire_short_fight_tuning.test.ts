@@ -356,8 +356,14 @@ describe('talented burst window (Monte Carlo 2026-07-24, designer round 2026-07-
   const frost = CEILING_SEEDS.map((seed) =>
     runShortFight('frost', FIGHT_SECONDS, seed, FROST_TOP_ROWS),
   );
+  // PAIRED naked comparator on the SAME seed ladder, hoisted with the talented
+  // sample. Running these five 27s fights inside the `it` body alone took ~8s
+  // locally and blew the 20s testTimeout on loaded CI shards (same trap the
+  // Ignite conservation pin below already documents for re-running sims).
+  const naked = CEILING_SEEDS.map((seed) => runShortFight('fire', FIGHT_SECONDS, seed));
   const mean = fire.reduce((a, r) => a + r.dps, 0) / fire.length;
   const frostMean = frost.reduce((a, r) => a + r.dps, 0) / frost.length;
+  const nakedMean = naked.reduce((a, r) => a + r.dps, 0) / naked.length;
 
   it('reports the talented burst numbers (owner harness)', () => {
     const per = fire.map((r, k) => `${CEILING_SEEDS[k]}:${r.dps.toFixed(1)}`).join(' ');
@@ -381,8 +387,6 @@ describe('talented burst window (Monte Carlo 2026-07-24, designer round 2026-07-
     // naked mean over 45 seeds, so no representative sample could pass it). Same
     // assertion, same intent, compared like for like, so the margin now reflects
     // the real talent contribution (about 12 percent) instead of one lucky roll.
-    const naked = CEILING_SEEDS.map((seed) => runShortFight('fire', FIGHT_SECONDS, seed));
-    const nakedMean = naked.reduce((a, r) => a + r.dps, 0) / naked.length;
     expect(mean).toBeGreaterThanOrEqual(nakedMean);
   });
 });

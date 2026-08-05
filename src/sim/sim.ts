@@ -240,6 +240,7 @@ import {
   paginateLeaderboard,
 } from './leaderboard_page';
 import type { Ante, PickAction } from './lockpick';
+import { isExclusiveGearItem, withExclusiveGearScale } from './loot/exclusive_gear_scale';
 // L1: the loot-distribution layer (party-loot strategy, the rollLoot roller, copper
 // split, need-greed roll lifecycle, corpse-loot helpers) moved to ./loot/loot_roll.ts;
 // Sim keeps thin same-named delegates that call these.
@@ -256,7 +257,6 @@ import {
   setPartyLootMaster as setPartyLootMasterImpl,
   submitLootRoll as submitLootRollImpl,
 } from './loot/loot_roll';
-import { isExclusiveGearItem, withExclusiveGearScale } from './loot/exclusive_gear_scale';
 import { type MailSave, PostOffice } from './mail/post_office';
 import { Market, type MarketListing, type MarketSave } from './market';
 import { defaultMarketQuery, type MarketQuery } from './market_query';
@@ -556,6 +556,7 @@ import {
 import {
   type AbilityDef,
   type AbilityEffect,
+  ALL_EQUIP_SLOTS,
   type ArenaCombatant,
   type ArenaFormat,
   type ArenaStanding,
@@ -2618,7 +2619,9 @@ export class Sim {
       }
       // Worn gear that never carried an instance (pre-exclusive saves) still needs
       // the exclusiveScaled stamp so unscaled ItemDef tables grant the retune.
-      for (const slot of EQUIP_SLOTS) {
+      // Live ALL_EQUIP_SLOTS (includes offhand), never the frozen launch list:
+      // EQUIP_SLOTS was removed and left this path as ReferenceError on login.
+      for (const slot of ALL_EQUIP_SLOTS) {
         const itemId = meta.equipment[slot];
         if (!itemId || meta.equipmentInstance[slot]) continue;
         const def = ITEMS[itemId];
@@ -2638,10 +2641,10 @@ export class Sim {
       });
       for (const slot of meta.inventory) {
         if (slot.instance?.rift) {
-        const clean = sanitizeRiftGearInstance(slot.itemId, slot.instance, player.id);
-        if (clean) slot.instance = clean;
-        else delete slot.instance;
-      }
+          const clean = sanitizeRiftGearInstance(slot.itemId, slot.instance, player.id);
+          if (clean) slot.instance = clean;
+          else delete slot.instance;
+        }
         const def = ITEMS[slot.itemId];
         if (!def) continue;
         const stamped = withExclusiveGearScale(slot.instance, def);

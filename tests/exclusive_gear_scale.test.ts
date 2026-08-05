@@ -104,4 +104,30 @@ describe('exclusive gear scale (grant-time stamp)', () => {
     expect(p?.weapon.min).toBe(4);
     expect(p?.weapon.max).toBe(10);
   });
+
+  // Regression: addPlayer used to iterate the removed EQUIP_SLOTS name and throw
+  // ReferenceError during ws auth / character join. Pre-exclusive saves also have
+  // worn gear with no equipmentInstance; the live ALL_EQUIP_SLOTS path must stamp
+  // every worn slot including offhand.
+  it('addPlayer stamps pre-exclusive worn gear including offhand without crashing', () => {
+    const sim = new Sim({ seed: 13, playerClass: 'warrior', autoEquip: false });
+    sim.setPlayerLevel(40);
+    expect(sim.setSpec('fury')).toBe(true);
+    sim.addItem('worn_sword', 2);
+    sim.equipItem('worn_sword');
+    sim.equipItemToSlot('worn_sword', 'offhand');
+    const saved = sim.serializeCharacter(sim.playerId);
+    expect(saved).toBeTruthy();
+    if (!saved) return;
+    // Strip instances to mimic a pre-exclusive save (worn ids only).
+    delete saved.equipmentInstance;
+    expect(saved.equipment.mainhand).toBe('worn_sword');
+    expect(saved.equipment.offhand).toBe('worn_sword');
+
+    const sim2 = new Sim({ seed: 14, playerClass: 'warrior', autoEquip: false, noPlayer: true });
+    const pid = sim2.addPlayer('warrior', 'PreExcl', { state: saved });
+    const meta = sim2.players.get(pid);
+    expect(meta?.equipmentInstance.mainhand?.exclusiveScaled).toBe(true);
+    expect(meta?.equipmentInstance.offhand?.exclusiveScaled).toBe(true);
+  });
 });
