@@ -3,6 +3,7 @@ import { ITEMS } from '../src/sim/data';
 import {
   EXCLUSIVE_STAT_MULT,
   EXCLUSIVE_WEAPON_MULT,
+  effectiveItemRating,
   effectiveItemStats,
   effectiveWeapon,
   isExclusiveGearItem,
@@ -47,6 +48,21 @@ describe('exclusive gear scale (grant-time stamp)', () => {
     const stamped = withExclusiveGearScale(undefined, staff);
     const stats = effectiveItemStats(staff, stamped);
     expect(stats?.int).toBe(1 * EXCLUSIVE_STAT_MULT);
+  });
+
+  // Regression: heroic jewelry content briefly kept JEWELRY_RATING=125 (already
+  // exclusive x5) while grant-time exclusiveScaled multiplied ratings again,
+  // producing 625 rating (25x official). Content stays at official 25; stamped
+  // copies land at 125.
+  it('jewelry ratings are official in tables and x5 only when stamped', () => {
+    const ring = ITEMS.seal_of_the_nine_oaths;
+    expect(ring?.hitRating).toBe(25);
+    expect(ring?.stats?.str).toBe(7);
+    if (!ring) return;
+    expect(effectiveItemRating(ring.hitRating, undefined)).toBe(25);
+    const stamped = withExclusiveGearScale(undefined, ring);
+    expect(effectiveItemRating(ring.hitRating, stamped)).toBe(25 * EXCLUSIVE_STAT_MULT);
+    expect(effectiveItemStats(ring, stamped)?.str).toBe(7 * EXCLUSIVE_STAT_MULT);
   });
 
   it('cloneItemInstancePayload preserves exclusiveScaled', () => {

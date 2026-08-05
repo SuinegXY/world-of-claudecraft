@@ -57,3 +57,13 @@ export function perfReportEnabled(env: NodeJS.ProcessEnv = process.env): boolean
 export function sitePresenceEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
   return exclusiveFlagEnabled(env.SITE_PRESENCE_ENABLED);
 }
+
+/**
+ * Discord OAuth, bot gateway, and discord.com REST. Default off on exclusive:
+ * Discord is unreachable from CN realms. Keep OAuth/rewards code; call sites
+ * must also see DISCORD_OUTBOUND_ENABLED=1 (plus the usual Discord credentials)
+ * before dialing out. Client UI soft-disable is VITE_DISCORD_DISABLED (default 1).
+ */
+export function discordOutboundEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return exclusiveFlagEnabled(env.DISCORD_OUTBOUND_ENABLED);
+}

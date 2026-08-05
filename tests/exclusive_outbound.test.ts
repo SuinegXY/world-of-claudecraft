@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   claudiumOutboundEnabled,
   dailyRewardsOutboundEnabled,
+  discordOutboundEnabled,
   exclusiveFlagEnabled,
   githubOutboundEnabled,
   perfReportEnabled,
@@ -35,5 +36,11 @@ describe('exclusive_outbound gates', () => {
     expect(dailyRewardsOutboundEnabled({ DAILY_REWARDS_OUTBOUND_ENABLED: '1' })).toBe(true);
     expect(perfReportEnabled({ PERF_REPORT_ENABLED: '1' })).toBe(true);
     expect(sitePresenceEnabled({ SITE_PRESENCE_ENABLED: '1' })).toBe(true);
+  });
+
+  it('keeps Discord outbound off unless opted in', () => {
+    expect(discordOutboundEnabled({})).toBe(false);
+    expect(discordOutboundEnabled({ DISCORD_OUTBOUND_ENABLED: '0' })).toBe(false);
+    expect(discordOutboundEnabled({ DISCORD_OUTBOUND_ENABLED: '1' })).toBe(true);
   });
 });

@@ -302,6 +302,7 @@ import { claudiumBalanceAddress, currentWocDiscountBps } from './ui/claudium_vie
 import { ensureDeedLocalesLoaded } from './ui/deed_i18n';
 import { isDevGuiCommand } from './ui/dev_command_view';
 import { devTierByIndex, devTierDisplayName } from './ui/dev_tier';
+import { DISCORD_BUILD_ENABLED } from './ui/discord_build';
 import {
   type DiscordAccountStatus,
   type DiscordPresenceState,
@@ -3086,6 +3087,7 @@ async function startGame(
       ) {
         hud.attachStorePromoCard();
       }
+    }
     }
   }
   // The R40 per-use effect confirm gate, shared by every gather entry point
@@ -6616,7 +6618,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
   if (jsonLd) {
     const sameAs = [
       'https://github.com/levy-street/world-of-claudecraft',
-      'https://discord.com/invite/worldofclaudecraft',
+      ...(DISCORD_BUILD_ENABLED ? ['https://discord.com/invite/worldofclaudecraft'] : []),
       'https://www.youtube.com/@WoClaudeCraft',
       'https://x.com/WoClaudecraft',
       'https://www.instagram.com/worldofclaudecraft/',
@@ -7623,8 +7625,8 @@ function flashWalletError(message: string): void {
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
 // Discord UI is available on web and native unless explicitly disabled at build time.
-// Exclusive server: Discord UI defaults off unless explicitly enabled at build time.
-const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '1').trim() !== '1';
+// Exclusive server: Discord UI defaults off unless explicitly enabled at build time
+// (DISCORD_BUILD_ENABLED from ui/discord_build.ts).
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
@@ -7999,13 +8001,21 @@ function syncDiscordEntries(): void {
   if (mobileBtn) mobileBtn.hidden = !DISCORD_BUILD_ENABLED;
   const desktopBtn = document.getElementById('mm-discord');
   if (desktopBtn) desktopBtn.hidden = !DISCORD_BUILD_ENABLED;
+  // Marketing / footer invite links stay out of the exclusive CN surface when
+  // Discord UI is build-disabled (they dial discord.com, which is unreachable).
+  for (const el of document.querySelectorAll<HTMLElement>(
+    'a.social-link[href*="discord.com"], .uf-discord, #tf-discord',
+  )) {
+    el.hidden = !DISCORD_BUILD_ENABLED;
+  }
 }
 
 // The More tray's Discord tap: the account panel (link / unlink / status) when
 // it is available (build on, server has Discord on, player logged in), else the
 // community invite in a new tab, mirroring the desktop shell's community link.
 function openDiscordEntry(): void {
-  if (DISCORD_BUILD_ENABLED && discordUiEnabled() && api.token) {
+  if (!DISCORD_BUILD_ENABLED) return;
+  if (discordUiEnabled() && api.token) {
     toggleDiscordPanel(true);
     return;
   }

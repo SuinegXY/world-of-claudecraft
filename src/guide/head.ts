@@ -9,6 +9,7 @@
 // so re-running on a language switch never duplicates a node. Pure-ish: it only touches
 // document.head and reads the route + the i18n runtime; no app state.
 
+import { DISCORD_BUILD_ENABLED } from '../ui/discord_build';
 import {
   formatNumber,
   getLanguage,
@@ -256,7 +257,7 @@ function videoGameNode(description: string, inLanguage: string): Record<string, 
     image: LOGO,
     description,
     inLanguage,
-    sameAs: [GITHUB_URL, DISCORD_URL],
+    sameAs: DISCORD_BUILD_ENABLED ? [GITHUB_URL, DISCORD_URL] : [GITHUB_URL],
   };
 }
 
