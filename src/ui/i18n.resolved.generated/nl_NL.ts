@@ -6096,6 +6096,15 @@ export const nl_NL: EnTranslations = {
     "discordCommunity": "Word lid van de World of ClaudeCraft Discord-community",
     "donateProject": "Doneer om World of ClaudeCraft te steunen"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Grafische kwaliteit verlaagd",
     "body": "Het spel is onverwacht afgesloten bij het betreden van de wereld, dus de grafische kwaliteit staat nu op {preset}. Je kunt dit wijzigen in de grafische keuzelijst hieronder of in de opties in het spel.",

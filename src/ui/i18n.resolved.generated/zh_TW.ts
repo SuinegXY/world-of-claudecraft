@@ -1411,7 +1411,7 @@ export const zh_TW: EnTranslations = {
         "spellPower": "法術強度",
         "critRating": "暴擊等級",
         "hasteRating": "急速等級",
-        "versatilityRating": "Versatility",
+        "versatilityRating": "全能等級",
         "parry": "招架",
         "hitRating": "命中等級",
         "warfare": "戰爭"
@@ -1433,7 +1433,7 @@ export const zh_TW: EnTranslations = {
         "hasteRating": "來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。",
         "parry": "你招架正面近戰攻擊、完全不受傷害的機率。來自背後的攻擊無法招架。",
         "hitRating": "來自裝備和套裝獎勵的命中等級，降低你的攻擊被閃避和法術被抵抗的機率，對更高等級的敵人尤其有效。約每10點等級提供1%命中。",
-        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
+        "versatilityRating": "來自裝備次要詞綴的全能等級，提高你造成的所有傷害。每10點等級恰好提供1%額外傷害。",
         "warfare": "對玩家造成的傷害提高 {increase}%，受到玩家造成的傷害降低 {reduction}%。"
       },
       "effects": {
@@ -5065,7 +5065,7 @@ export const zh_TW: EnTranslations = {
     "loginRegister": "登入/註冊",
     "account": "帳號",
     "logout": "登出",
-    "donate": "捐贈"
+    "donate": "贊助大熊"
   },
   "stats": {
     "title": "世界狀態",
@@ -6095,6 +6095,15 @@ export const zh_TW: EnTranslations = {
     "githubProject": "開啟 World of ClaudeCraft 的 GitHub 專案",
     "discordCommunity": "加入 World of ClaudeCraft 的 Discord 社群",
     "donateProject": "捐贈支持 World of ClaudeCraft"
+  },
+  "sponsor": {
+    "title": "贊助大熊",
+    "blurb": "贊助大熊,可在贊助時留言",
+    "alipay": "支付寶",
+    "wechat": "微信支付",
+    "alipayAlt": "支付寶贊助二維碼",
+    "wechatAlt": "微信支付贊助二維碼",
+    "railLabel": "贊助二維碼"
   },
   "entryGuard": {
     "title": "已降低圖形設定",

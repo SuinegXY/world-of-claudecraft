@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "ja_JP".
+﻿// Flat dotted-key translation overlay for "ja_JP".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1514,6 +1514,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'GitHubでWorld of ClaudeCraftプロジェクトを開く',
   'a11y.discordCommunity': 'World of ClaudeCraftのDiscordコミュニティに参加',
   'a11y.donateProject': 'World of ClaudeCraftを支援するために寄付',
+  'sponsor.title': '大熊を支援',
+  'sponsor.blurb': '大熊を支援できます。支援時にメッセージを残せます。',
+  'sponsor.alipay': 'アリペイ',
+  'sponsor.wechat': 'ウィーチャットペイ',
+  'sponsor.alipayAlt': 'Alipay支援用QRコード',
+  'sponsor.wechatAlt': 'WeChat Pay支援用QRコード',
+  'sponsor.railLabel': '支援用QRコード',
   'entryGuard.body':
     'ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。',
   'entryGuard.dismiss': '閉じる',

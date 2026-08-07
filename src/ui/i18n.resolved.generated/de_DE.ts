@@ -6096,6 +6096,15 @@ export const de_DE: EnTranslations = {
     "discordCommunity": "Der World of ClaudeCraft-Community auf Discord beitreten",
     "donateProject": "Spenden, um World of ClaudeCraft zu unterstützen"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Grafik verringert",
     "body": "Das Spiel wurde beim Betreten der Welt unerwartet beendet, daher ist die Grafik jetzt auf {preset} eingestellt. Du kannst dies unten in der Grafikauswahl oder in den Optionen im Spiel ändern.",

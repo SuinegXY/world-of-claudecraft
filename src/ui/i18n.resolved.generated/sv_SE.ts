@@ -6096,6 +6096,15 @@ export const sv_SE: EnTranslations = {
     "discordCommunity": "Gå med i World of ClaudeCraft-gemenskapen på Discord",
     "donateProject": "Donera för att stödja World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Grafik sänkt",
     "body": "Spelet stängdes oväntat när du gick in i världen, så grafiken är nu inställd på {preset}. Du kan ändra detta i grafikväljaren nedan eller i alternativen i spelet.",

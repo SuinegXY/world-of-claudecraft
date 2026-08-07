@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "zh_TW".
+﻿// Flat dotted-key translation overlay for "zh_TW".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1148,7 +1148,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'nav.download': '下載客戶端',
   'nav.loginRegister': '登入/註冊',
   'nav.logout': '登出',
-  'nav.donate': '捐贈',
+  'nav.donate': '贊助大熊',
   'stats.title': '世界狀態',
   'stats.accountsCreated': '玩家',
   'stats.charactersCreated': '已創建角色',
@@ -1447,6 +1447,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': '開啟 World of ClaudeCraft 的 GitHub 專案',
   'a11y.discordCommunity': '加入 World of ClaudeCraft 的 Discord 社群',
   'a11y.donateProject': '捐贈支持 World of ClaudeCraft',
+  'sponsor.title': '贊助大熊',
+  'sponsor.blurb': '贊助大熊,可在贊助時留言',
+  'sponsor.alipay': '支付寶',
+  'sponsor.wechat': '微信支付',
+  'sponsor.alipayAlt': '支付寶贊助二維碼',
+  'sponsor.wechatAlt': '微信支付贊助二維碼',
+  'sponsor.railLabel': '贊助二維碼',
   'entryGuard.body':
     '進入世界時遊戲意外關閉，圖形設定現已設為{preset}。你可以在下方的圖形選擇器或遊戲內選項中變更。',
   'entryGuard.dismiss': '關閉',

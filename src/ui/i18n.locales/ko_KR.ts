@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "ko_KR".
+﻿// Flat dotted-key translation overlay for "ko_KR".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1506,6 +1506,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'GitHub에서 World of ClaudeCraft 프로젝트 열기',
   'a11y.discordCommunity': 'World of ClaudeCraft Discord 커뮤니티 참여',
   'a11y.donateProject': 'World of ClaudeCraft 후원하기',
+  'sponsor.title': '대웅 후원',
+  'sponsor.blurb': '대웅을 후원하세요. 후원할 때 메시지를 남길 수 있습니다.',
+  'sponsor.alipay': '알리페이',
+  'sponsor.wechat': '위챗페이',
+  'sponsor.alipayAlt': '알리페이 후원 QR 코드',
+  'sponsor.wechatAlt': '위챗페이 후원 QR 코드',
+  'sponsor.railLabel': '후원 QR 코드',
   'entryGuard.body':
     '월드 입장 중 게임이 예기치 않게 종료되어 그래픽이 {preset}(으)로 설정되었습니다. 아래 그래픽 선택기나 게임 내 옵션에서 변경할 수 있습니다.',
   'entryGuard.dismiss': '닫기',

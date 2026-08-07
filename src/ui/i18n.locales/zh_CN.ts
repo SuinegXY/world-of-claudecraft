@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "zh_CN".
+﻿// Flat dotted-key translation overlay for "zh_CN".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1147,7 +1147,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'nav.download': '下载客户端',
   'nav.loginRegister': '登录/注册',
   'nav.logout': '退出登录',
-  'nav.donate': '捐赠',
+  'nav.donate': '赞助大熊',
   'stats.title': '服务器状态',
   'stats.accountsCreated': '玩家',
   'stats.charactersCreated': '已创建角色',
@@ -1446,7 +1446,14 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'a11y.characterActions': '角色操作',
   'a11y.githubProject': '打开 World of ClaudeCraft 的 GitHub 项目',
   'a11y.discordCommunity': '加入 World of ClaudeCraft 的 Discord 社区',
-  'a11y.donateProject': '捐赠支持 World of ClaudeCraft',
+  'a11y.donateProject': '赞助支持 World of ClaudeCraft',
+  'sponsor.title': '赞助大熊',
+  'sponsor.blurb': '赞助大熊,可在赞助时留言',
+  'sponsor.alipay': '支付宝',
+  'sponsor.wechat': '微信支付',
+  'sponsor.alipayAlt': '支付宝赞助二维码',
+  'sponsor.wechatAlt': '微信支付赞助二维码',
+  'sponsor.railLabel': '赞助二维码',
   'entryGuard.body':
     '进入世界时游戏意外关闭，图形设置现已设为{preset}。你可以在下方的图形选择器或游戏内选项中更改。',
   'entryGuard.dismiss': '关闭',

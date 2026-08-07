@@ -15,7 +15,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "es_ES": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -23,7 +30,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "fr_FR": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -31,7 +45,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "fr_CA": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -39,7 +60,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "en_CA": [],
   "it_IT": [
@@ -48,7 +76,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "de_DE": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -56,31 +91,29 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
-  "zh_CN": [
-    "hudChrome.statInfo.desc.versatilityRating",
-    "hudChrome.statInfo.names.versatilityRating"
-  ],
+  "zh_CN": [],
   "zh_TW": [
-    "hudChrome.statInfo.desc.versatilityRating",
-    "hudChrome.statInfo.names.versatilityRating",
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "ko_KR": [
-    "hudChrome.statInfo.desc.versatilityRating",
-    "hudChrome.statInfo.names.versatilityRating",
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
     "nav.exclusiveUpdates"
   ],
   "ja_JP": [
-    "hudChrome.statInfo.desc.versatilityRating",
-    "hudChrome.statInfo.names.versatilityRating",
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
@@ -92,11 +125,16 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "ru_RU": [
-    "hudChrome.statInfo.desc.versatilityRating",
-    "hudChrome.statInfo.names.versatilityRating",
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
@@ -108,7 +146,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "nl_NL": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -116,7 +161,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "pl_PL": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -124,7 +176,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "id_ID": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -132,7 +191,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "tr_TR": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -140,7 +206,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "sv_SE": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -148,7 +221,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "vi_VN": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -156,7 +236,14 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ],
   "da_DK": [
     "hudChrome.statInfo.desc.versatilityRating",
@@ -164,6 +251,13 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.stats.secondaryCritRating",
     "itemUi.stats.secondaryHasteRating",
     "itemUi.stats.versatilityRating",
-    "nav.exclusiveUpdates"
+    "nav.exclusiveUpdates",
+    "sponsor.alipay",
+    "sponsor.alipayAlt",
+    "sponsor.blurb",
+    "sponsor.railLabel",
+    "sponsor.title",
+    "sponsor.wechat",
+    "sponsor.wechatAlt"
   ]
 };

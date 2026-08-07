@@ -3,17 +3,108 @@
    up front (idempotent with the barrel) so the layer slots resolve regardless of
    which sheet the browser parses first.
 
-   The ONLY per-entry rule today is the #rotate-device orientation gate.
-   index.html uses the same mobile gameplay contract as play.html: portrait is
-   not supported in-game, so the rotate overlay is shown whenever a touch device
-   is game-active in portrait. Layer name is flat (index-extra), NOT dotted, so
-   it is a top-level layer placed last by the order below, after hud-mobile. */
+   Per-entry rules: the #rotate-device orientation gate, plus the exclusive
+   homepage sponsor rail (Alipay / WeChat Pay QR images). index.html uses the same
+   mobile gameplay contract as play.html: portrait is not supported in-game, so
+   the rotate overlay is shown whenever a touch device is game-active in portrait.
+   Layer name is flat (index-extra), NOT dotted, so it is a top-level layer placed
+   last by the order below, after hud-mobile. */
 @layer tokens, base, layout, components, hud, shell, hud-mobile, index-extra, play-extra;
 
 @layer index-extra {
   @media (orientation: portrait) {
     body.mobile-touch.game-active #rotate-device {
       display: flex;
+    }
+  }
+
+  /* Exclusive homepage sponsor rail: fixed right-side semi-transparent panel
+     with Alipay + WeChat Pay QR images. Hidden once the game is active. */
+  .homepage-sponsor-rail {
+    position: fixed;
+    top: 50%;
+    right: 16px;
+    z-index: 40;
+    transform: translateY(-50%);
+    width: min(200px, calc(100vw - 32px));
+    padding: 14px 12px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.55);
+    color: #f0e8d2;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    pointer-events: auto;
+  }
+  body.game-active .homepage-sponsor-rail {
+    display: none;
+  }
+  .homepage-sponsor-title {
+    margin: 0 0 8px;
+    text-align: center;
+    font-family: var(--font-heading, Georgia, serif);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #f0c34d;
+  }
+  .homepage-sponsor-blurb {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.45;
+    color: rgba(240, 232, 210, 0.88);
+  }
+  .homepage-sponsor-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .homepage-sponsor-rail .sponsor-qr-item {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .homepage-sponsor-rail .sponsor-qr-item img {
+    display: block;
+    width: 132px;
+    height: 132px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 6px;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+  .homepage-sponsor-rail .sponsor-qr-item figcaption {
+    font-size: 12px;
+    font-weight: 700;
+    color: #f0e8d2;
+  }
+  @media (max-width: 900px) {
+    .homepage-sponsor-rail {
+      top: auto;
+      bottom: 72px;
+      right: 12px;
+      transform: none;
+      width: min(168px, calc(100vw - 24px));
+      padding: 10px 8px;
+    }
+    .homepage-sponsor-blurb {
+      display: none;
+    }
+    .homepage-sponsor-rail .sponsor-qr-item img {
+      width: 108px;
+      height: 108px;
+    }
+  }
+  @media (max-height: 640px) {
+    .homepage-sponsor-rail {
+      display: none;
     }
   }
 }

@@ -1411,7 +1411,7 @@ export const ja_JP: EnTranslations = {
         "spellPower": "呪文威力",
         "critRating": "クリティカルレーティング",
         "hasteRating": "ヘイストレーティング",
-        "versatilityRating": "Versatility",
+        "versatilityRating": "多様性",
         "parry": "受け流し",
         "hitRating": "命中レーティング",
         "warfare": "ウォーフェア"
@@ -1433,7 +1433,7 @@ export const ja_JP: EnTranslations = {
         "hasteRating": "装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。",
         "parry": "前方からの近接攻撃を完全に受け流し、ダメージを受けない確率です。背後からの一撃は受け流せません。",
         "hitRating": "装備とセットボーナスによる命中レーティング。攻撃がミスする頻度と呪文が抵抗される頻度を減らし、特に高レベルの敵に有効です。約10レーティングで1%命中。",
-        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
+        "versatilityRating": "装備の二次アフィックスによる多様性レーティング。与えるすべてのダメージが増加します。レーティング10につきちょうど1%のボーナスダメージ。",
         "warfare": "プレイヤーに与えるダメージが {increase}% 増加し、プレイヤーから受けるダメージが {reduction}% 減少します。"
       },
       "effects": {
@@ -6095,6 +6095,15 @@ export const ja_JP: EnTranslations = {
     "githubProject": "GitHubでWorld of ClaudeCraftプロジェクトを開く",
     "discordCommunity": "World of ClaudeCraftのDiscordコミュニティに参加",
     "donateProject": "World of ClaudeCraftを支援するために寄付"
+  },
+  "sponsor": {
+    "title": "大熊を支援",
+    "blurb": "大熊を支援できます。支援時にメッセージを残せます。",
+    "alipay": "アリペイ",
+    "wechat": "ウィーチャットペイ",
+    "alipayAlt": "Alipay支援用QRコード",
+    "wechatAlt": "WeChat Pay支援用QRコード",
+    "railLabel": "支援用QRコード"
   },
   "entryGuard": {
     "title": "グラフィックを下げました",

@@ -323,6 +323,7 @@ import { classDisplayName, tEntity } from './ui/entity_i18n';
 import { showEntryGuardBanner } from './ui/entry_guard_banner';
 import { refreshEpicLinkStatus, wireEpicLink } from './ui/epic_link';
 import { FocusManager, type FocusTrapHandle } from './ui/focus_manager';
+import { openSponsorQrPanel, wireSponsorTriggers } from './ui/sponsor_qr_panel';
 import {
   attachGatherNodeHoverTooltip,
   gatherNodeToolGateFor,
@@ -1859,7 +1860,7 @@ async function startGame(
     onMenu: () => hud.toggleOptionsMenu(),
     onSocial: () => hud.toggleSocial(),
     onDiscord: () => openDiscordEntry(),
-    onDonate: () => window.open(DONATE_URL, '_blank', 'noopener,noreferrer'),
+    onDonate: () => openSponsorEntry(),
     onEmotes: () => hud.toggleEmoteWheel(),
     onArena: () => hud.toggleArena(),
     onDungeonFinder: () => hud.toggleDungeonFinder(),
@@ -7631,7 +7632,13 @@ function flashWalletError(message: string): void {
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
 // gets the fail-open behavior for free.
-const DONATE_URL = 'https://ko-fi.com/worldofclaudecraft';
+// Exclusive server: Donate opens the local Alipay / WeChat Pay QR panel instead
+// of the overseas Ko-fi page.
+const sponsorFocusManager = new FocusManager();
+function openSponsorEntry(): void {
+  openSponsorQrPanel(sponsorFocusManager);
+}
+wireSponsorTriggers(document, sponsorFocusManager);
 const DISCORD_ONBOARD_KEY = 'woc_discord_onboard';
 let discordPopup: Window | null = null;
 

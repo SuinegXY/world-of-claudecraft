@@ -1411,7 +1411,7 @@ export const ru_RU: EnTranslations = {
         "spellPower": "Сила заклинаний",
         "critRating": "Рейтинг крит. удара",
         "hasteRating": "Рейтинг ускорения",
-        "versatilityRating": "Versatility",
+        "versatilityRating": "Универсальность",
         "parry": "Парирование",
         "hitRating": "Рейтинг меткости",
         "warfare": "Боевая мощь"
@@ -1433,7 +1433,7 @@ export const ru_RU: EnTranslations = {
         "hasteRating": "Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.",
         "parry": "Ваш шанс полностью парировать фронтальную атаку в ближнем бою и не получить урона. Удар со спины парировать нельзя.",
         "hitRating": "Рейтинг меткости от снаряжения и бонусов комплекта снижает частоту промахов ваших атак и сопротивления вашим заклинаниям, особенно против противников более высокого уровня. Примерно 10 рейтинга дают 1% меткости.",
-        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
+        "versatilityRating": "Рейтинг универсальности от вторичных аффиксов снаряжения повышает весь наносимый вами урон. Ровно 10 рейтинга дают 1% бонусного урона.",
         "warfare": "Увеличивает урон по игрокам на {increase}% и снижает получаемый от игроков урон на {reduction}%."
       },
       "effects": {
@@ -6095,6 +6095,15 @@ export const ru_RU: EnTranslations = {
     "githubProject": "Открыть проект World of ClaudeCraft на GitHub",
     "discordCommunity": "Присоединиться к Discord-сообществу World of ClaudeCraft",
     "donateProject": "Пожертвовать на поддержку World of ClaudeCraft"
+  },
+  "sponsor": {
+    "title": "Поддержать Дасюна",
+    "blurb": "Поддержите Дасюна; при спонсорстве можно оставить сообщение.",
+    "alipay": "Алипей",
+    "wechat": "Вичат Пей",
+    "alipayAlt": "QR-код Alipay для поддержки",
+    "wechatAlt": "QR-код WeChat Pay для поддержки",
+    "railLabel": "QR-коды для поддержки"
   },
   "entryGuard": {
     "title": "Графика снижена",

@@ -1411,7 +1411,7 @@ export const ko_KR: EnTranslations = {
         "spellPower": "주문력",
         "critRating": "치명타 등급",
         "hasteRating": "가속 등급",
-        "versatilityRating": "Versatility",
+        "versatilityRating": "유연성",
         "parry": "무기 막기",
         "hitRating": "명중 등급",
         "warfare": "워페어"
@@ -1433,7 +1433,7 @@ export const ko_KR: EnTranslations = {
         "hasteRating": "장비와 세트 보너스에서 얻는 가속 등급으로 공격과 시전 속도가 빨라집니다. 약 10등급당 1% 가속.",
         "parry": "전방 근접 공격을 완전히 무기로 막아 피해를 입지 않을 확률입니다. 뒤에서 오는 공격은 막을 수 없습니다.",
         "hitRating": "장비와 세트 보너스에서 얻는 명중 등급으로 공격이 빗나가거나 주문이 저항되는 빈도를 줄이며, 특히 더 높은 레벨의 적에게 효과적입니다. 약 10등급당 1% 명중.",
-        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
+        "versatilityRating": "장비의 보조 접두사에서 얻는 유연성 등급으로 가하는 모든 피해가 증가합니다. 등급 10당 정확히 1%의 추가 피해.",
         "warfare": "플레이어에게 주는 피해가 {increase}% 증가하고 플레이어에게 받는 피해가 {reduction}% 감소합니다."
       },
       "effects": {
@@ -6095,6 +6095,15 @@ export const ko_KR: EnTranslations = {
     "githubProject": "GitHub에서 World of ClaudeCraft 프로젝트 열기",
     "discordCommunity": "World of ClaudeCraft Discord 커뮤니티 참여",
     "donateProject": "World of ClaudeCraft 후원하기"
+  },
+  "sponsor": {
+    "title": "대웅 후원",
+    "blurb": "대웅을 후원하세요. 후원할 때 메시지를 남길 수 있습니다.",
+    "alipay": "알리페이",
+    "wechat": "위챗페이",
+    "alipayAlt": "알리페이 후원 QR 코드",
+    "wechatAlt": "위챗페이 후원 QR 코드",
+    "railLabel": "후원 QR 코드"
   },
   "entryGuard": {
     "title": "그래픽 낮춤",

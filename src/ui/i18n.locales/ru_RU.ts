@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "ru_RU".
+﻿// Flat dotted-key translation overlay for "ru_RU".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1526,6 +1526,13 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'Открыть проект World of ClaudeCraft на GitHub',
   'a11y.discordCommunity': 'Присоединиться к Discord-сообществу World of ClaudeCraft',
   'a11y.donateProject': 'Пожертвовать на поддержку World of ClaudeCraft',
+  'sponsor.title': 'Поддержать Дасюна',
+  'sponsor.blurb': 'Поддержите Дасюна; при спонсорстве можно оставить сообщение.',
+  'sponsor.alipay': 'Алипей',
+  'sponsor.wechat': 'Вичат Пей',
+  'sponsor.alipayAlt': 'QR-код Alipay для поддержки',
+  'sponsor.wechatAlt': 'QR-код WeChat Pay для поддержки',
+  'sponsor.railLabel': 'QR-коды для поддержки',
   'entryGuard.body':
     'Игра неожиданно закрылась при входе в мир, поэтому графика теперь установлена на {preset}. Вы можете изменить это в переключателе графики ниже или в настройках игры.',
   'entryGuard.dismiss': 'Закрыть',
