@@ -77,6 +77,7 @@ import {
   type DiscordStatusLink,
   readDiscordStatusCore,
 } from './discord_status_cache';
+import { discordOutboundEnabled } from './exclusive_outbound';
 import { deleteUnusedFederatedProvision } from './federated_auth_db';
 import { ctxAccountId } from './http/context';
 import type { ErrorCode } from './http/error_codes';
@@ -163,7 +164,9 @@ export function autoJoinEnabled(cfg: DiscordConfig): boolean {
 
 /** Whether the feature is configured. Read by the route table + client UI gate. */
 export function discordEnabled(): boolean {
-  return discordConfig() !== null;
+  // Exclusive CN default: Discord outbound stays off unless opted in, even when
+  // OAuth credentials are present in the env (see exclusive_outbound.ts).
+  return discordOutboundEnabled() && discordConfig() !== null;
 }
 
 export function discordInviteUrl(): string {

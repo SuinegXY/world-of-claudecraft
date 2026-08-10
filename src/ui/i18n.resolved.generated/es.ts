@@ -1553,6 +1553,7 @@ export const es: EnTranslations = {
         "spellPower": "Poder con hechizos",
         "critRating": "Índice de golpe crítico",
         "hasteRating": "Índice de celeridad",
+        "versatilityRating": "Versatility",
         "parry": "Parada",
         "hitRating": "Puntuacion de impacto",
         "warfare": "Pericia bélica"
@@ -1574,6 +1575,7 @@ export const es: EnTranslations = {
         "hasteRating": "Índice de celeridad de tu equipo y bonificaciones de conjunto, que acelera tus ataques y lanzamientos de hechizos. Unos 10 de índice otorgan un 1% de celeridad.",
         "parry": "Tu probabilidad de parar por completo un ataque cuerpo a cuerpo frontal, sin recibir daño. Un golpe por la espalda no se puede parar.",
         "hitRating": "Puntuacion de impacto proveniente de tu equipo y bonificaciones de conjunto, que reduce la frecuencia con que tus ataques fallan y tus hechizos son resistidos, especialmente contra enemigos de nivel superior. Aproximadamente 10 puntos de puntuacion otorgan un 1% de impacto.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Aumenta un {increase}% el daño infligido a jugadores y reduce un {reduction}% el daño recibido de jugadores."
       },
       "effects": {
@@ -5318,6 +5320,7 @@ export const es: EnTranslations = {
     "highscores": "Clasificaciones",
     "wiki": "Wiki",
     "news": "Noticias",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Descargar",
     "loginRegister": "Iniciar Sesión/Registrarse",
     "account": "Cuenta",
@@ -6542,6 +6545,15 @@ export const es: EnTranslations = {
     "discordCommunity": "Unirse a la comunidad de World of ClaudeCraft en Discord",
     "donateProject": "Donar para apoyar World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Gráficos reducidos",
     "body": "El juego se cerró inesperadamente al entrar al mundo, así que los gráficos ahora están en {preset}. Puedes cambiarlo en el selector de gráficos de abajo o en las opciones del juego.",
@@ -7613,7 +7625,10 @@ export const es: EnTranslations = {
       "dps": "Daño/seg",
       "critChance": "Prob. de crítico",
       "dodge": "Esquiva",
-      "parry": "Parada"
+      "parry": "Parada",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{kind} {quality}",

@@ -1553,6 +1553,7 @@ export const ja_JP: EnTranslations = {
         "spellPower": "呪文威力",
         "critRating": "クリティカルレーティング",
         "hasteRating": "ヘイストレーティング",
+        "versatilityRating": "多様性",
         "parry": "受け流し",
         "hitRating": "命中レーティング",
         "warfare": "ウォーフェア"
@@ -1574,6 +1575,7 @@ export const ja_JP: EnTranslations = {
         "hasteRating": "装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。",
         "parry": "前方からの近接攻撃を完全に受け流し、ダメージを受けない確率です。背後からの一撃は受け流せません。",
         "hitRating": "装備とセットボーナスによる命中レーティング。攻撃がミスする頻度と呪文が抵抗される頻度を減らし、特に高レベルの敵に有効です。約10レーティングで1%命中。",
+        "versatilityRating": "装備の二次アフィックスによる多様性レーティング。与えるすべてのダメージが増加します。レーティング10につきちょうど1%のボーナスダメージ。",
         "warfare": "プレイヤーに与えるダメージが {increase}% 増加し、プレイヤーから受けるダメージが {reduction}% 減少します。"
       },
       "effects": {
@@ -5318,6 +5320,7 @@ export const ja_JP: EnTranslations = {
     "highscores": "ハイスコア",
     "wiki": "Wiki",
     "news": "ニュース",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "ダウンロード",
     "loginRegister": "ログイン/登録",
     "account": "アカウント",
@@ -6542,6 +6545,15 @@ export const ja_JP: EnTranslations = {
     "discordCommunity": "World of ClaudeCraftのDiscordコミュニティに参加",
     "donateProject": "World of ClaudeCraftを支援するために寄付"
   },
+  "sponsor": {
+    "title": "大熊を支援",
+    "blurb": "大熊を支援できます。支援時にメッセージを残せます。",
+    "alipay": "アリペイ",
+    "wechat": "ウィーチャットペイ",
+    "alipayAlt": "Alipay支援用QRコード",
+    "wechatAlt": "WeChat Pay支援用QRコード",
+    "railLabel": "支援用QRコード"
+  },
   "entryGuard": {
     "title": "グラフィックを下げました",
     "body": "ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。",
@@ -7613,7 +7625,10 @@ export const ja_JP: EnTranslations = {
       "dps": "秒間ダメージ",
       "critChance": "クリティカル率",
       "dodge": "回避",
-      "parry": "受け流し"
+      "parry": "受け流し",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

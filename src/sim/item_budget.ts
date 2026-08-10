@@ -97,7 +97,7 @@ export const HEROIC_VARIANT_SOURCE_LEVEL = 22;
 // Two-handers ride TWOHAND_DPS_MULT above this line (their side of the stat tradeoff),
 // which puts a top-tier 2H above the one-hand legendary ceiling on raw weapon dps.
 export function weaponDpsBudget(level: number): number {
-  return 6.7 + 0.3 * level;
+  return 13.4 + 0.6 * level;
 }
 
 // Rescale a weapon's min/max damage to hit `dps` at its existing swing speed, keeping

@@ -1553,6 +1553,7 @@ export const ru_RU: EnTranslations = {
         "spellPower": "Сила заклинаний",
         "critRating": "Рейтинг крит. удара",
         "hasteRating": "Рейтинг ускорения",
+        "versatilityRating": "Универсальность",
         "parry": "Парирование",
         "hitRating": "Рейтинг меткости",
         "warfare": "Боевая мощь"
@@ -1574,6 +1575,7 @@ export const ru_RU: EnTranslations = {
         "hasteRating": "Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.",
         "parry": "Ваш шанс полностью парировать фронтальную атаку в ближнем бою и не получить урона. Удар со спины парировать нельзя.",
         "hitRating": "Рейтинг меткости от снаряжения и бонусов комплекта снижает частоту промахов ваших атак и сопротивления вашим заклинаниям, особенно против противников более высокого уровня. Примерно 10 рейтинга дают 1% меткости.",
+        "versatilityRating": "Рейтинг универсальности от вторичных аффиксов снаряжения повышает весь наносимый вами урон. Ровно 10 рейтинга дают 1% бонусного урона.",
         "warfare": "Увеличивает урон по игрокам на {increase}% и снижает получаемый от игроков урон на {reduction}%."
       },
       "effects": {
@@ -5318,6 +5320,7 @@ export const ru_RU: EnTranslations = {
     "highscores": "Таблицы рекордов",
     "wiki": "Вики",
     "news": "Новости",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Скачать",
     "loginRegister": "Войти / Зарегистрироваться",
     "account": "Аккаунт",
@@ -6542,6 +6545,15 @@ export const ru_RU: EnTranslations = {
     "discordCommunity": "Присоединиться к Discord-сообществу World of ClaudeCraft",
     "donateProject": "Пожертвовать на поддержку World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Поддержать Дасюна",
+    "blurb": "Поддержите Дасюна; при спонсорстве можно оставить сообщение.",
+    "alipay": "Алипей",
+    "wechat": "Вичат Пей",
+    "alipayAlt": "QR-код Alipay для поддержки",
+    "wechatAlt": "QR-код WeChat Pay для поддержки",
+    "railLabel": "QR-коды для поддержки"
+  },
   "entryGuard": {
     "title": "Графика снижена",
     "body": "Игра неожиданно закрылась при входе в мир, поэтому графика теперь установлена на {preset}. Вы можете изменить это в переключателе графики ниже или в настройках игры.",
@@ -7613,7 +7625,10 @@ export const ru_RU: EnTranslations = {
       "dps": "Урон/сек",
       "critChance": "Шанс крита",
       "dodge": "Уклонение",
-      "parry": "Парирование"
+      "parry": "Парирование",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

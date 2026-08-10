@@ -53,6 +53,9 @@ Repository skills live in `.agents/skills/` and are invoked as `$skill-name`:
 - `$woc-release-malware-audit`: scan and judge malicious-code risk.
 - `$woc-codex-audit`: compare the checked-in Codex architecture with current official
   guidance.
+- `$woc-exclusive-redev`: re-develop fork-only exclusive deltas on a fresh official tip
+  (never blind cherry-pick; see `.claude/skills/exclusive-redev/`).
+- `$woc-changelog-sync`: refresh Chinese `/changelog` after an official version merge.
 
 Read-only specialist agents live in `.codex/agents/`. Use only the roles matching the
 changed surface: sim architecture, cross-platform parity, persistence, database

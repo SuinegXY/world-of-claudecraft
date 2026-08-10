@@ -1553,6 +1553,7 @@ export const id_ID: EnTranslations = {
         "spellPower": "Kekuatan Mantra",
         "critRating": "Rating Kritis",
         "hasteRating": "Rating Kecepatan",
+        "versatilityRating": "Versatility",
         "parry": "Tangkis",
         "hitRating": "Rating Pukulan",
         "warfare": "Perang"
@@ -1574,6 +1575,7 @@ export const id_ID: EnTranslations = {
         "hasteRating": "Rating kecepatan dari perlengkapan dan bonus set Anda, mempercepat serangan dan rapalan mantra Anda. Sekitar 10 rating memberi 1% kecepatan.",
         "parry": "Peluang Anda untuk sepenuhnya menangkis serangan jarak dekat dari depan, tanpa menerima kerusakan. Pukulan dari belakang tidak dapat ditangkis.",
         "hitRating": "Rating pukulan dari perlengkapan dan bonus setelanmu, mengurangi seberapa sering seranganmu meleset dan mantramu ditangkal, terutama melawan musuh level lebih tinggi. Sekitar 10 rating memberikan 1% hit.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Meningkatkan kerusakan yang diberikan kepada pemain sebesar {increase}% dan mengurangi kerusakan yang diterima dari pemain sebesar {reduction}%."
       },
       "effects": {
@@ -5318,6 +5320,7 @@ export const id_ID: EnTranslations = {
     "highscores": "Skor Tertinggi",
     "wiki": "Wiki",
     "news": "Berita",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Unduh",
     "loginRegister": "Masuk/Daftar",
     "account": "Akun",
@@ -6542,6 +6545,15 @@ export const id_ID: EnTranslations = {
     "discordCommunity": "Gabung komunitas Discord World of ClaudeCraft",
     "donateProject": "Berdonasi untuk mendukung World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Grafis diturunkan",
     "body": "Game tertutup secara tidak terduga saat memasuki dunia, jadi grafis sekarang diatur ke {preset}. Anda dapat mengubahnya di pemilih grafis di bawah atau di opsi dalam game.",
@@ -7613,7 +7625,10 @@ export const id_ID: EnTranslations = {
       "dps": "Kerusakan/detik",
       "critChance": "Peluang Kritis",
       "dodge": "Mengelak",
-      "parry": "Tangkis"
+      "parry": "Tangkis",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

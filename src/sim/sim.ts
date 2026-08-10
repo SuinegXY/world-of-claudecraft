@@ -251,6 +251,7 @@ import {
   paginateLeaderboard,
 } from './leaderboard_page';
 import type { Ante, PickAction } from './lockpick';
+import { isExclusiveGearItem, withExclusiveGearScale } from './loot/exclusive_gear_scale';
 // L1: the loot-distribution layer (party-loot strategy, the rollLoot roller, copper
 // split, need-greed roll lifecycle, corpse-loot helpers) moved to ./loot/loot_roll.ts;
 // Sim keeps thin same-named delegates that call these.
@@ -633,6 +634,7 @@ import {
 import {
   type AbilityDef,
   type AbilityEffect,
+  ALL_EQUIP_SLOTS,
   type ArenaCombatant,
   type ArenaFormat,
   type ArenaStanding,
@@ -2963,6 +2965,19 @@ export class Sim {
         for (const d of dropped) droppedInstanceJunk.push(`equip.${slot}.${d}`);
         if (clean) meta.equipmentInstance[slot] = clean;
       }
+      // Exclusive numerical stamp on EVERY worn slot, including copies that
+      // already carry an instance (rift rebuild, enchant, masterwork). The old
+      // "only stamp when no instance" arm left rift gear permanently unscaled
+      // after login because sanitizeRiftGearInstance rebuilds a fresh payload
+      // and historically dropped exclusiveScaled. Idempotent.
+      for (const slot of ALL_EQUIP_SLOTS) {
+        const itemId = meta.equipment[slot];
+        if (!itemId) continue;
+        const def = ITEMS[itemId];
+        if (!def) continue;
+        const stamped = withExclusiveGearScale(meta.equipmentInstance[slot], def);
+        if (stamped) meta.equipmentInstance[slot] = stamped;
+      }
       // The shared tamper ceiling (bags.ts instancedCountCap, same rule as the
       // bank arm below): a counted instanced slot loads capped at what
       // identical-payload merges could legitimately have built, and a
@@ -2990,10 +3005,7 @@ export class Sim {
         if (slot.instance?.rift) {
           const rebuilt = sanitizeRiftGearInstance(slot.itemId, slot.instance, player.id);
           if (rebuilt) slot.instance = rebuilt;
-          else {
-            delete slot.instance;
-            continue;
-          }
+          else delete slot.instance;
         }
         // The payload bound covers BAGS too (the review round: the mint sites
         // put signed instances into bags in the common case, so an
@@ -3005,6 +3017,14 @@ export class Sim {
           for (const d of dropped) droppedInstanceJunk.push(`bag.${slot.itemId}.${d}`);
           if (payload) slot.instance = payload;
           else delete slot.instance;
+        }
+        // Same exclusiveScaled heal as worn gear: a bag copy whose instance
+        // lost the stamp (pre-fix rift sanitize) must not stay at official
+        // ItemDef numbers after login.
+        const def = ITEMS[slot.itemId];
+        if (def) {
+          const stamped = withExclusiveGearScale(slot.instance, def);
+          if (stamped) slot.instance = stamped;
         }
       }
       if (s.bags === undefined) {
@@ -3065,11 +3085,23 @@ export class Sim {
         if (slot.instance && !isMergeableInstancePayload(slot.instance)) slot.count = 1;
         return slot;
       });
+      for (const slot of meta.vendorBuyback) {
+        const def = ITEMS[slot.itemId];
+        if (!def) continue;
+        const stamped = withExclusiveGearScale(slot.instance, def);
+        if (stamped) slot.instance = stamped;
+      }
       // Bank sanitizes on load (never destroys items; a pre-bank save has no `bank`
       // field and sanitizes to an empty bank). See bank.ts sanitizeBankState.
       meta.bank = sanitizeBankState(s.bank, meta.name, droppedInstanceJunk, player.id);
       warnDroppedInstanceKeys(meta.name, droppedInstanceJunk);
       let questRevReset = false;
+      for (const slot of meta.bank.inventory) {
+        const def = ITEMS[slot.itemId];
+        if (!def) continue;
+        const stamped = withExclusiveGearScale(slot.instance, def);
+        if (stamped) slot.instance = stamped;
+      }
       for (const q of s.questLog) {
         // Prune unknown quest ids at load (normalize on load, never crash): a save
         // mid a since-deleted quest (e.g. the retirement of
@@ -8293,6 +8325,21 @@ export class Sim {
     if (!r) return;
     const { meta } = r;
     const def = ITEMS[itemId];
+    // Exclusive: equippable gear is always granted as an exclusiveScaled instance
+    // so official ItemDef tables stay unscaled and trade cannot re-multiply.
+    if (def && isExclusiveGearItem(def)) {
+      const stamped = withExclusiveGearScale(undefined, def);
+      if (stamped) {
+        this.addItemInstance(itemId, stamped, pid, count, opts);
+        if (
+          meta.autoEquip &&
+          (def.kind === 'weapon' || def.kind === 'armor' || def.kind === 'held_offhand')
+        ) {
+          this.maybeAutoEquip(itemId, meta);
+        }
+        return;
+      }
+    }
     addStacked(meta.inventory, itemId, count, undefined, opts?.craftedRecipeId);
     // Every grant that reaches the hub is an acquisition for the Book of
     // Deeds discovery ledger (loot, craft, quest reward, vendor, mail, trade).
@@ -8341,6 +8388,11 @@ export class Sim {
     if (count < 1) return;
     const { meta } = r;
     const def = ITEMS[itemId];
+    // Idempotent exclusive numerical stamp (skip if already exclusiveScaled).
+    if (def) {
+      const stamped = withExclusiveGearScale(instance, def);
+      if (stamped) instance = stamped;
+    }
     const stack = stackSizeOf(def);
     for (let i = 0; i < count; i++) {
       const mergeTarget = meta.inventory.find(

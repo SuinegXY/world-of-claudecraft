@@ -6,11 +6,12 @@
 // API key embedded in it, never ship in the client bundle. Cached per wallet, since
 // balances move slowly and public RPCs are rate-limited.
 //
-// Reads SOLANA_RPC_URL + WOC_MINT from the SERVER environment. The VITE_* names are
-// accepted only as a local-dev fallback (server/db.ts loads .env.local); no client
-// code references them, so nothing secret is inlined at build time.
+// Exclusive: SOLANA_OUTBOUND_ENABLED must be 1 and SOLANA_RPC_URL (or the VITE_
+// local-dev fallback) must be set, or fetchWocBalance returns 0 with no network
+// call. Official behavior is opt-in on this fork.
 import type http from 'node:http';
 import { holderTierIndexForBalance } from '../src/sim/holder_tier';
+import { solanaOutboundEnabled } from './exclusive_outbound';
 import { logger } from './http/logger';
 import { json } from './http_util';
 import {
@@ -28,11 +29,10 @@ const WOC_MINT = (
   process.env.VITE_WOC_MINT ??
   '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth'
 ).trim();
-const SOLANA_RPC_URL = (
-  process.env.SOLANA_RPC_URL ??
-  process.env.VITE_SOLANA_RPC_URL ??
-  'https://api.mainnet-beta.solana.com'
-).trim();
+
+function solanaRpcUrl(): string {
+  return (process.env.SOLANA_RPC_URL ?? process.env.VITE_SOLANA_RPC_URL ?? '').trim();
+}
 // How long a per-wallet balance is reused before the next RPC. This is the
 // freshness floor for the in-world holder-tier badge (the broadcast path reads
 // through this cache); the player's own card/bag bypass it with `fresh=1` on
@@ -153,9 +153,12 @@ export function wocBalanceCacheStats(): UsageCacheSnapshot {
  * keep the last known value.
  */
 export async function fetchWocBalance(pubkey: string): Promise<number | null> {
+  // Exclusive default-off: never dial a foreign RPC from a China-hosted realm.
+  const rpcUrl = solanaRpcUrl();
+  if (!solanaOutboundEnabled() || !rpcUrl) return 0;
   recordUsageMetric('woc.balance.rpc');
   try {
-    const res = await fetch(SOLANA_RPC_URL, {
+    const res = await fetch(rpcUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

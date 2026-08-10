@@ -1,0 +1,6 @@
+interface:
+  display_name: "Exclusive Server Redev"
+  short_description: "Re-port fork-only deltas onto a fresh official tip"
+  default_prompt: "Use $woc-exclusive-redev to re-develop exclusive-server features on the latest official base."
+policy:
+  allow_implicit_invocation: true

@@ -1553,6 +1553,7 @@ export const en_CA: EnTranslations = {
         "spellPower": "Spell Power",
         "critRating": "Crit Rating",
         "hasteRating": "Haste Rating",
+        "versatilityRating": "Versatility",
         "parry": "Parry",
         "hitRating": "Hit Rating",
         "warfare": "Warfare"
@@ -1574,6 +1575,7 @@ export const en_CA: EnTranslations = {
         "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. Every 20 rating grants exactly 1% haste.",
         "parry": "Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried.",
         "hitRating": "Hit rating from your gear and set bonuses, reducing how often your attacks miss and your spells are resisted, especially against higher-level enemies. Every 10 rating grants exactly 1% hit.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Increases damage dealt to players by {increase}% and reduces damage taken from players by {reduction}%."
       },
       "effects": {
@@ -5318,6 +5320,7 @@ export const en_CA: EnTranslations = {
     "highscores": "High Scores",
     "wiki": "Wiki",
     "news": "News",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Download",
     "loginRegister": "Login/Register",
     "account": "Account",
@@ -6542,6 +6545,15 @@ export const en_CA: EnTranslations = {
     "discordCommunity": "Join the World of ClaudeCraft Discord community",
     "donateProject": "Donate to support World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Graphics lowered",
     "body": "The game closed unexpectedly while entering the world, so graphics are now set to {preset}. You can change this in the graphics selector below or in the in-game Options.",
@@ -7613,7 +7625,10 @@ export const en_CA: EnTranslations = {
       "dps": "Damage/sec",
       "critChance": "Crit Chance",
       "dodge": "Dodge",
-      "parry": "Parry"
+      "parry": "Parry",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",

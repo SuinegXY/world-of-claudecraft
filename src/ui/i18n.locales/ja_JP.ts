@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "ja_JP".
+﻿// Flat dotted-key translation overlay for "ja_JP".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -999,6 +999,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '呪文威力',
   'hudChrome.statInfo.names.critRating': 'クリティカルレーティング',
   'hudChrome.statInfo.names.hasteRating': 'ヘイストレーティング',
+  'hudChrome.statInfo.names.versatilityRating': '多様性',
   'hudChrome.statInfo.names.parry': '受け流し',
   'hudChrome.statInfo.desc.parry':
     '前方からの近接攻撃を完全に受け流し、ダメージを受けない確率です。背後からの一撃は受け流せません。',
@@ -1011,6 +1012,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '装備とセットボーナスによるクリティカルレーティング。クリティカル率が上昇します。約10レーティングで1%クリティカル。',
   'hudChrome.statInfo.desc.hasteRating':
     '装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '装備の二次アフィックスによる多様性レーティング。与えるすべてのダメージが増加します。レーティング10につきちょうど1%のボーナスダメージ。',
   'hudChrome.statInfo.desc.spellPower':
     '呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。',
   'hudChrome.statInfo.desc.warfare':
@@ -1677,6 +1680,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'GitHubでWorld of ClaudeCraftプロジェクトを開く',
   'a11y.discordCommunity': 'World of ClaudeCraftのDiscordコミュニティに参加',
   'a11y.donateProject': 'World of ClaudeCraftを支援するために寄付',
+  'sponsor.title': '大熊を支援',
+  'sponsor.blurb': '大熊を支援できます。支援時にメッセージを残せます。',
+  'sponsor.alipay': 'アリペイ',
+  'sponsor.wechat': 'ウィーチャットペイ',
+  'sponsor.alipayAlt': 'Alipay支援用QRコード',
+  'sponsor.wechatAlt': 'WeChat Pay支援用QRコード',
+  'sponsor.railLabel': '支援用QRコード',
   'entryGuard.body':
     'ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。',
   'entryGuard.dismiss': '閉じる',

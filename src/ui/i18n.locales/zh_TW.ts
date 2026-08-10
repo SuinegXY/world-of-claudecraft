@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "zh_TW".
+﻿// Flat dotted-key translation overlay for "zh_TW".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -966,6 +966,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '法術強度',
   'hudChrome.statInfo.names.critRating': '暴擊等級',
   'hudChrome.statInfo.names.hasteRating': '急速等級',
+  'hudChrome.statInfo.names.versatilityRating': '全能等級',
   'hudChrome.statInfo.names.parry': '招架',
   'hudChrome.statInfo.desc.parry':
     '你招架正面近戰攻擊、完全不受傷害的機率。來自背後的攻擊無法招架。',
@@ -978,6 +979,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '來自裝備和套裝加成的暴擊等級，提升你的暴擊機率。約每10點等級提供1%暴擊。',
   'hudChrome.statInfo.desc.hasteRating':
     '來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '來自裝備次要詞綴的全能等級，提高你造成的所有傷害。每10點等級恰好提供1%額外傷害。',
   'hudChrome.statInfo.desc.spellPower':
     '提高你法術造成的傷害與治療的強度。每點智力都會提供少量法術強度，此外還有來自裝備與增益的加成。',
   'hudChrome.statInfo.desc.warfare':
@@ -1305,7 +1308,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'nav.download': '下載客戶端',
   'nav.loginRegister': '登入/註冊',
   'nav.logout': '登出',
-  'nav.donate': '捐贈',
+  'nav.donate': '贊助大熊',
   'stats.title': '世界狀態',
   'stats.accountsCreated': '玩家',
   'stats.charactersCreated': '已創建角色',
@@ -1604,6 +1607,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': '開啟 World of ClaudeCraft 的 GitHub 專案',
   'a11y.discordCommunity': '加入 World of ClaudeCraft 的 Discord 社群',
   'a11y.donateProject': '捐贈支持 World of ClaudeCraft',
+  'sponsor.title': '贊助大熊',
+  'sponsor.blurb': '贊助大熊,可在贊助時留言',
+  'sponsor.alipay': '支付寶',
+  'sponsor.wechat': '微信支付',
+  'sponsor.alipayAlt': '支付寶贊助二維碼',
+  'sponsor.wechatAlt': '微信支付贊助二維碼',
+  'sponsor.railLabel': '贊助二維碼',
   'entryGuard.body':
     '進入世界時遊戲意外關閉，圖形設定現已設為{preset}。你可以在下方的圖形選擇器或遊戲內選項中變更。',
   'entryGuard.dismiss': '關閉',

@@ -100,6 +100,8 @@ const STATIC_PAGE_ALIASES = new Map([
   ['/data-deletion/', '/data-deletion.html'],
   ['/support', '/support.html'],
   ['/support/', '/support.html'],
+  ['/changelog', '/changelog.html'],
+  ['/changelog/', '/changelog.html'],
   ['/wiki', '/guide.html'],
   ['/wiki/', '/guide.html'],
   ['/editor', '/editor.html'],
