@@ -363,6 +363,11 @@
   }
 
   /* Exclusive: in-game / shell Donate opens a local Alipay + WeChat Pay QR modal. */
+  .sponsor-qr-backdrop {
+    /* Above in-game HUD stacking (mobile #ui ~80-90, drawers ~300): the panel must
+       paint over the live game chrome, not under it. */
+    z-index: 10000;
+  }
   .sponsor-qr-modal {
     width: min(420px, 100%);
     padding: 18px;

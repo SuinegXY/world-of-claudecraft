@@ -14,6 +14,9 @@ export const SPONSOR_QR = {
 } as const;
 
 const PANEL_ID = 'sponsor-qr-panel';
+/** Ignore backdrop dismiss for this long after open: in-game touch synthesizes a
+ *  click on the new full-screen backdrop, and pointer-lock release can do the same. */
+const BACKDROP_DISMISS_GRACE_MS = 400;
 
 function buildQrFigure(src: string, label: string, alt: string): HTMLElement {
   const fig = document.createElement('figure');
@@ -63,6 +66,13 @@ export function closeSponsorQrPanel(): void {
 export function openSponsorQrPanel(focusManager: FocusManager): void {
   closeSponsorQrPanel();
 
+  // Free the game cursor so the player can read / screenshot the QR codes.
+  try {
+    document.exitPointerLock?.();
+  } catch {
+    /* ignore */
+  }
+
   const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   const back = document.createElement('div');
   back.id = PANEL_ID;
@@ -74,6 +84,7 @@ export function openSponsorQrPanel(focusManager: FocusManager): void {
   panel.setAttribute('aria-modal', 'true');
   panel.setAttribute('aria-labelledby', 'sponsor-qr-title');
   panel.setAttribute('aria-describedby', 'sponsor-qr-blurb');
+  panel.tabIndex = -1;
 
   const titleRow = document.createElement('div');
   titleRow.className = 'panel-title';
@@ -92,25 +103,34 @@ export function openSponsorQrPanel(focusManager: FocusManager): void {
   document.body.appendChild(back);
 
   const focusHandle = focusManager.open({ root: () => panel, returnFocusTo: opener });
+  const openedAt = performance.now();
   let closed = false;
   const close = (): void => {
     if (closed) return;
     closed = true;
-    document.removeEventListener('keydown', onKey);
+    document.removeEventListener('keydown', onKey, true);
     back.remove();
     focusHandle.release(true);
   };
   const onKey = (ev: KeyboardEvent): void => {
-    if (ev.key === 'Escape') {
-      ev.preventDefault();
-      close();
-    }
+    if (ev.key !== 'Escape') return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    close();
   };
-  closeBtn.addEventListener('click', close);
-  back.addEventListener('click', (ev) => {
-    if (ev.target === back) close();
+  closeBtn.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    close();
   });
-  document.addEventListener('keydown', onKey);
+  // Defer backdrop dismiss so the opening tap/click (or pointer-lock unlock
+  // ghost click) cannot immediately close the brand-new overlay.
+  back.addEventListener('click', (ev) => {
+    if (ev.target !== back) return;
+    if (performance.now() - openedAt < BACKDROP_DISMISS_GRACE_MS) return;
+    close();
+  });
+  document.addEventListener('keydown', onKey, true);
   closeBtn.focus();
 }
 
@@ -119,6 +139,7 @@ export function wireSponsorTriggers(root: ParentNode, focusManager: FocusManager
   root.querySelectorAll<HTMLElement>('.js-open-sponsor').forEach((el) => {
     el.addEventListener('click', (ev) => {
       ev.preventDefault();
+      ev.stopPropagation();
       openSponsorQrPanel(focusManager);
     });
   });
