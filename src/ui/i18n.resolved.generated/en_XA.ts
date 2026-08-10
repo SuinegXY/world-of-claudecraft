@@ -10609,6 +10609,93 @@ export const en_XA: EnTranslations = {
       "pristine_claw": {
         "name": "[Þŕíšţíñé Çļáŵ]"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "[Ĝúíļðɱáŕķ Áŕɱíñĝ Šŵóŕð]"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "[Ɓŕáššçáþ Ĥáţçĥéţ]"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "[Ţéɱþéŕéð Ƒļáñĝéð Ɱáçé]"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "[Ĝúíļðɱáŕķ Ðíŕķ]"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "[Ɓŕáššçŕóŵñ Ŵáļķíñĝ Šţáƒƒ]"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "[Ļáçɋúéŕéð Ŕóð]"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "[Ƒļéţçĥéŕ'š Ĝúíļð Ɓóŵ]"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "[Çíñðéŕƀŕáñð]"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "[Éɱƀéŕƀíţé]"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "[Šɱóúļðéŕƒáļļ]"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "[Ášĥšþáŕķ Šĥíʋ]"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "[Ƒóŕĝéĥéáŕţ Šţáʋé]"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "[Éɱƀéŕŵŕóúĝĥţ Ŵáñð]"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "[Çíñðéŕļáţçĥ]"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "[Íçé Ƒáñĝ]"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "[Ĝļáçíéŕšþļíţ]"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "[Ŕíɱéçŕúšĥéŕ]"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "[Ŕíɱé Ñééðļé]"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "[Ĥóáŕƒŕóšţ Ʋíĝíļ]"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "[Šĥáŕð óƒ Éʋéŕŵíñţéŕ]"
+      },
+      "winterbite_skin_unlock": {
+        "name": "[Ŵíñţéŕƀíţé]"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "[Šóļĥéíɱ, Ļášţ Ļíĝĥţ óƒ ţĥé Ðáŵñ]"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "[Šķýŕéñðéŕ, ţĥé Ƒíŕɱáɱéñţ'š Ŵóúñð]"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "[Šţáŕƒáļļ, Ĵúðĝɱéñţ óƒ ţĥé Ĥéáʋéñš]"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "[Ášţŕáʋýŕ, Ƒáñĝ óƒ ţĥé Ƒáļļéñ Šţáŕ]"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "[Çóšɱáŕçĥ, Šþíŕé óƒ ţĥé Éñðļéšš Ʋóíð]"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "[Éɱƀéŕŵíšĥ, Ɱóţé óƒ ţĥé Ðýíñĝ Šúñ]"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "[Éñçóŕé, ţĥé Šéçóñð Ƒáļļíñĝ Šţáŕ]"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "[Ɱéţéóŕļáţçĥ, ţĥé Šķý'š Ļášţ Ĵúðĝɱéñţ]"
+      },
       "conjured_water4": {
         "name": "[Çóñĵúŕéð Šþŕíñĝŵáţéŕ]"
       },
@@ -12181,6 +12268,11 @@ export const en_XA: EnTranslations = {
         "name": "[ƑÚŔÝ]",
         "title": "[Ĥóñóŕ Ɋúáŕţéŕɱášţéŕ]",
         "greeting": "[Ţĥé šáñðš ŕéɱéɱƀéŕ éʋéŕý ʋíçţóŕý. Šþéñð ýóúŕ ĥóñóŕ ŵéļļ.]"
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "[Ðá Ẋíóñĝ Ƒášĥíóñ Ŵéļƒáŕé Ɱéŕçĥáñţ]",
+        "title": "[Ƒášĥíóñ Óúţƒíţţéŕ]",
+        "greeting": "[Ţéñ ĝóļð áþíéçé. Éʋéŕý ļóóķ ţĥé ŕéáļɱ áļŕéáðý ķñóŵš, ƀóẋéð áñð ŕéáðý.]"
       },
       "warmarshal_draven_kole": {
         "name": "[Ŵáŕɱáŕšĥáļ Ðŕáʋéñ Ķóļé]",

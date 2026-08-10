@@ -10609,6 +10609,93 @@ export const ko_KR: EnTranslations = {
       "pristine_claw": {
         "name": "온전한 발톱"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "길드마크 무장검"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "브라스캡 손도끼"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "담금질 플랜지 철퇴"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "길드마크 더크"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "브라스크라운 여행 지팡이"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "옻칠 마법봉"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "화살장인 길드 활"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "신더브랜드"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "엠버바이트"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "스몰더폴"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "애시스파크 칼"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "포지하트 장봉"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "엠버로트 마법봉"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "신더래치"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "얼음 송곳니"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "글레이셔스플릿"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "라임크러셔"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "서리 바늘"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "백상의 감시"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "영원한 겨울의 파편"
+      },
+      "winterbite_skin_unlock": {
+        "name": "윈터바이트"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "솔하임, 새벽의 마지막 빛"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "스카이렌더, 창공의 상처"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "스타폴, 하늘의 심판"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "아스트라비르, 추락한 별의 송곳니"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "코스마치, 끝없는 공허의 첨탑"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "엠버위시, 죽어 가는 태양의 티끌"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "앙코르, 두 번째 추락한 별"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "미티어래치, 하늘의 마지막 심판"
+      },
       "conjured_water4": {
         "name": "창조된 샘물"
       },
@@ -12181,6 +12268,11 @@ export const ko_KR: EnTranslations = {
         "name": "퓨리",
         "title": "명예 병참장교",
         "greeting": "전장의 모래는 모든 승리를 기억한다. 명예를 현명하게 사용하라."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "대웅 패션 복리 상인",
+        "title": "패션 상인",
+        "greeting": "개당 금화 열 닢. 이미 세상에 있는 외형은 모두 여기서 구할 수 있다."
       },
       "warmarshal_draven_kole": {
         "name": "전쟁원수 드레이븐 콜",

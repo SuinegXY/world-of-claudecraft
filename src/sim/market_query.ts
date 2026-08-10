@@ -168,7 +168,11 @@ export function sanitizeMarketQuery(
 }
 
 function isCosmeticItem(item: ItemDef): boolean {
-  return item.use?.type === 'mechChroma' || item.use?.type === 'skinSelect';
+  return (
+    item.use?.type === 'mechChroma' ||
+    item.use?.type === 'skinSelect' ||
+    item.use?.type === 'weaponSkin'
+  );
 }
 
 function itemMatchesType(item: ItemDef, filter: MarketItemTypeFilter): boolean {

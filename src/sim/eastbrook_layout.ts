@@ -1003,6 +1003,9 @@ const WEAVER_POSITION = localToWorld(LOOM_STATION.position, WEAVING_HOUSE.rotati
 const TINKER_POSITION = localToWorld(TOOLWORKS_STATION.position, TOOLWORKS.rotation, 2, 0);
 const SAUL_POSITION = { x: 0, z: -14.5 } as const;
 const FURY_POSITION = { x: -22.5, z: -7.5 } as const;
+// Fashion welfare merchant: open civic green between the market stalls and the
+// marshal's post, facing the well so the vendor window opens toward the square.
+const FASHION_WELFARE_POSITION = { x: -3, z: 6.5 } as const;
 
 const NPCS = [
   makeNpc('the_merchant', MERCHANT_POSITION, MARKET_STALLS[0].rotation, MARKET_STALLS[0].id),
@@ -1036,6 +1039,12 @@ const NPCS = [
   makeNpc('weaver_ottilie', WEAVER_POSITION, WEAVING_HOUSE.rotation, LOOM_STATION.id),
   makeNpc('tinker_gizzel', TINKER_POSITION, TOOLWORKS.rotation, TOOLWORKS_STATION.id),
   makeNpc('fury', FURY_POSITION, facingToward(FURY_POSITION, CIVIC_CENTER), 'eastbrook_chapel'),
+  makeNpc(
+    'da_xiong_fashion_welfare_merchant',
+    FASHION_WELFARE_POSITION,
+    facingToward(FASHION_WELFARE_POSITION, CIVIC_CENTER),
+    'eastbrook_civic_well_beacon',
+  ),
 ] as const;
 
 const BURSAR = NPCS.find((npc) => npc.id === 'bursar_fernando');

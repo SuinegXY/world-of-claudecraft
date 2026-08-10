@@ -109,6 +109,10 @@ import { ensureWarriorStance } from './combat/warrior_stances';
 // moved to social/fiesta.ts with that logic; sim.ts keeps only the type used by
 // the PlayerMeta interface + the power-up catalog the fiestaMatchInfo accessor reads.
 import { type AugmentSpecial, type AugmentTier, POWERUPS_BY_ID } from './content/augments';
+import {
+  FASHION_WELFARE_ENTITY_ID,
+  FASHION_WELFARE_NPC_ID,
+} from './content/fashion_welfare_vendor';
 import { DEFAULT_MOUNT, type MountKey } from './content/mounts';
 import { GATHERING_PROFESSION_IDS, type GatheringProfessionId } from './content/professions';
 import { PTR_DEV_VENDOR_DEF } from './content/ptr_dev_vendor';
@@ -1135,10 +1139,9 @@ export interface SkinClaimResult {
   chromaId?: string;
 }
 
-export interface ItemUseResult {
-  type: 'mechChroma';
-  chromaId: string;
-}
+export type ItemUseResult =
+  | { type: 'mechChroma'; chromaId: string }
+  | { type: 'weaponSkin'; skinId: string };
 
 // Opt-in global chat channels a player can /join and /leave. `general` is
 // always-on (everyone hears /general), so it is intentionally not joinable here.
@@ -2393,6 +2396,20 @@ export class Sim {
         const safe = this.findSafePos(furyDef.pos.x, furyDef.pos.z, waterLevel() + 0.6);
         const fury = createNpc(FURY_ENTITY_ID, furyDef, this.groundPos(safe.x, safe.z));
         this.addEntity(fury);
+      }
+    }
+
+    // Exclusive fashion welfare merchant: same reserved-id treatment as FURY.
+    {
+      const fashionDef = worldContent.npcs[FASHION_WELFARE_NPC_ID];
+      if (fashionDef && !this.entities.has(FASHION_WELFARE_ENTITY_ID)) {
+        const safe = this.findSafePos(fashionDef.pos.x, fashionDef.pos.z, waterLevel() + 0.6);
+        const fashion = createNpc(
+          FASHION_WELFARE_ENTITY_ID,
+          fashionDef,
+          this.groundPos(safe.x, safe.z),
+        );
+        this.addEntity(fashion);
       }
     }
 
@@ -4420,6 +4437,24 @@ export class Sim {
     return { type: 'mechChroma', chromaId };
   }
 
+  private unlockWeaponSkinFromItem(
+    meta: PlayerMeta,
+    itemId: string,
+    skinId: string,
+  ): ItemUseResult | undefined {
+    if (!WEAPON_SKINS[skinId]) return undefined;
+    if (this.countItem(itemId, meta.entityId) <= 0) return undefined;
+    this.removeItem(itemId, 1, meta.entityId);
+    const weaponSkinIds = this.accountCosmetics.weaponSkinIds.includes(skinId)
+      ? this.accountCosmetics.weaponSkinIds
+      : [...this.accountCosmetics.weaponSkinIds, skinId];
+    this.accountCosmetics = { ...this.accountCosmetics, weaponSkinIds };
+    // Best-effort apply when a matching weapon is already in hand; ownership is
+    // the durable grant either way.
+    this.setWeaponSkin(meta.entityId, skinId);
+    return { type: 'weaponSkin', skinId };
+  }
+
   unequipMechChroma(chromaId: string, pid?: number): boolean {
     const r = this.resolve(pid);
     if (!r) return false;
@@ -5429,10 +5464,12 @@ export class Sim {
       // Sim method post-construction. startFishing/completeFishing flip points-at to the
       // fishing module (Professions 2.0), called with the live ctx the same way
       // runEffects is above; no Sim fishing method remains. unlockMechChromaFromItem /
-      // openSkinSelect are private on Sim; isSwimming is public. The owning facets stay TBD.
+      // unlockWeaponSkinFromItem / openSkinSelect are private on Sim; isSwimming is public.
       startFishing: (p, meta) => fishing.startFishing(sim.ctx, p, meta),
       unlockMechChromaFromItem: (meta, itemId, chromaId) =>
         sim.unlockMechChromaFromItem(meta, itemId, chromaId),
+      unlockWeaponSkinFromItem: (meta, itemId, skinId) =>
+        sim.unlockWeaponSkinFromItem(meta, itemId, skinId),
       openSkinSelect: (meta, catalog, itemId) => sim.openSkinSelect(meta, catalog, itemId),
       isSwimming: (e) => sim.isSwimming(e),
       revalidateOffhandForSpec: (pid) => items.revalidateOffhandForSpec(sim.ctx, pid),

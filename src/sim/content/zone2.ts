@@ -20,6 +20,7 @@ import type {
   ZoneDef,
   ZonePropsDef,
 } from '../types';
+import { FASHION_WELFARE_PRICE_COPPER } from './fashion_welfare_vendor';
 import { FERAL } from './items';
 
 export const DEEPFEN_SHALLOWS_LAKE = { x: -110, z: 310, radius: 35 };
@@ -1514,6 +1515,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'rare',
     use: { type: 'skinSelect', catalog: 'mech' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1525,6 +1528,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'amber_crimson' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1536,6 +1541,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'crimson_amber' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1547,6 +1554,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'cyan_magenta' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1558,6 +1567,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'magenta_cyan' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1569,6 +1580,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'orange_steel' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1580,6 +1593,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'steel_orange' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1591,6 +1606,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'forest_pink' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1602,6 +1619,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'pink_forest' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1613,6 +1632,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'rare',
     use: { type: 'mechChroma', chromaId: 'amethyst_silver' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1624,6 +1645,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'rare',
     use: { type: 'mechChroma', chromaId: 'ivory_copper' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1635,6 +1658,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'rare',
     use: { type: 'mechChroma', chromaId: 'onyx_gold' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1646,6 +1671,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     use: { type: 'mechChroma', chromaId: 'imperial_crimson' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1657,6 +1684,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     use: { type: 'mechChroma', chromaId: 'imperial_gold' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1668,6 +1697,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     use: { type: 'mechChroma', chromaId: 'vanguard_azure' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,
@@ -1679,6 +1710,8 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     use: { type: 'mechChroma', chromaId: 'vanguard_chrome' },
     sellValue: 0,
+    // Flat 10g at the Eastbrook fashion welfare merchant (exclusive stock).
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
     noVendorSell: true,
     noDiscard: true,
     noMarketList: true,

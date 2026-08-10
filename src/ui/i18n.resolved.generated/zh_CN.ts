@@ -10609,6 +10609,93 @@ export const zh_CN: EnTranslations = {
       "pristine_claw": {
         "name": "完美的爪"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "公会印记武装剑"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "黄铜帽手斧"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "淬火凸缘锤"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "公会印记短剑"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "黄铜冠手杖"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "漆木短杖"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "制弓师公会弓"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "烬痕"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "余烬之噬"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "闷燃坠击"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "灰火匕"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "炉心法杖"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "余烬锻造魔杖"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "烬锁"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "冰牙"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "裂冰"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "霜碎"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "霜针"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "白霜守望"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "永冬碎片"
+      },
+      "winterbite_skin_unlock": {
+        "name": "寒冬之噬"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim，黎明最后之光"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "裂天者，苍穹之伤"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "星陨，诸天裁决"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr，陨星之牙"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch，无尽虚空尖塔"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "余烬之愿，垂死太阳之火种"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore，第二颗坠星"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "星陨锁扣，苍穹最后的裁决"
+      },
       "conjured_water4": {
         "name": "魔法泉水"
       },
@@ -12181,6 +12268,11 @@ export const zh_CN: EnTranslations = {
         "name": "怒焰",
         "title": "荣誉军需官",
         "greeting": "战场黄沙铭记每一场胜利。愿你妥善运用这份荣誉。"
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "大熊时装福利商人",
+        "title": "时装商人",
+        "greeting": "每件十金。凡是世间已有的样子，这里都有现成的。"
       },
       "warmarshal_draven_kole": {
         "name": "战帅德拉文·科尔",

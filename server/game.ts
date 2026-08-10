@@ -6492,6 +6492,8 @@ export class GameServer {
         if (typeof msg.item === 'string') {
           const result = sim.useItem(msg.item, pid);
           if (result?.type === 'mechChroma') this.noteAccountMechChroma(session, result.chromaId);
+          if (result?.type === 'weaponSkin')
+            this.grantWeaponSkinsToAccount(session.accountId, [result.skinId]);
         }
         break;
       case 'discard':

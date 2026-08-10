@@ -719,6 +719,9 @@ export type ItemUse =
   // src/sim/interactions/firebottle_hut.ts. Reusable, so it is never consumed.
   | { type: 'throw' }
   | { type: 'mechChroma'; chromaId: string }
+  // Consumed to unlock a Season 1 Armory weapon skin on the account cosmetics
+  // ledger (same bag-token shape as mechChroma plates).
+  | { type: 'weaponSkin'; skinId: string }
   // Opens the client-side event skin-select overlay. The server rolls a rank on
   // use (see Sim.openSkinSelect) and the player locks one in via claimEventSkin.
   | { type: 'skinSelect'; catalog?: SkinCatalog }
@@ -5764,12 +5767,13 @@ export const EASTBROOK_NOTICEBOARD_NATIVE_DIMENSIONS = Object.freeze({
 } as const);
 export const EASTBROOK_NOTICEBOARD_INTERACTION_RADIUS = 4 as const;
 // Static world services use their own namespace above the sequential allocator
-// and the reserved 1_000_000_000/1_000_000_001/1_000_000_002 singleton NPC ids
-// (the Vale Cup groundskeeper, FURY in Eastbrook, and Warmarshal Draven Kole in
-// Highwatch). A singleton NPC takes a reserved id AND `dynamic: true` so the
-// generic world-init loop skips it: that loop allocates ids by iterating the
-// merged NPC table in insertion order, so a plain insertion would shift the id
-// of every NPC, camp mob and object created after it, which the parity goldens
+// and the reserved 1_000_000_000/1_000_000_001/1_000_000_002/1_000_000_003
+// singleton NPC ids (the Vale Cup groundskeeper, FURY in Eastbrook, Warmarshal
+// Draven Kole in Highwatch, and the Eastbrook fashion welfare merchant). A
+// singleton NPC takes a reserved id AND `dynamic: true` so the generic
+// world-init loop skips it: that loop allocates ids by iterating the merged
+// NPC table in insertion order, so a plain insertion would shift the id of
+// every NPC, camp mob and object created after it, which the parity goldens
 // pin per frame.
 export const STATIC_WORLD_SERVICE_ENTITY_ID_MIN = 2_000_000_001;
 

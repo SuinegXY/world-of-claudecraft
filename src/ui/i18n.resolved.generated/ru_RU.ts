@@ -10609,6 +10609,93 @@ export const ru_RU: EnTranslations = {
       "pristine_claw": {
         "name": "Безупречный коготь"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "Боевой меч с клеймом гильдии"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "Топорик с латунным навершием"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "Закалённая шестопёрная булава"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "Дирк с клеймом гильдии"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "Трость с латунной короной"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "Лакированный жезл"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "Лук гильдии Fletcher"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "Синдербренд"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "Эмбербайт"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "Смолдерфолл"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "Заточка Ashspark"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "Посох Forgeheart"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "Жезл Emberwrought"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "Синдерлатч"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "Ice Fang"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "Глейшерсплит"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "Раймкрашер"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "Ледяная игла"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "Морозный дозор"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "Осколок Вечной Зимы"
+      },
+      "winterbite_skin_unlock": {
+        "name": "Уинтербайт"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim, Последний свет зари"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "Skyrender, Рана небосвода"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "Starfall, Суд небес"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr, Клык падшей звезды"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch, Шпиль бесконечной пустоты"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "Emberwish, Искра угасающего солнца"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore, Вторая падшая звезда"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "Meteorlatch, Последний суд небес"
+      },
       "conjured_water4": {
         "name": "Сотворённая родниковая вода"
       },
@@ -12181,6 +12268,11 @@ export const ru_RU: EnTranslations = {
         "name": "Фьюри",
         "title": "Интендант чести",
         "greeting": "Пески поля боя помнят каждую победу. Распорядись своей честью достойно."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "Торговец модой Да Сюн",
+        "title": "Портной обликов",
+        "greeting": "По десять золотых штука. Все облики, что уже есть в мире, здесь готовы."
       },
       "warmarshal_draven_kole": {
         "name": "Военный маршал Дравен Коул",

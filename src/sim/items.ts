@@ -628,6 +628,9 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
   if (def.use?.type === 'mechChroma') {
     return ctx.unlockMechChromaFromItem(meta, itemId, def.use.chromaId);
   }
+  if (def.use?.type === 'weaponSkin') {
+    return ctx.unlockWeaponSkinFromItem(meta, itemId, def.use.skinId);
+  }
   if (def.use?.type === 'skinSelect') {
     ctx.openSkinSelect(meta, def.use.catalog ?? 'class', itemId);
     return;
@@ -957,7 +960,7 @@ export function buyItem(
     if (instance) ctx.addItemInstance(itemId, instance, meta.entityId, 1);
     else ctx.addItem(itemId, 1, meta.entityId);
   } else {
-  ctx.addItem(itemId, qty, meta.entityId);
+    ctx.addItem(itemId, qty, meta.entityId);
   }
   ctx.emit({ type: 'vendor', action: 'buy', itemId, pid: meta.entityId });
 }
