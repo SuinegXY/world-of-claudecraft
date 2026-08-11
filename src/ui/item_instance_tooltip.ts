@@ -61,6 +61,8 @@ export function wornTooltipInstance(
   if (instance.signer !== undefined) worn.signer = instance.signer;
   if (instance.enchant !== undefined) worn.enchant = instance.enchant;
   if (instance.rolled !== undefined) worn.rolled = instance.rolled;
+  if (instance.secondary !== undefined) worn.secondary = instance.secondary;
+  if (instance.exclusiveScaled) worn.exclusiveScaled = true;
   return worn;
 }
 
@@ -155,6 +157,22 @@ export function instanceBonusStatLines(instance?: ItemInstancePayload): string {
     html += `<div class="tt-sub" style="color:${QUALITY_COLOR.uncommon}">${esc(
       t('hudChrome.itemTooltip.enchantedFallback'),
     )}</div>`;
+  }
+  // Exclusive secondary affixes (Versatility / Crit / Haste rating).
+  const sec = instance?.secondary;
+  if (sec) {
+    if (sec.versatilityRating)
+      html += `<div class="tt-green tt-instance-bonus">${esc(
+        t('itemUi.stats.versatilityRating', { value: itemNumber(sec.versatilityRating) }),
+      )}</div>`;
+    if (sec.critRating)
+      html += `<div class="tt-green tt-instance-bonus">${esc(
+        t('itemUi.stats.secondaryCritRating', { value: itemNumber(sec.critRating) }),
+      )}</div>`;
+    if (sec.hasteRating)
+      html += `<div class="tt-green tt-instance-bonus">${esc(
+        t('itemUi.stats.secondaryHasteRating', { value: itemNumber(sec.hasteRating) }),
+      )}</div>`;
   }
   return html;
 }

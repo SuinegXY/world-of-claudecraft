@@ -873,6 +873,7 @@ describe('static combat-rating/progression scalars ride the delta gate', () => {
     'bval',
     'crat',
     'hrat',
+    'vrat',
     'hirat',
     'xp',
     'lxp',
@@ -4218,6 +4219,7 @@ const ALL_DELTA_KEYS = [
   'tslot',
   'vcup',
   'vcupb',
+  'vrat',
   'weapon',
   'xp',
 ] as const;
@@ -4311,6 +4313,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   sport: 'sportRole',
   tfocus: 'townFocus',
   tslot: 'toolEffectSlots',
+  vrat: 'versatilityRating',
 };
 
 // Year ~2223 in epoch ms. Beats selfWireJson's `until > Date.now()` lockout
@@ -5141,7 +5144,7 @@ describe('gather node cooldown wire round trip (ncd)', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 86 unique keys in sorted order', () => {
+  it('ALL_DELTA_KEYS contains exactly 87 unique keys in sorted order', () => {
     // +1: guildBank (Guild Bank Phase 2), +1: the battleground bg key, +1: the
     // commission order board's corder key (issue #1298), +1: the character
     // sheet's lifetime played-time key ptime, for 67, then +16: the static
@@ -5156,8 +5159,8 @@ describe('delta-key contract pins (anti-drift)', () => {
     // for 86. Every v0.36.0 sync conflicts here because each side pins its own
     // additions alone; the merged tree carries all of them, and this number
     // came from a run on the merged tree.
-    expect(ALL_DELTA_KEYS).toHaveLength(86);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(86);
+    expect(ALL_DELTA_KEYS).toHaveLength(87);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(87);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

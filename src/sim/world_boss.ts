@@ -19,6 +19,7 @@
 // loot entries in array order) so the parity gate's rng draw-order log stays stable.
 
 import { MOBS } from './data';
+import { makeLootItem } from './loot/loot_roll';
 import type { PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
 import type { Entity, LootSlot } from './types';
@@ -197,6 +198,10 @@ export function rollWorldBossLoot(ctx: SimContext, mob: Entity, contributors: Pl
   if (!template) return;
   const items: LootSlot[] = mob.loot?.items ?? [];
   const copper = mob.loot?.copper ?? 0;
+  // Same fallback as rollLoot: exclusive secondary affixes budget off mob level when
+  // the item has no authored itemLevel. makeLootItem rolls Versatility/Crit/Haste on
+  // equippable gear and leaves junk/trophies instance-free (no extra rng draws).
+  const fallbackLevel = Math.max(1, mob.level);
   // contributors arrive sorted by entityId (worldBossLootContributors); iterate in
   // that fixed order so the rng draw order is deterministic for the parity gate.
   // Eligibility is checked here, but the lockout is consumed only when the player
@@ -223,7 +228,11 @@ export function rollWorldBossLoot(ctx: SimContext, mob: Entity, contributors: Pl
           cumulative += g.chance;
           if (roll < cumulative) {
             if (g.itemId && !gearWon) {
-              items.push({ itemId: g.itemId, count: 1, personalFor: [meta.entityId] });
+              items.push(
+                makeLootItem(ctx, g.itemId, fallbackLevel, {
+                  personalFor: [meta.entityId],
+                }),
+              );
               gearWon = true;
             }
             break;
@@ -232,8 +241,13 @@ export function rollWorldBossLoot(ctx: SimContext, mob: Entity, contributors: Pl
         continue;
       }
       if (!ctx.rng.chance(entry.chance)) continue;
-      if (entry.itemId)
-        items.push({ itemId: entry.itemId, count: 1, personalFor: [meta.entityId] });
+      if (entry.itemId) {
+        items.push(
+          makeLootItem(ctx, entry.itemId, fallbackLevel, {
+            personalFor: [meta.entityId],
+          }),
+        );
+      }
     }
   }
   if (copper > 0 || items.length > 0) {

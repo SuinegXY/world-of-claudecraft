@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../server/db', () => ({
   accountAndScopeForToken: vi.fn(),
@@ -55,6 +55,12 @@ function fakeRes() {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  // Exclusive gate: opt the suite into perf-report ingestion.
+  vi.stubEnv('PERF_REPORT_ENABLED', '1');
+});
+
+afterEach(() => {
+  vi.unstubAllEnvs();
 });
 
 describe('perf report ingestion', () => {

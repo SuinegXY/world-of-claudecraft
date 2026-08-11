@@ -224,6 +224,7 @@ describe('parry stat surfacing (stat_tooltip + warrior_hit_table)', () => {
       critRating: p.critRating,
       hasteRating: p.hasteRating,
       hitRating: p.hitRating,
+      versatilityRating: p.versatilityRating,
       parryChance: warriorParryChance(p.stats.str),
       dps: 0,
       gear: [],

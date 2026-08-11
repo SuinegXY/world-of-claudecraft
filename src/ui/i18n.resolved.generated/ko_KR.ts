@@ -1766,6 +1766,7 @@ export const ko_KR: EnTranslations = {
         "spellPower": "주문력",
         "critRating": "치명타 등급",
         "hasteRating": "가속 등급",
+        "versatilityRating": "유연성",
         "parry": "무기 막기",
         "hitRating": "명중 등급",
         "warfare": "워페어"
@@ -1787,6 +1788,7 @@ export const ko_KR: EnTranslations = {
         "hasteRating": "장비와 세트 보너스에서 얻는 가속 등급으로 공격과 시전 속도가 빨라집니다. 약 10등급당 1% 가속.",
         "parry": "전방 근접 공격을 완전히 무기로 막아 피해를 입지 않을 확률입니다. 뒤에서 오는 공격은 막을 수 없습니다.",
         "hitRating": "장비와 세트 보너스에서 얻는 명중 등급으로 공격이 빗나가거나 주문이 저항되는 빈도를 줄이며, 특히 더 높은 레벨의 적에게 효과적입니다. 약 10등급당 1% 명중.",
+        "versatilityRating": "장비의 보조 접두사에서 얻는 유연성 등급으로 가하는 모든 피해가 증가합니다. 등급 10당 정확히 1%의 추가 피해.",
         "warfare": "플레이어에게 주는 피해가 {increase}% 증가하고 플레이어에게 받는 피해가 {reduction}% 감소합니다."
       },
       "effects": {
@@ -6438,6 +6440,7 @@ export const ko_KR: EnTranslations = {
     "highscores": "순위표",
     "wiki": "위키",
     "news": "새소식",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "다운로드",
     "loginRegister": "로그인/회원가입",
     "account": "계정",
@@ -7662,6 +7665,15 @@ export const ko_KR: EnTranslations = {
     "discordCommunity": "World of ClaudeCraft Discord 커뮤니티 참여",
     "donateProject": "World of ClaudeCraft 후원하기"
   },
+  "sponsor": {
+    "title": "대웅 후원",
+    "blurb": "대웅을 후원하세요. 후원할 때 메시지를 남길 수 있습니다.",
+    "alipay": "알리페이",
+    "wechat": "위챗페이",
+    "alipayAlt": "알리페이 후원 QR 코드",
+    "wechatAlt": "위챗페이 후원 QR 코드",
+    "railLabel": "후원 QR 코드"
+  },
   "entryGuard": {
     "title": "그래픽 낮춤",
     "body": "월드 입장 중 게임이 예기치 않게 종료되어 그래픽이 {preset}(으)로 설정되었습니다. 아래 그래픽 선택기나 게임 내 옵션에서 변경할 수 있습니다.",
@@ -8760,7 +8772,10 @@ export const ko_KR: EnTranslations = {
       "dps": "초당 피해",
       "critChance": "치명타율",
       "dodge": "회피",
-      "parry": "무기 막기"
+      "parry": "무기 막기",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",
@@ -12203,6 +12218,93 @@ export const ko_KR: EnTranslations = {
       "pristine_claw": {
         "name": "온전한 발톱"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "길드마크 무장검"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "브라스캡 손도끼"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "담금질 플랜지 철퇴"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "길드마크 더크"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "브라스크라운 여행 지팡이"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "옻칠 마법봉"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "화살장인 길드 활"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "신더브랜드"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "엠버바이트"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "스몰더폴"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "애시스파크 칼"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "포지하트 장봉"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "엠버로트 마법봉"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "신더래치"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "얼음 송곳니"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "글레이셔스플릿"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "라임크러셔"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "서리 바늘"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "백상의 감시"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "영원한 겨울의 파편"
+      },
+      "winterbite_skin_unlock": {
+        "name": "윈터바이트"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "솔하임, 새벽의 마지막 빛"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "스카이렌더, 창공의 상처"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "스타폴, 하늘의 심판"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "아스트라비르, 추락한 별의 송곳니"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "코스마치, 끝없는 공허의 첨탑"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "엠버위시, 죽어 가는 태양의 티끌"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "앙코르, 두 번째 추락한 별"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "미티어래치, 하늘의 마지막 심판"
+      },
       "conjured_water4": {
         "name": "창조된 샘물"
       },
@@ -13778,6 +13880,11 @@ export const ko_KR: EnTranslations = {
         "name": "퓨리",
         "title": "명예 병참장교",
         "greeting": "전장의 모래는 모든 승리를 기억한다. 명예를 현명하게 사용하라."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "대웅 패션 복리 상인",
+        "title": "패션 상인",
+        "greeting": "개당 금화 열 닢. 이미 세상에 있는 외형은 모두 여기서 구할 수 있다."
       },
       "warmarshal_draven_kole": {
         "name": "전쟁원수 드레이븐 콜",

@@ -166,6 +166,21 @@ describe('retained v0.26 all-class Talents V2 semantics', () => {
     expect(resolved('warlock', 'shadow_bolt', rows, 'destruction').cost).toBe(42);
   });
 
+  it('exclusive pushback immunity leaves player cast remaining untouched', () => {
+    const sim = harness(
+      new Sim({ seed: 2612, playerClass: 'mage', autoEquip: false, world: EMPTY_TEST_WORLD }),
+    );
+    sim.setPlayerLevel(20);
+    const player = sim.player;
+    const attacker = spawnTarget(sim, player, 4);
+    player.castingAbility = 'fireball';
+    player.castRemaining = 2;
+    player.castTotal = 3;
+    dealDamage(sim.ctx, attacker, player, 10, false, 'physical', 'Test Hit', 'hit');
+    // Exclusive server: every player cast ignores damage pushback.
+    expect(player.castRemaining).toBe(2);
+  });
+
   it('makes winning Lingering Dread absorb 10% max-health damage before fear breaks', () => {
     const sim = harness(
       new Sim({ seed: 2614, playerClass: 'warrior', autoEquip: false, world: EMPTY_TEST_WORLD }),

@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "zh_CN".
+﻿// Flat dotted-key translation overlay for "zh_CN".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -976,6 +976,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '法术强度',
   'hudChrome.statInfo.names.critRating': '暴击等级',
   'hudChrome.statInfo.names.hasteRating': '急速等级',
+  'hudChrome.statInfo.names.versatilityRating': '全能等级',
   'hudChrome.statInfo.names.parry': '招架',
   'hudChrome.statInfo.desc.parry':
     '你完全招架来自正面近战攻击、不受任何伤害的几率。来自背后的攻击无法被招架。',
@@ -988,6 +989,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '来自装备和套装奖励的暴击等级，提升你的暴击几率。约每10点等级提供1%暴击。',
   'hudChrome.statInfo.desc.hasteRating':
     '来自装备和套装奖励的急速等级，加快你的攻击和施法速度。约每10点等级提供1%急速。',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '来自装备次要词缀的全能等级，提高你造成的所有伤害。每10点等级恰好提供1%额外伤害。',
   'hudChrome.statInfo.desc.spellPower':
     '提高你法术造成的伤害和治疗的强度。每点智力都会提供少量法术强度，此外还有来自装备和增益的加成。',
   'hudChrome.statInfo.desc.warfare':
@@ -1317,10 +1320,11 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'nav.highscores': '排行榜',
   'nav.wiki': '百科指南',
   'nav.news': '新闻资讯',
+  'nav.exclusiveUpdates': '独家更新',
   'nav.download': '下载客户端',
   'nav.loginRegister': '登录/注册',
   'nav.logout': '退出登录',
-  'nav.donate': '捐赠',
+  'nav.donate': '赞助大熊',
   'stats.title': '服务器状态',
   'stats.accountsCreated': '玩家',
   'stats.charactersCreated': '已创建角色',
@@ -1619,7 +1623,14 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'a11y.characterActions': '角色操作',
   'a11y.githubProject': '打开 World of ClaudeCraft 的 GitHub 项目',
   'a11y.discordCommunity': '加入 World of ClaudeCraft 的 Discord 社区',
-  'a11y.donateProject': '捐赠支持 World of ClaudeCraft',
+  'a11y.donateProject': '赞助支持 World of ClaudeCraft',
+  'sponsor.title': '赞助大熊',
+  'sponsor.blurb': '赞助大熊,可在赞助时留言',
+  'sponsor.alipay': '支付宝',
+  'sponsor.wechat': '微信支付',
+  'sponsor.alipayAlt': '支付宝赞助二维码',
+  'sponsor.wechatAlt': '微信支付赞助二维码',
+  'sponsor.railLabel': '赞助二维码',
   'entryGuard.body':
     '进入世界时游戏意外关闭，图形设置现已设为{preset}。你可以在下方的图形选择器或游戏内选项中更改。',
   'entryGuard.dismiss': '关闭',
@@ -2468,6 +2479,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'itemUi.stats.critChance': '暴击几率',
   'itemUi.stats.dodge': '躲闪',
   'itemUi.stats.parry': '招架',
+  'itemUi.stats.versatilityRating': '+{value} 全能',
+  'itemUi.stats.secondaryCritRating': '+{value} 暴击',
+  'itemUi.stats.secondaryHasteRating': '+{value} 急速',
   'itemUi.tooltip.qualityKind': '{quality}{kind}',
   'itemUi.tooltip.currentlyEquipped': '当前装备',
   'itemUi.tooltip.ifYouEquip': '装备后',
@@ -8650,6 +8664,41 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.fury.name': '怒焰',
   'entities.npcs.fury.title': '荣誉军需官',
   'entities.npcs.fury.greeting': '战场黄沙铭记每一场胜利。愿你妥善运用这份荣誉。',
+
+  // Exclusive fashion welfare: Armory weapon-skin unlock tokens.
+  'entities.items.guildmark_arming_sword_skin_unlock.name': '公会印记武装剑',
+  'entities.items.brasscap_axe_skin_unlock.name': '黄铜帽手斧',
+  'entities.items.tempered_flanged_mace_skin_unlock.name': '淬火凸缘锤',
+  'entities.items.guildmark_dirk_skin_unlock.name': '公会印记短剑',
+  'entities.items.brasscrown_staff_skin_unlock.name': '黄铜冠手杖',
+  'entities.items.lacquered_wand_skin_unlock.name': '漆木短杖',
+  'entities.items.fletcher_s_guild_bow_skin_unlock.name': '制弓师公会弓',
+  'entities.items.cinderbrand_sword_skin_unlock.name': '烬痕',
+  'entities.items.emberbite_axe_skin_unlock.name': '余烬之噬',
+  'entities.items.smoulderfall_mace_skin_unlock.name': '闷燃坠击',
+  'entities.items.ashspark_dagger_skin_unlock.name': '灰火匕',
+  'entities.items.forgeheart_staff_skin_unlock.name': '炉心法杖',
+  'entities.items.emberwrought_wand_skin_unlock.name': '余烬锻造魔杖',
+  'entities.items.cinderlatch_crossbow_skin_unlock.name': '烬锁',
+  'entities.items.ice_fang_sword_skin_unlock.name': '冰牙',
+  'entities.items.glaciersplit_axe_skin_unlock.name': '裂冰',
+  'entities.items.rimecrusher_mace_skin_unlock.name': '霜碎',
+  'entities.items.frostbite_dagger_skin_unlock.name': '霜针',
+  'entities.items.hoarfrost_vigil_staff_skin_unlock.name': '白霜守望',
+  'entities.items.everwinter_wand_skin_unlock.name': '永冬碎片',
+  'entities.items.winterbite_skin_unlock.name': '寒冬之噬',
+  'entities.items.solheim_sword_skin_unlock.name': 'Solheim，黎明最后之光',
+  'entities.items.skyrender_axe_skin_unlock.name': '裂天者，苍穹之伤',
+  'entities.items.starfall_mace_skin_unlock.name': '星陨，诸天裁决',
+  'entities.items.astravyr_dagger_skin_unlock.name': 'Astravyr，陨星之牙',
+  'entities.items.cosmarch_staff_skin_unlock.name': 'Cosmarch，无尽虚空尖塔',
+  'entities.items.emberwish_wand_skin_unlock.name': '余烬之愿，垂死太阳之火种',
+  'entities.items.encore_bow_skin_unlock.name': 'Encore，第二颗坠星',
+  'entities.items.meteorlatch_crossbow_skin_unlock.name': '星陨锁扣，苍穹最后的裁决',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.name': '大熊时装福利商人',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.title': '时装商人',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.greeting':
+    '每件十金。凡是世间已有的样子，这里都有现成的。',
   'entities.npcs.warmarshal_draven_kole.name': '战帅德拉文·科尔',
   'entities.npcs.warmarshal_draven_kole.title': '战争军备库总管',
   'entities.npcs.warmarshal_draven_kole.greeting':

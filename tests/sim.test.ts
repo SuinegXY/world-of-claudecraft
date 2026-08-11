@@ -557,7 +557,7 @@ describe('spell pushback', () => {
     return { sim, wolf };
   }
 
-  it('a hit pushes a cast back instead of cancelling it', () => {
+  it('a hit does not push a player cast back or cancel it (exclusive)', () => {
     const { sim, wolf } = castingMage();
     sim.castAbility('fireball');
     expect(sim.player.castingAbility).toBe('fireball');
@@ -565,33 +565,32 @@ describe('spell pushback', () => {
     const totalBefore = sim.player.castTotal;
     (sim as any).dealDamage(wolf, sim.player, 5, false, 'physical', null, 'hit');
     expect(sim.player.castingAbility).toBe('fireball');
-    expect(sim.player.castRemaining).toBeCloseTo(remBefore + 0.5, 3);
-    expect(sim.player.castTotal).toBeCloseTo(totalBefore + 0.5, 3);
+    expect(sim.player.castRemaining).toBeCloseTo(remBefore, 3);
+    expect(sim.player.castTotal).toBeCloseTo(totalBefore, 3);
   });
 
-  it('a pushed-back cast still completes and lands', () => {
+  it('a cast under damage still completes and lands', () => {
     const { sim, wolf } = castingMage(20); // high level vs a low wolf: the bolt won't miss
     sim.castAbility('fireball');
     (sim as any).dealDamage(wolf, sim.player, 5, false, 'physical', null, 'hit');
     const hpBefore = wolf.hp;
-    // The cast completes (pushed back, not cancelled), THEN the fireball flies to the
+    // The cast completes (no pushback), THEN the fireball flies to the
     // wolf and lands its damage a few ticks later (projectile_travel): tick until the
     // bolt connects, not merely until the cast bar empties.
     for (let i = 0; i < 20 * 8 && wolf.hp >= hpBefore; i++) sim.tick();
     expect(wolf.hp).toBeLessThan(hpBefore);
   });
 
-  it('a hit shaves a quarter off a channel instead of cancelling it', () => {
+  it('a hit does not shave a player channel (exclusive)', () => {
     const { sim, wolf } = castingMage(8);
     // Aether Darts is Chronomancy-gated in the reworked kit; commit the spec first.
     sim.setSpec('arcane');
     sim.castAbility('arcane_missiles');
     expect(sim.player.channeling).toBe(true);
     const remBefore = sim.player.castRemaining;
-    const total = sim.player.castTotal;
     (sim as any).dealDamage(wolf, sim.player, 5, false, 'physical', null, 'hit');
     expect(sim.player.channeling).toBe(true);
-    expect(sim.player.castRemaining).toBeCloseTo(remBefore - total * 0.25, 3);
+    expect(sim.player.castRemaining).toBeCloseTo(remBefore, 3);
   });
 
   it('misses and fully absorbed hits do not push the cast back', () => {

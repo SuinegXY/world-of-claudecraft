@@ -1766,6 +1766,7 @@ export const zh_CN: EnTranslations = {
         "spellPower": "法术强度",
         "critRating": "暴击等级",
         "hasteRating": "急速等级",
+        "versatilityRating": "全能等级",
         "parry": "招架",
         "hitRating": "命中等级",
         "warfare": "战争"
@@ -1787,6 +1788,7 @@ export const zh_CN: EnTranslations = {
         "hasteRating": "来自装备和套装奖励的急速等级，加快你的攻击和施法速度。约每10点等级提供1%急速。",
         "parry": "你完全招架来自正面近战攻击、不受任何伤害的几率。来自背后的攻击无法被招架。",
         "hitRating": "来自装备和套装奖励的命中等级，降低你的攻击被闪避和法术被抵抗的几率，对更高等级的敌人尤其有效。约每10点等级提供1%命中。",
+        "versatilityRating": "来自装备次要词缀的全能等级，提高你造成的所有伤害。每10点等级恰好提供1%额外伤害。",
         "warfare": "对玩家造成的伤害提高 {increase}%，受到玩家造成的伤害降低 {reduction}%。"
       },
       "effects": {
@@ -6438,11 +6440,12 @@ export const zh_CN: EnTranslations = {
     "highscores": "排行榜",
     "wiki": "百科指南",
     "news": "新闻资讯",
+    "exclusiveUpdates": "独家更新",
     "download": "下载客户端",
     "loginRegister": "登录/注册",
     "account": "账户",
     "logout": "退出登录",
-    "donate": "捐赠"
+    "donate": "赞助大熊"
   },
   "stats": {
     "title": "服务器状态",
@@ -7660,7 +7663,16 @@ export const zh_CN: EnTranslations = {
     "characterActions": "角色操作",
     "githubProject": "打开 World of ClaudeCraft 的 GitHub 项目",
     "discordCommunity": "加入 World of ClaudeCraft 的 Discord 社区",
-    "donateProject": "捐赠支持 World of ClaudeCraft"
+    "donateProject": "赞助支持 World of ClaudeCraft"
+  },
+  "sponsor": {
+    "title": "赞助大熊",
+    "blurb": "赞助大熊,可在赞助时留言",
+    "alipay": "支付宝",
+    "wechat": "微信支付",
+    "alipayAlt": "支付宝赞助二维码",
+    "wechatAlt": "微信支付赞助二维码",
+    "railLabel": "赞助二维码"
   },
   "entryGuard": {
     "title": "已降低图形设置",
@@ -8760,7 +8772,10 @@ export const zh_CN: EnTranslations = {
       "dps": "每秒伤害",
       "critChance": "暴击几率",
       "dodge": "躲闪",
-      "parry": "招架"
+      "parry": "招架",
+      "versatilityRating": "+{value} 全能",
+      "secondaryCritRating": "+{value} 暴击",
+      "secondaryHasteRating": "+{value} 急速"
     },
     "tooltip": {
       "qualityKind": "{quality}{kind}",
@@ -12203,6 +12218,93 @@ export const zh_CN: EnTranslations = {
       "pristine_claw": {
         "name": "完美的爪"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "公会印记武装剑"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "黄铜帽手斧"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "淬火凸缘锤"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "公会印记短剑"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "黄铜冠手杖"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "漆木短杖"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "制弓师公会弓"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "烬痕"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "余烬之噬"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "闷燃坠击"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "灰火匕"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "炉心法杖"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "余烬锻造魔杖"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "烬锁"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "冰牙"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "裂冰"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "霜碎"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "霜针"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "白霜守望"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "永冬碎片"
+      },
+      "winterbite_skin_unlock": {
+        "name": "寒冬之噬"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim，黎明最后之光"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "裂天者，苍穹之伤"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "星陨，诸天裁决"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr，陨星之牙"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch，无尽虚空尖塔"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "余烬之愿，垂死太阳之火种"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore，第二颗坠星"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "星陨锁扣，苍穹最后的裁决"
+      },
       "conjured_water4": {
         "name": "魔法泉水"
       },
@@ -13778,6 +13880,11 @@ export const zh_CN: EnTranslations = {
         "name": "怒焰",
         "title": "荣誉军需官",
         "greeting": "战场黄沙铭记每一场胜利。愿你妥善运用这份荣誉。"
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "大熊时装福利商人",
+        "title": "时装商人",
+        "greeting": "每件十金。凡是世间已有的样子，这里都有现成的。"
       },
       "warmarshal_draven_kole": {
         "name": "战帅德拉文·科尔",
