@@ -4448,10 +4448,27 @@ export class Sim {
     const weaponSkinIds = this.accountCosmetics.weaponSkinIds.includes(skinId)
       ? this.accountCosmetics.weaponSkinIds
       : [...this.accountCosmetics.weaponSkinIds, skinId];
-    this.accountCosmetics = { ...this.accountCosmetics, weaponSkinIds };
-    // Best-effort apply when a matching weapon is already in hand; ownership is
-    // the durable grant either way.
-    this.setWeaponSkin(meta.entityId, skinId);
+    // Park the skin in the per-type loadout even when the held weapon does not
+    // match yet (Armory Apply requires a match; unlock-from-item always stamps
+    // so a later equip of that type resolves without a second Apply click).
+    const weaponSkinLoadout =
+      withWeaponSkinApplied(this.accountCosmetics.weaponSkinLoadout, skinId) ??
+      this.accountCosmetics.weaponSkinLoadout;
+    this.accountCosmetics = { ...this.accountCosmetics, weaponSkinIds, weaponSkinLoadout };
+    const e = this.entities.get(meta.entityId);
+    if (e?.kind === 'player') {
+      const next = withWeaponSkinApplied(e.weaponSkinLoadout, skinId);
+      if (next) {
+        e.weaponSkinLoadout = next;
+        e.weaponSkinId = resolveActiveWeaponSkin(
+          e.templateId,
+          e.mainhandItemId,
+          next,
+          e.skinCatalog,
+        );
+        this.mirrorWeaponSkinLoadout(meta.entityId, e);
+      }
+    }
     return { type: 'weaponSkin', skinId };
   }
 

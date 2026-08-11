@@ -3435,6 +3435,40 @@ export class GameServer {
       .catch((err) => console.error('failed to grant account weapon skins:', err));
   }
 
+  /**
+   * Persist ownership + applied loadout after a weapon-skin unlock item is used.
+   * Must stamp the loadout before any live cosmetics push: updateLiveAccountCosmetics
+   * reseeds every session via setWeaponSkinLoadout, and a grant that only unions
+   * weaponSkinIds would wipe the sim's just-applied skin with an empty loadout.
+   */
+  private noteAccountWeaponSkinFromItem(session: ClientSession, skinId: string): void {
+    if (!WEAPON_SKINS[skinId]) return;
+    const current = session.accountCosmetics;
+    const weaponSkinIds = current.weaponSkinIds.includes(skinId)
+      ? current.weaponSkinIds
+      : [...current.weaponSkinIds, skinId];
+    const weaponSkinLoadout = withWeaponSkinApplied(current.weaponSkinLoadout, skinId) ?? {
+      ...current.weaponSkinLoadout,
+    };
+    this.updateLiveAccountCosmetics(session.accountId, {
+      ...current,
+      weaponSkinIds,
+      weaponSkinLoadout,
+    });
+    this.enqueueWeaponSkinLoadoutSave(session.accountId, weaponSkinLoadout);
+    void grantAccountWeaponSkins(session.accountId, [skinId])
+      .then((cosmetics) => {
+        // Grant returns the DB loadout, which may lag the optimistic apply /
+        // queued save. Keep the live applied loadout so the reseed does not wipe.
+        const live = this.accountCosmeticsByAccount.get(session.accountId);
+        this.updateLiveAccountCosmetics(session.accountId, {
+          ...cosmetics,
+          weaponSkinLoadout: live?.weaponSkinLoadout ?? weaponSkinLoadout,
+        });
+      })
+      .catch((err) => console.error('failed to grant weapon skin from item:', err));
+  }
+
   private unequipAccountMechChroma(session: ClientSession, chromaId: string): void {
     const skin = mechChromaSkinIndex(chromaId);
     const itemId = mechChromaItemId(chromaId);
@@ -6493,7 +6527,7 @@ export class GameServer {
           const result = sim.useItem(msg.item, pid);
           if (result?.type === 'mechChroma') this.noteAccountMechChroma(session, result.chromaId);
           if (result?.type === 'weaponSkin')
-            this.grantWeaponSkinsToAccount(session.accountId, [result.skinId]);
+            this.noteAccountWeaponSkinFromItem(session, result.skinId);
         }
         break;
       case 'discard':
