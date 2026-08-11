@@ -5190,8 +5190,9 @@ describe('delta-key contract pins (anti-drift)', () => {
     // key ptime for 67, then the 16 static combat-rating/progression scalars
     // (ap/sp/sh/crit/dodge/blk/bval/crat/hrat/hirat/xp/lxp/rxp/prk/copper/ddiff)
     // for 83, then reliq (Reliquary Phase 3 sparse blob) for 84, the nameplate
-    // border echo aborder for 85, and the authored modular look `app` for 86.
-    expect(scraped.size).toBe(86);
+    // border echo aborder for 85, the authored modular look `app` for 86, and
+    // exclusive versatility rating `vrat` for 87.
+    expect(scraped.size).toBe(87);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
