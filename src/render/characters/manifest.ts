@@ -3056,6 +3056,8 @@ const NPC_KEYS: Record<string, string> = {
   // makes and needs no new asset.
   warmarshal_draven_kole: 'npc_knight',
   fury: 'npc_knight',
+  // Exclusive fashion merchant: provisioner silhouette (no new GLB).
+  da_xiong_fashion_welfare_merchant: 'npc_villager',
   loremaster_caddis: 'npc_mage',
   smith_haldren: 'npc_smith',
   armorer_hode: 'npc_smith',

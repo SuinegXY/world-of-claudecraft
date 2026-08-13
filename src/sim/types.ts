@@ -62,6 +62,7 @@ export const MIN_GCD = 0.75; // seconds
 export const HASTE_RATING_PER_PCT = 20; // 20 haste rating = 1% faster
 export const CRIT_RATING_PER_PCT = 20; // 20 crit rating = +1% crit chance
 export const HIT_RATING_PER_PCT = 10; // 10 hit rating = +1% hit (less miss/resist)
+export const VERSATILITY_RATING_PER_PCT = 10; // 10 versatility = +1% damage dealt
 export function hasteFractionFromRating(rating: number): number {
   return rating / (HASTE_RATING_PER_PCT * 100);
 }
@@ -73,6 +74,9 @@ export function critFractionFromRating(rating: number): number {
 // stat: a warrior and a mage both want hit. Applied in recalcPlayerStats.
 export function hitFractionFromRating(rating: number): number {
   return rating / (HIT_RATING_PER_PCT * 100);
+}
+export function versatilityDamageFractionFromRating(rating: number): number {
+  return rating / (VERSATILITY_RATING_PER_PCT * 100);
 }
 
 export type HonorReason =
@@ -831,6 +835,9 @@ export type ItemUse =
   // src/sim/interactions/firebottle_hut.ts. Reusable, so it is never consumed.
   | { type: 'throw' }
   | { type: 'mechChroma'; chromaId: string }
+  // Consumed to unlock a Season 1 Armory weapon skin on the account cosmetics
+  // ledger (same bag-token shape as mechChroma plates).
+  | { type: 'weaponSkin'; skinId: string }
   // Opens the client-side event skin-select overlay. The server rolls a rank on
   // use (see Sim.openSkinSelect) and the player locks one in via claimEventSkin.
   | { type: 'skinSelect'; catalog?: SkinCatalog }
@@ -1220,6 +1227,23 @@ export interface ItemInstancePayload {
    *  (items.ts): this is an optional mark the owner sets on an otherwise
    *  ordinary copy. */
   locked?: boolean;
+  /** Exclusive-server secondary affixes rolled at loot time (Versatility /
+   *  Crit / Haste). Separate from rolled.stats so enchant/masterwork detection
+   *  stays unchanged. Folded into combat ratings in recalcPlayerStats. */
+  secondary?: {
+    versatilityRating?: number;
+    critRating?: number;
+    hasteRating?: number;
+  };
+  /**
+   * Exclusive-server numerical retune stamp. When true, combat/tooltip reads
+   * apply weapon damage x2 and authored primary stats / ratings / spellPower
+   * x5 on top of the official ItemDef. Stamped once at grant (loot, vendor,
+   * craft, quest, load migration); trade / bank / mail / buyback must keep
+   * the flag and never multiply again (see loot/exclusive_gear_scale.ts).
+   */
+  exclusiveScaled?: true;
+
   /** Long-term Rift gear progression. `rolled.stats` is the authoritative
    * aggregate bonus consumed by recalcPlayerStats; this record explains how it
    * was earned and lets forge operations rebuild it deterministically. */
@@ -1258,6 +1282,8 @@ export function cloneItemInstancePayload(src: ItemInstancePayload): ItemInstance
       gems: [...src.rift.gems],
     };
   }
+  if (src.secondary) instance.secondary = { ...src.secondary };
+  if (src.exclusiveScaled) instance.exclusiveScaled = true;
   return instance;
 }
 
@@ -4136,6 +4162,9 @@ export interface Entity extends ClientMirroredEntityFields {
   critChance: number; // 0..1
   critRating: number; // accumulated crit rating from gear + set bonuses
   hasteRating: number; // accumulated haste rating from gear + set bonuses
+  // Exclusive secondary affix: increases damage dealt (+1% per 10 rating).
+  versatilityRating: number;
+  versatilityDmgBonus: number; // fraction from versatilityRating
   hitRating: number; // accumulated hit rating from gear + set bonuses
   hitBonus: number; // hit fraction (hitRating converted): reduces miss/resist, 0..1
   // The class-agnostic crit core every strike shares: crit rating, talent and
@@ -6594,12 +6623,13 @@ export const EASTBROOK_NOTICEBOARD_NATIVE_DIMENSIONS = Object.freeze({
 } as const);
 export const EASTBROOK_NOTICEBOARD_INTERACTION_RADIUS = 4 as const;
 // Static world services use their own namespace above the sequential allocator
-// and the reserved 1_000_000_000/1_000_000_001/1_000_000_002 singleton NPC ids
-// (the Vale Cup groundskeeper, FURY in Eastbrook, and Warmarshal Draven Kole in
-// Highwatch). A singleton NPC takes a reserved id AND `dynamic: true` so the
-// generic world-init loop skips it: that loop allocates ids by iterating the
-// merged NPC table in insertion order, so a plain insertion would shift the id
-// of every NPC, camp mob and object created after it, which the parity goldens
+// and the reserved 1_000_000_000/1_000_000_001/1_000_000_002/1_000_000_003
+// singleton NPC ids (the Vale Cup groundskeeper, FURY in Eastbrook, Warmarshal
+// Draven Kole in Highwatch, and the Eastbrook fashion welfare merchant). A
+// singleton NPC takes a reserved id AND `dynamic: true` so the generic
+// world-init loop skips it: that loop allocates ids by iterating the merged
+// NPC table in insertion order, so a plain insertion would shift the id of
+// every NPC, camp mob and object created after it, which the parity goldens
 // pin per frame.
 export const STATIC_WORLD_SERVICE_ENTITY_ID_MIN = 2_000_000_001;
 

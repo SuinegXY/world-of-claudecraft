@@ -152,6 +152,27 @@ describe('dungeon finder window stylesheet contract', () => {
     expect(rule?.[1]).not.toContain('display: flex;');
   });
 
+  // Tall catalogue loot used to grow past max-height: the shell's overflow-y:auto
+  // scrolled under the sticky title (clipping the top of both columns) while
+  // .df-body-catalogue's overflow:hidden permanently hid the bottom of the detail
+  // pane. The window must clip, the chrome must not shrink, and the grid row must
+  // be minmax(0, 1fr) so .df-rail / .df-detail actually get a bounded scrollport.
+  it('keeps catalogue scrolling inside the rail and detail panes', () => {
+    const rule = /#dungeon-finder-window \{([^}]*)\}/.exec(components);
+    expect(rule?.[1]).toContain('overflow: hidden;');
+    expect(rule?.[1]).toContain('min-height: 0;');
+    expect(components).toMatch(/#dungeon-finder-window > \.panel-title \{[^}]*flex:\s*none;/);
+    expect(components).toMatch(/\.df-tabs \{[^}]*flex:\s*none;/);
+    const cols = /\.df-cols \{([^}]*)\}/.exec(components);
+    expect(cols, '.df-cols rule').toBeTruthy();
+    expect(cols?.[1]).toContain('grid-template-rows: minmax(0, 1fr);');
+    expect(cols?.[1]).toContain('minmax(0, 1fr)');
+    const panes = /\.df-rail,\s*\.df-detail \{([^}]*)\}/.exec(components);
+    expect(panes, '.df-rail / .df-detail rule').toBeTruthy();
+    expect(panes?.[1]).toContain('min-height: 0;');
+    expect(panes?.[1]).toContain('overflow-y: auto;');
+  });
+
   it('keeps every mobile finder rule inside @layer hud-mobile and sets no root display', () => {
     // Unlayered rules outrank every layer: a block appended after the wrapper closes
     // would beat both the closed-state default and the painter's own cascade.

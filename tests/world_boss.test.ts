@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_WORLD, MOBS } from '../src/sim/data';
+import { ITEMS, BUILTIN_WORLD, MOBS } from '../src/sim/data';
 import { EASTBROOK_BUILDINGS_BY_ID, localToWorld } from '../src/sim/eastbrook_layout';
+import {
+  canRollSecondaryAffix,
+  SECONDARY_AFFIX_KEYS,
+  secondaryAffixBudget,
+} from '../src/sim/loot/secondary_affix';
 import { respawnMob } from '../src/sim/mob/lifecycle';
 import { resetEvadingMob } from '../src/sim/mob/locomotion';
 import { combatProfileForMob, scaledDefaultMobMeleeRange } from '../src/sim/mob_combat';
@@ -453,6 +458,37 @@ describe('world boss personal loot', () => {
     };
     expect(run()).toBe(run());
   });
+
+  it('rolls exclusive secondary affixes onto personal gear drops (not junk trophies)', () => {
+    let sawGear = false;
+    for (let seed = 1; seed <= 80; seed++) {
+      const sim = makeSim(seed);
+      sim.utcDay = DAY;
+      const p1 = sim.addPlayer('warrior', 'Ada');
+      const { boss } = spawnBossNow(sim);
+      killWith(sim, boss, [p1]);
+      const items = boss.loot?.items ?? [];
+      for (const slot of items) {
+        const def = ITEMS[slot.itemId];
+        expect(def).toBeTruthy();
+        if (!def) continue;
+        if (!canRollSecondaryAffix(def)) {
+          // Guaranteed Inert Storm Shard (junk): no secondary instance.
+          expect(slot.instance?.secondary).toBeUndefined();
+          continue;
+        }
+        sawGear = true;
+        const secondary = slot.instance?.secondary;
+        expect(secondary).toBeTruthy();
+        if (!secondary) continue;
+        const keys = SECONDARY_AFFIX_KEYS.filter((k) => (secondary[k] ?? 0) > 0);
+        expect(keys).toHaveLength(2);
+        const budget = secondaryAffixBudget(def, boss.level);
+        expect(keys.reduce((sum, k) => sum + (secondary[k] ?? 0), 0)).toBe(budget);
+      }
+    }
+    expect(sawGear).toBe(true);
+});
 });
 
 describe('world boss loot roster survives contributor death and grouping', () => {

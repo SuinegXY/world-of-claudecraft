@@ -1780,6 +1780,7 @@ export const en: EnTranslations = {
         "spellPower": "Spell Power",
         "critRating": "Crit Rating",
         "hasteRating": "Haste Rating",
+        "versatilityRating": "Versatility",
         "parry": "Parry",
         "hitRating": "Hit Rating",
         "warfare": "Warfare"
@@ -1801,6 +1802,7 @@ export const en: EnTranslations = {
         "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. Every 20 rating grants exactly 1% haste.",
         "parry": "Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried.",
         "hitRating": "Hit rating from your gear and set bonuses, reducing how often your attacks miss and your spells are resisted, especially against higher-level enemies. Every 10 rating grants exactly 1% hit.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Increases damage dealt to players by {increase}% and reduces damage taken from players by {reduction}%."
       },
       "effects": {
@@ -6459,6 +6461,7 @@ export const en: EnTranslations = {
     "highscores": "High Scores",
     "wiki": "Wiki",
     "news": "News",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Download",
     "loginRegister": "Login/Register",
     "account": "Account",
@@ -7683,6 +7686,15 @@ export const en: EnTranslations = {
     "discordCommunity": "Join the World of ClaudeCraft Discord community",
     "donateProject": "Donate to support World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Graphics lowered",
     "body": "The game closed unexpectedly while entering the world, so graphics are now set to {preset}. You can change this in the graphics selector below or in the in-game Options.",
@@ -8781,7 +8793,10 @@ export const en: EnTranslations = {
       "dps": "Damage/sec",
       "critChance": "Crit Chance",
       "dodge": "Dodge",
-      "parry": "Parry"
+      "parry": "Parry",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",
@@ -12227,6 +12242,93 @@ export const en: EnTranslations = {
       "pristine_claw": {
         "name": "Pristine Claw"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "Guildmark Arming Sword"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "Brasscap Hatchet"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "Tempered Flanged Mace"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "Guildmark Dirk"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "Brasscrown Walking Staff"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "Lacquered Rod"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "Fletcher's Guild Bow"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "Cinderbrand"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "Emberbite"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "Smoulderfall"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "Ashspark Shiv"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "Forgeheart Stave"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "Emberwrought Wand"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "Cinderlatch"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "Ice Fang"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "Glaciersplit"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "Rimecrusher"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "Rime Needle"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "Hoarfrost Vigil"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "Shard of Everwinter"
+      },
+      "winterbite_skin_unlock": {
+        "name": "Winterbite"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim, Last Light of the Dawn"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "Skyrender, the Firmament's Wound"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "Starfall, Judgment of the Heavens"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr, Fang of the Fallen Star"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch, Spire of the Endless Void"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "Emberwish, Mote of the Dying Sun"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore, the Second Falling Star"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "Meteorlatch, the Sky's Last Judgment"
+      },
       "conjured_water4": {
         "name": "Conjured Springwater"
       },
@@ -13802,6 +13904,11 @@ export const en: EnTranslations = {
         "name": "FURY",
         "title": "Honor Quartermaster",
         "greeting": "The sands remember every victory. Spend your honor well."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "Da Xiong Fashion Welfare Merchant",
+        "title": "Fashion Outfitter",
+        "greeting": "Ten gold apiece. Every look the realm already knows, boxed and ready."
       },
       "warmarshal_draven_kole": {
         "name": "Warmarshal Draven Kole",

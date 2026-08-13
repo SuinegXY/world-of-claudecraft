@@ -755,27 +755,25 @@ function cardPageHtml(opts: {
 <meta name="twitter:title" content="${t}">
 <meta name="twitter:description" content="${d}">
 <meta name="twitter:image" content="${escapeHtml(imageUrl)}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Alegreya+Sans:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root { --gold: #ffd100; }
   * { box-sizing: border-box; }
   /* 100dvh tracks the visible area as the mobile URL bar shows/hides. */
   body { margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; padding: 32px 16px;
     background: radial-gradient(circle at 50% 18%, #241910, #0a0805 70%);
-    color: #ece2c4; font-family: 'Alegreya Sans', system-ui, sans-serif; text-align: center; }
+    color: #ece2c4; font-family: "Segoe UI", system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; text-align: center; }
   /* margin:auto centers the card when it fits and lets the page scroll from the TOP
      when it doesn't (justify-content:center would clip the top on a short/portrait
      phone, the reported bug). */
   main { margin: auto; width: 100%; max-width: 720px; display: flex; flex-direction: column;
     align-items: center; gap: 22px; }
-  h1 { font-family: 'Cinzel', Georgia, serif; color: var(--gold); font-size: clamp(22px, 4vw, 34px);
+  h1 { font-family: Georgia, "Palatino Linotype", Palatino, serif; color: var(--gold); font-size: clamp(22px, 4vw, 34px);
     margin: 0; max-width: 100%; overflow-wrap: anywhere; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
   p { margin: 0; color: #c9bb92; max-width: 640px; line-height: 1.5; overflow-wrap: anywhere; }
   img.card { width: 100%; max-width: 720px; height: auto; border-radius: 12px;
     box-shadow: 0 12px 48px rgba(0,0,0,.6); border: 1px solid #4a3a18; }
   a.cta { display: inline-block; margin-top: 6px; padding: 13px 30px; border-radius: 8px;
-    font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; text-decoration: none;
+    font-family: Georgia, "Palatino Linotype", Palatino, serif; font-weight: 700; font-size: 17px; text-decoration: none;
     color: #2a1d05; background: linear-gradient(#ffe27a, #e0a52a); box-shadow: 0 4px 18px rgba(224,165,42,.4); }
   a.cta:hover { filter: brightness(1.08); }
   footer { color: #7c6f4e; font-size: 13px; }

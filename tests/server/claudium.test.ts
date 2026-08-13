@@ -70,6 +70,8 @@ beforeEach(() => {
   vi.clearAllMocks();
   resetClaudiumMutationRateLimits();
   configureClaudiumRuntime({ grantWeaponSkins });
+  // Exclusive gate: opt the suite into Claudium outbound so URL/secret stubs work.
+  vi.stubEnv('CLAUDIUM_OUTBOUND_ENABLED', '1');
 });
 
 afterEach(() => {

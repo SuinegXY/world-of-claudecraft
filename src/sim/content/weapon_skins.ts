@@ -320,3 +320,15 @@ export const WEAPON_SKIN_COLLECTIONS: readonly WeaponSkinCollection[] = [
   S1.hoarfrost,
   S1.fallenStar,
 ];
+
+/** Inventory unlock token for a Season 1 Armory skin (vendor / bag form). */
+export function weaponSkinItemId(skinId: string): string {
+  return `${skinId}_skin_unlock`;
+}
+
+/** Reverse of weaponSkinItemId; null if the id is not an unlock token. */
+export function weaponSkinIdFromItemId(itemId: string): string | null {
+  if (!itemId.endsWith('_skin_unlock')) return null;
+  const skinId = itemId.slice(0, -'_skin_unlock'.length);
+  return WEAPON_SKINS[skinId] ? skinId : null;
+}
