@@ -3,7 +3,7 @@ import { nextRaidResetMs } from '../server/raid_reset';
 import { visualKeyFor } from '../src/render/characters/manifest';
 import { dungeonDaisHasRaisedPlatform } from '../src/render/dungeon';
 import { isBlocked } from '../src/sim/colliders';
-import { BUILTIN_WORLD, DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
+import { BUILTIN_WORLD, DUNGEONS, dungeonAt, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
 import { NYTHRAXIS_LAYOUT } from '../src/sim/dungeon_layout';
 import { nythraxisGravebreakerOnMobSwing } from '../src/sim/encounters/nythraxis';
 import { isShieldItem } from '../src/sim/equipment_rules';
@@ -287,15 +287,17 @@ describe('Nythraxis raid encounter', () => {
     expect(dungeonDaisHasRaisedPlatform('crypt')).toBe(true);
   });
 
-  it('blocks attuned solo players from the Nythraxis arena until they are in a raid group', () => {
+  it('lets an attuned solo player enter the Nythraxis arena without a raid group', () => {
+    // Exclusive: raid doors do not require converting to a raid group.
     const sim = makeWorld();
     const pid = sim.addPlayer('warrior', 'Solo');
     attune(sim, pid);
     const before = { ...sim.entities.get(pid)!.pos };
 
-    sim.enterDungeon('nythraxis_boss_arena', pid);
+    expect(sim.enterDungeon('nythraxis_boss_arena', pid)).toBe(true);
 
-    expect(dist2d(sim.entities.get(pid)!.pos, before)).toBeLessThan(0.1);
+    expect(dist2d(sim.entities.get(pid)!.pos, before)).toBeGreaterThan(1);
+    expect(dungeonAt(sim.entities.get(pid)!.pos.x)?.id).toBe('nythraxis_boss_arena');
   });
 
   it('automatically pulls Nythraxis when a player enters his aggro radius', () => {

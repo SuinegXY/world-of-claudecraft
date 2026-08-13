@@ -287,12 +287,19 @@ describe('parties', () => {
     expect(party.raid).toBe(true);
   });
 
-  it('blocks raid groups from standard dungeons while requiring raid groups for Nythraxis entry', () => {
+  it('blocks raid groups from standard dungeons while allowing solo Nythraxis entry', () => {
+    // Exclusive: solo / non-raid may enter the arena; raid groups still cannot
+    // walk into standard five-man doors.
     const sim = makeWorld();
     const leader = sim.addPlayer('warrior', 'Leader');
     sim.players.get(leader)?.questsDone.add('q_nythraxis_bound_guardian');
     sim.enterDungeon('nythraxis_boss_arena', leader);
-    expect(sim.entities.get(leader)?.pos.x).toBeLessThan(DUNGEON_X_THRESHOLD);
+    expect(dungeonAt(mustEntity(sim, leader).pos.x)?.id).toBe('nythraxis_boss_arena');
+
+    // Leave the arena claim so the later raid-group five-man check is clean.
+    const outside = mustEntity(sim, leader);
+    outside.pos = { x: 10, y: 0, z: 10 };
+    outside.prevPos = { ...outside.pos };
 
     fillPartyToFive(sim, leader);
     sim.convertPartyToRaid(leader);
