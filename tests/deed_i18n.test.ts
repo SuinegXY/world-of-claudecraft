@@ -141,46 +141,28 @@ describe('titledDisplayName + titledNameDecoration (the name-plus-title pattern)
 });
 
 describe('deed locale chunks (the per-base-locale release fill)', () => {
-  // The release-fill tables now live in per-base-locale chunks
-  // (deed_i18n.locales/<locale>.ts) behind DEED_LOCALE_LOADERS, each fetched on
-  // demand. The runtime pulls only one chunk per visitor; this suite assembles
-  // all of them (and the two co-located dialect override layers) once for the
-  // data checks.
+  // Exclusive CN ship: only the zh_CN deed locale chunk is reachable at runtime.
   type BaseLocale = keyof typeof DEED_LOCALE_LOADERS;
   const tables = {} as Record<BaseLocale, DeedLocaleTable>;
-  const overrides = {} as Record<'es_ES' | 'fr_CA', DeedLocaleTable>;
 
   beforeAll(async () => {
     const keys = Object.keys(DEED_LOCALE_LOADERS) as BaseLocale[];
     await Promise.all(
       keys.map(async (loc) => {
-        tables[loc] = (await DEED_LOCALE_LOADERS[loc]()).table;
+        tables[loc] = (await DEED_LOCALE_LOADERS[loc]!()).table;
       }),
     );
-    overrides.es_ES = (await DEED_LOCALE_LOADERS.es()).dialects?.es_ES ?? {};
-    overrides.fr_CA = (await DEED_LOCALE_LOADERS.fr_FR()).dialects?.fr_CA ?? {};
-    // Make every language the resolver test switches to resident (per-locale now,
-    // so each is a distinct chunk): the test-harness mirror of the bootstrap's
-    // await-before-paint.
-    await Promise.all(
-      (['de_DE', 'es', 'es_ES', 'fr_FR', 'fr_CA'] as const).map(ensureDeedLocalesLoaded),
-    );
+    await ensureDeedLocalesLoaded('zh_CN');
   });
 
   const tableLocales = (): BaseLocale[] => Object.keys(tables) as BaseLocale[];
 
-  it('carries one chunk per base locale', () => {
-    expect(tableLocales().length).toBe(18);
+  it('ships only the zh_CN deed locale chunk', () => {
+    expect(tableLocales()).toEqual(['zh_CN']);
   });
 
-  // RELEASE-TIER ONLY: a contributor adds new deeds ENGLISH-only (the deed
-  // renders its authored English through the fallback, a legal pending state
-  // on a PR); the maintainer fills every locale table at release. An explicit
-  // entry that equals the English is the recorded deliberate-cognate form
-  // (the talent titleOverrides semantics), so full coverage here plus the
-  // copied-English desc guard in localization_coverage is the release bar.
   it.runIf(process.env.I18N_RELEASE_TIER === '1')(
-    'covers every manifest row in all 18 base locale tables',
+    'covers every manifest row in the shipped zh_CN table',
     () => {
       const manifest = deedTranslationManifest();
       for (const lang of tableLocales()) {
@@ -213,9 +195,6 @@ describe('deed locale chunks (the per-base-locale release fill)', () => {
   it('keeps every value free of em/en dashes and emoji (these files sit outside the overlay copy-scan exemption)', () => {
     const forbidden =
       /[\u{2013}\u{2014}\u{2015}]|[\u{1F000}-\u{1FAFF}]|[\u{1F1E6}-\u{1F1FF}]|[\u{2600}-\u{27BF}]|\u{FE0F}/u;
-    // Prove the guard trips: a regex typo would otherwise make every assertion
-    // below pass vacuously. Escape form on purpose, so this file stays clean
-    // under the repo copy scan that the regex itself enforces.
     expect(forbidden.test('a\u2014b')).toBe(true);
     expect(forbidden.test('a-b')).toBe(false);
     for (const lang of tableLocales()) {
@@ -230,62 +209,14 @@ describe('deed locale chunks (the per-base-locale release fill)', () => {
     }
   });
 
-  it('resolves per language, with es_ES and fr_CA inheriting their base under the delve-term overrides', () => {
+  it('resolves Simplified Chinese deed strings from the shipped chunk', () => {
     try {
-      setLanguage('de_DE');
-      expect(deedName('prog_first_steps')).toBe('Erste Schritte');
-      expect(deedTitleText('prog_veteran')).toBe('Veteran');
-      // Dialect inheritance: a non-overridden entry resolves byte-identically
-      // to the base locale (the talent_i18n localeText dialect model).
-      setLanguage('es_ES');
-      const dialectName = deedName('prog_first_steps');
-      const dialectDesc = deedDesc('col_discovery_250');
-      // The delve deeds diverge with the dialect's own delve noun (the
-      // shipped delveUi vocabulary: es_ES Profundidad, fr_CA excavation).
-      expect(deedDesc('dlv_clears_50')).toContain('Profundidades');
-      setLanguage('es');
-      expect(deedName('prog_first_steps')).toBe(dialectName);
-      expect(deedDesc('col_discovery_250')).toBe(dialectDesc);
-      expect(deedDesc('dlv_clears_50')).not.toContain('Profundidades');
-      setLanguage('fr_CA');
-      expect(deedDesc('dlv_clears_50')).toContain('excavations');
-      setLanguage('fr_FR');
-      expect(deedDesc('dlv_clears_50')).toContain('plongées');
-      // en_CA resolves to the authored English before the table is consulted.
-      setLanguage('en_CA');
-      expect(deedName('prog_first_steps')).toBe('First Steps');
-      expect(deedTitleText('prog_veteran')).toBe('Veteran');
+      setLanguage('zh_CN');
+      expect(deedName('prog_first_steps')).toBe('千里之行');
+      expect(deedTitleText('prog_veteran')).toBe('老兵');
+      expect(deedDesc('dlv_clears_50')).toBe('完成 50 次探秘。');
     } finally {
       setLanguage('en');
-    }
-  });
-
-  it('dialect overrides carry only real catalog ids and obey the same copy rules', () => {
-    const forbidden =
-      /[\u{2013}\u{2014}\u{2015}]|[\u{1F000}-\u{1FAFF}]|[\u{1F1E6}-\u{1F1FF}]|[\u{2600}-\u{27BF}]|\u{FE0F}/u;
-    // Prove the guard trips: a regex typo would otherwise make every assertion
-    // below pass vacuously. Escape form on purpose, so this file stays clean
-    // under the repo copy scan that the regex itself enforces.
-    expect(forbidden.test('a\u2014b')).toBe(true);
-    expect(forbidden.test('a-b')).toBe(false);
-    for (const [dialect, table] of Object.entries(overrides)) {
-      const base = dialect === 'es_ES' ? tables.es : tables.fr_FR;
-      for (const [id, entry] of Object.entries(table)) {
-        expect(DEEDS[id], `${dialect}.${id} is not a catalog deed`).toBeDefined();
-        for (const field of ['name', 'desc', 'title'] as const) {
-          const value = entry[field];
-          if (value !== undefined) {
-            expect(value.trim().length, `${dialect}.${id}.${field} empty`).toBeGreaterThan(0);
-            expect(forbidden.test(value), `${dialect}.${id}.${field}: "${value}"`).toBe(false);
-          }
-        }
-        // An override that is byte-identical to the base entry is dead weight
-        // (the dialect gate philosophy: divergence-only).
-        expect(
-          JSON.stringify(entry) !== JSON.stringify(base[id]),
-          `${dialect}.${id} is byte-identical to its base entry`,
-        ).toBe(true);
-      }
     }
   });
 });

@@ -50,6 +50,7 @@ import * as esbuild from 'esbuild';
 import { COPIED_ALLOW_IDS, V07_SLASH } from './i18n_blocked_seed.mjs';
 import { flatten } from './i18n_flatten.mjs';
 import { contentHash, PLACEHOLDER_RE, placeholdersOf } from './i18n_hash.mjs';
+import { SHIP_LOCALES } from './i18n_ship_locales.mjs';
 
 const root = process.cwd();
 // I18N_OUT_DIR overrides the destination DIRECTORY for both emitted files (used by
@@ -79,30 +80,10 @@ function atomicWriteFileSync(filePath, contents) {
 // The authoritative ordered locale set (mirrors scripts/i18n_build.mjs). `en` is
 // the nested base; the rest are flat dotted-key overlays. The registry tracks the
 // 13 NON-`en` locales per key (`en` is the authoritative source, never "pending").
-const LOCALES = [
-  'en',
-  'es',
-  'es_ES',
-  'fr_FR',
-  'fr_CA',
-  'en_CA',
-  'it_IT',
-  'de_DE',
-  'zh_CN',
-  'zh_TW',
-  'ko_KR',
-  'ja_JP',
-  'pt_BR',
-  'ru_RU',
-  'cs_CZ',
-  'nl_NL',
-  'pl_PL',
-  'id_ID',
-  'tr_TR',
-  'sv_SE',
-  'vi_VN',
-  'da_DK',
-];
+// Exclusive CN ship set: the status registry only tracks locales that ship at
+// runtime (en + zh_CN by default). Unshipped overlays stay on disk for upstream
+// sync but never enter pending / release-tier gates.
+const LOCALES = SHIP_LOCALES;
 const NON_EN = LOCALES.filter((l) => l !== 'en');
 
 // Dialect locales resolve through a base locale: a key the dialect

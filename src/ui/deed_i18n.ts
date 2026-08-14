@@ -70,25 +70,11 @@ type DeedBaseLocale =
 // never reassigns the map; tests spy a single locale's thunk (vi.spyOn) to assert
 // per-locale fetch counts and simulate a failed chunk fetch. Read at call time in
 // ensureDeedLocalesLoaded (never captured) so a spy replacement is honored.
-export const DEED_LOCALE_LOADERS: Record<DeedBaseLocale, () => Promise<DeedLocaleModule>> = {
-  cs_CZ: () => import('./deed_i18n.locales/cs_CZ'),
-  da_DK: () => import('./deed_i18n.locales/da_DK'),
-  de_DE: () => import('./deed_i18n.locales/de_DE'),
-  es: () => import('./deed_i18n.locales/es'),
-  fr_FR: () => import('./deed_i18n.locales/fr_FR'),
-  id_ID: () => import('./deed_i18n.locales/id_ID'),
-  it_IT: () => import('./deed_i18n.locales/it_IT'),
-  ja_JP: () => import('./deed_i18n.locales/ja_JP'),
-  ko_KR: () => import('./deed_i18n.locales/ko_KR'),
-  nl_NL: () => import('./deed_i18n.locales/nl_NL'),
-  pl_PL: () => import('./deed_i18n.locales/pl_PL'),
-  pt_BR: () => import('./deed_i18n.locales/pt_BR'),
-  ru_RU: () => import('./deed_i18n.locales/ru_RU'),
-  sv_SE: () => import('./deed_i18n.locales/sv_SE'),
-  tr_TR: () => import('./deed_i18n.locales/tr_TR'),
-  vi_VN: () => import('./deed_i18n.locales/vi_VN'),
+export const DEED_LOCALE_LOADERS: Partial<
+  Record<DeedBaseLocale, () => Promise<DeedLocaleModule>>
+> = {
+  // Exclusive CN ship: only Simplified Chinese deeds locale chunk is reachable.
   zh_CN: () => import('./deed_i18n.locales/zh_CN'),
-  zh_TW: () => import('./deed_i18n.locales/zh_TW'),
 };
 
 // Dialect locales ride their base locale's chunk (es_ES over es, fr_CA over

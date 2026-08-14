@@ -67,22 +67,23 @@ describe('the Honor float names the battleground drip and nothing else', () => {
     for (const reason of NAMED) expect(honorFloatReasonKey(reason), reason).not.toBeNull();
   });
 
-  it('the amount goes through formatNumber, so a grouped locale groups it', () => {
+  it('the amount goes through formatNumber, so a grouped locale groups it', async () => {
     // Not a hand-built number: the plain and reason-naming arms both format.
     expect(honorFloatText('arena_win', 12345)).toBe('+12,345 Honor');
     expect(honorFloatText('battleground_kill', 12345)).toBe('+12,345 Honor (Kill)');
-    setLanguage('de_DE');
-    expect(honorFloatText('battleground_kill', 12345)).toContain('12.345');
-    expect(honorFloatText('battleground_kill', 12345)).not.toContain('12,345');
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
+    expect(honorFloatText('battleground_kill', 12345)).toContain('12,345');
+    expect(honorFloatText('battleground_kill', 12345)).toContain('荣誉');
   });
 
   it('the reason label is localized, not the English short form', async () => {
-    // Non-en slices load lazily; setLanguage alone does not fetch them.
-    await ensureLocaleLoaded('ru_RU');
-    setLanguage('ru_RU');
-    const ru = honorFloatText('battleground_kill', 5);
-    expect(ru).not.toContain('Kill');
-    expect(ru).toContain('5');
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
+    const zh = honorFloatText('battleground_kill', 5);
+    expect(zh).not.toContain('Kill');
+    expect(zh).toContain('5');
+    expect(zh).toContain('击杀');
   });
 
   it('reuses none of the chat line fragments (those are mid-sentence copy)', () => {
