@@ -25,23 +25,25 @@ function storageWithLocale(
 }
 
 describe('native device language selection', () => {
-  afterEach(() => setLanguage('en'));
+  afterEach(() => setLanguage('zh_CN'));
 
   it('uses an exact supported device dialect when available', () => {
-    expect(resolveSupportedDeviceLanguage(['fr-CA'])).toBe('fr_CA');
-    expect(resolveSupportedDeviceLanguage(['zh-Hant-TW'])).toBe('zh_TW');
-    expect(resolveSupportedDeviceLanguage(['en-CA'])).toBe('en_CA');
+    // Exclusive CN ship: only en + zh_CN are supported.
+    expect(resolveSupportedDeviceLanguage(['zh-Hans-CN'])).toBe('zh_CN');
+    expect(resolveSupportedDeviceLanguage(['en-US'])).toBe('en');
+    expect(resolveSupportedDeviceLanguage(['fr-CA'])).toBeNull();
+    expect(resolveSupportedDeviceLanguage(['zh-Hant-TW'])).toBe('zh_CN'); // zh -> zh_CN
   });
 
   it('falls back from device language subtags to an available game locale', () => {
-    expect(resolveSupportedDeviceLanguage(['fr-BE'])).toBe('fr_FR');
-    expect(resolveSupportedDeviceLanguage(['de'])).toBe('de_DE');
-    expect(resolveSupportedDeviceLanguage(['es-MX'])).toBe('es');
-    expect(resolveSupportedDeviceLanguage(['en-US'])).toBe('en');
+    expect(resolveSupportedDeviceLanguage(['zh-SG'])).toBe('zh_CN');
+    expect(resolveSupportedDeviceLanguage(['en-GB'])).toBe('en');
+    expect(resolveSupportedDeviceLanguage(['de'])).toBeNull();
+    expect(resolveSupportedDeviceLanguage(['es-MX'])).toBeNull();
   });
 
-  it('returns null for unsupported device languages so English remains the default', () => {
-    setLanguage('en');
+  it('returns null for unsupported device languages so Simplified Chinese remains the default', () => {
+    setLanguage('zh_CN');
     expect(resolveSupportedDeviceLanguage(['ar-SA', 'hi-IN'])).toBeNull();
     expect(
       applyNativeDeviceLanguage({
@@ -50,7 +52,7 @@ describe('native device language selection', () => {
         languages: ['ar-SA'],
       }),
     ).toBeNull();
-    expect(getLanguage()).toBe('en');
+    expect(getLanguage()).toBe('zh_CN');
   });
 
   it('does not override an explicit saved language or URL language', () => {
@@ -58,8 +60,8 @@ describe('native device language selection', () => {
     expect(
       applyNativeDeviceLanguage({
         native: true,
-        storage: storageWithLocale('ja_JP'),
-        languages: ['de-DE'],
+        storage: storageWithLocale('en'),
+        languages: ['zh-CN'],
       }),
     ).toBeNull();
     expect(getLanguage()).toBe('en');
@@ -67,38 +69,38 @@ describe('native device language selection', () => {
     expect(
       applyNativeDeviceLanguage({
         native: true,
-        locationSearch: '?lang=pt_BR',
+        locationSearch: '?lang=en',
         storage: storageWithLocale(null),
-        languages: ['de-DE'],
+        languages: ['zh-CN'],
       }),
     ).toBeNull();
     expect(getLanguage()).toBe('en');
   });
 
   it('keeps native auto-selected languages device-driven across launches', () => {
-    setLanguage('de_DE');
-    const storage = storageWithLocale('de_DE', 'de_DE');
+    setLanguage('en');
+    const storage = storageWithLocale('en', 'en');
     expect(
       applyNativeDeviceLanguage({
         native: true,
         storage,
-        languages: ['vi-VN'],
+        languages: ['zh-CN'],
       }),
-    ).toBe('vi_VN');
-    expect(getLanguage()).toBe('vi_VN');
-    expect(storage.values.get('woc_native_auto_locale')).toBe('vi_VN');
+    ).toBe('zh_CN');
+    expect(getLanguage()).toBe('zh_CN');
+    expect(storage.values.get('woc_native_auto_locale')).toBe('zh_CN');
   });
 
-  it('resets an auto-managed saved locale to English when the device language is unavailable', () => {
-    setLanguage('de_DE');
+  it('resets an auto-managed saved locale to Simplified Chinese when the device language is unavailable', () => {
+    setLanguage('en');
     expect(
       applyNativeDeviceLanguage({
         native: true,
-        storage: storageWithLocale('de_DE', 'de_DE'),
+        storage: storageWithLocale('en', 'en'),
         languages: ['ar-SA'],
       }),
-    ).toBe('en');
-    expect(getLanguage()).toBe('en');
+    ).toBe('zh_CN');
+    expect(getLanguage()).toBe('zh_CN');
   });
 
   it('applies a supported native device language only in native mode', () => {
@@ -107,7 +109,7 @@ describe('native device language selection', () => {
       applyNativeDeviceLanguage({
         native: false,
         storage: storageWithLocale(null),
-        languages: ['it-IT'],
+        languages: ['zh-CN'],
       }),
     ).toBeNull();
     expect(getLanguage()).toBe('en');
@@ -116,17 +118,17 @@ describe('native device language selection', () => {
       applyNativeDeviceLanguage({
         native: true,
         storage: storageWithLocale(null),
-        languages: ['it-IT'],
+        languages: ['zh-CN'],
       }),
-    ).toBe('it_IT');
-    expect(getLanguage()).toBe('it_IT');
+    ).toBe('zh_CN');
+    expect(getLanguage()).toBe('zh_CN');
   });
 
   it('deduplicates navigator.languages with navigator.language preserving priority', () => {
-    expect(nativeDeviceLocaleList({ languages: ['pl-PL'], language: 'pl-PL' })).toEqual(['pl-PL']);
-    expect(nativeDeviceLocaleList({ languages: ['ar-SA'], language: 'vi-VN' })).toEqual([
+    expect(nativeDeviceLocaleList({ languages: ['zh-CN'], language: 'zh-CN' })).toEqual(['zh-CN']);
+    expect(nativeDeviceLocaleList({ languages: ['ar-SA'], language: 'en-US' })).toEqual([
       'ar-SA',
-      'vi-VN',
+      'en-US',
     ]);
   });
 });

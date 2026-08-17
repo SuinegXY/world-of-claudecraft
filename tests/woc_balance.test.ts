@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import bs58 from 'bs58';
 import {
   CACHE_TTL_MS,
@@ -15,6 +15,20 @@ import {
 
 // A real 32-byte base58 Solana address (passes isSolanaAddress).
 const VALID_ADDR = bs58.encode(Uint8Array.from({ length: 32 }, (_, i) => i + 1));
+
+beforeEach(() => {
+  // Exclusive default-off: unit tests opt into the RPC path they mock.
+  process.env.SOLANA_OUTBOUND_ENABLED = '1';
+  process.env.SOLANA_RPC_URL = 'https://example.invalid/solana';
+});
+
+afterEach(() => {
+  resetWocBalanceCacheForTests();
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
+  delete process.env.SOLANA_OUTBOUND_ENABLED;
+  delete process.env.SOLANA_RPC_URL;
+});
 
 function makeRes(): any {
   return {
@@ -67,12 +81,6 @@ function mockTokenAmountRpc(tokenAmounts: MockTokenAmount[]) {
 function mockRawRpc(body: unknown) {
   return vi.fn(async () => ({ ok: true, json: async () => body }));
 }
-
-afterEach(() => {
-  resetWocBalanceCacheForTests();
-  vi.useRealTimers();
-  vi.unstubAllGlobals();
-});
 
 describe('server import boundary', () => {
   it('keeps holder tier math out of src/ui imports', () => {

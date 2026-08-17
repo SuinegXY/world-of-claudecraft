@@ -1,15 +1,14 @@
 // THE LAZY LOCALE FLIP. The runtime statically imports ONLY English eagerly:
-//   - `en`     the eager default + universal synchronous fallback (always resident),
+//   - `en`     universal synchronous fallback (always resident),
 //   - `en_XA`  the dev-only pseudo-locale (referenced solely inside the
 //              !import.meta.env.PROD branch in tableFor, so a prod build tree-shakes it),
 //   - `pending` feeds the release-gate hard-fail in t(),
-//   - `LOCALE_LOADERS` + `SUPPORTED_LANGUAGES` drive lazy per-locale loading.
-// The 21 non-en dense slices are NO LONGER static-imported for use - each loads lazily via
-// LOCALE_LOADERS[lang]()'s dynamic import() as its own content-hashed chunk, so a
-// default-English visitor downloads zero non-en locale bytes. These are imported from the
-// SPECIFIC generated modules (en / en_XA / pending / loaders), never the index.ts barrel,
-// so the only reference to the barrel below is the dead re-export line - which Rollup
-// tree-shakes out of the app chunk.
+//   - `LOCALE_LOADERS` + `SUPPORTED_LANGUAGES` drive the exclusive CN ship set
+//     (en + zh_CN). Default language is Simplified Chinese; main.ts awaits
+//     ensureLocaleLoaded(getLanguage()) before the first localized paint.
+// Other authored locale overlays may still be generated as dense slices for tests,
+// but they are NOT in SUPPORTED_LANGUAGES / LOCALE_LOADERS, so vite does not emit
+// their chunks into the production bundle.
 
 import type {
   DeepPartial,
@@ -76,7 +75,37 @@ export const supportedLanguages = [...SUPPORTED_LANGUAGES] as SupportedLanguage[
 // map (whose keys were the old membership test) is no longer imported.
 const SUPPORTED_SET: ReadonlySet<string> = new Set(SUPPORTED_LANGUAGES);
 
-let currentLanguage: SupportedLanguage = 'en';
+/** Full authored locale codes still present in matcher / overlay tables.
+ *  Exclusive ship set (`SupportedLanguage`) is a subset (en + zh_CN by default).
+ *  Dictionary maps that keep upstream fills for every locale MUST key on this,
+ *  never on SupportedLanguage, or tsc rejects the excess keys. */
+export const AUTHORED_LANGUAGES = [
+  'en',
+  'es',
+  'es_ES',
+  'fr_FR',
+  'fr_CA',
+  'en_CA',
+  'it_IT',
+  'de_DE',
+  'zh_CN',
+  'zh_TW',
+  'ko_KR',
+  'ja_JP',
+  'pt_BR',
+  'ru_RU',
+  'cs_CZ',
+  'nl_NL',
+  'pl_PL',
+  'id_ID',
+  'tr_TR',
+  'sv_SE',
+  'vi_VN',
+  'da_DK',
+] as const;
+export type AuthoredLanguage = (typeof AUTHORED_LANGUAGES)[number];
+
+let currentLanguage: SupportedLanguage = 'zh_CN';
 
 // --- en_XA dev-only pseudo-locale --------------------------------------
 //

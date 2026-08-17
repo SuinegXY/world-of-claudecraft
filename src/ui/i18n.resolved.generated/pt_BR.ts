@@ -1785,6 +1785,7 @@ export const pt_BR: EnTranslations = {
         "spellPower": "Poder Mágico",
         "critRating": "Índice de crítico",
         "hasteRating": "Índice de aceleração",
+        "versatilityRating": "Versatility",
         "parry": "Aparar",
         "hitRating": "Classificação de Acerto",
         "warfare": "Guerra"
@@ -1806,6 +1807,7 @@ export const pt_BR: EnTranslations = {
         "hasteRating": "Índice de aceleração dos seus equipamentos e benefícios de conjunto, acelerando seus ataques e conjurações. Cerca de 10 de índice concede 1% de aceleração.",
         "parry": "Sua chance de aparar completamente um ataque corpo a corpo frontal, sem sofrer dano. Um golpe pelas costas não pode ser aparado.",
         "hitRating": "Classificação de acerto proveniente de seu equipamento e bônus de conjuntos, reduzindo a frequência com que seus ataques erram e suas magias são resistidas, especialmente contra inimigos de nível superior. Cerca de 10 pontos de classificação concedem 1% de acerto.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Aumenta o dano causado aos jogadores em {increase}% e reduz o dano recebido dos jogadores em {reduction}%."
       },
       "effects": {
@@ -6472,6 +6474,7 @@ export const pt_BR: EnTranslations = {
     "highscores": "Recordes",
     "wiki": "Wiki",
     "news": "Notícias",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Baixar",
     "loginRegister": "Entrar/Registrar",
     "account": "Conta",
@@ -7710,6 +7713,15 @@ export const pt_BR: EnTranslations = {
     "discordCommunity": "Entrar na comunidade World of ClaudeCraft no Discord",
     "donateProject": "Doar para apoiar World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Gráficos reduzidos",
     "body": "O jogo fechou inesperadamente ao entrar no mundo, então os gráficos agora estão definidos como {preset}. Você pode alterar isso no seletor de gráficos abaixo ou nas opções do jogo.",
@@ -8924,7 +8936,10 @@ export const pt_BR: EnTranslations = {
       "dps": "Dano/s",
       "critChance": "Chance crítica",
       "dodge": "Esquiva",
-      "parry": "Aparar"
+      "parry": "Aparar",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{kind} {quality}",
@@ -12378,6 +12393,93 @@ export const pt_BR: EnTranslations = {
       "pristine_claw": {
         "name": "Garra Imaculada"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "Guildmark Arming Sword"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "Brasscap Hatchet"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "Tempered Flanged Mace"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "Guildmark Dirk"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "Brasscrown Walking Staff"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "Lacquered Rod"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "Fletcher's Guild Bow"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "Cinderbrand"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "Emberbite"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "Smoulderfall"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "Ashspark Shiv"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "Forgeheart Stave"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "Emberwrought Wand"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "Cinderlatch"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "Ice Fang"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "Glaciersplit"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "Rimecrusher"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "Rime Needle"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "Hoarfrost Vigil"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "Shard of Everwinter"
+      },
+      "winterbite_skin_unlock": {
+        "name": "Winterbite"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim, Last Light of the Dawn"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "Skyrender, the Firmament's Wound"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "Starfall, Judgment of the Heavens"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr, Fang of the Fallen Star"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch, Spire of the Endless Void"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "Emberwish, Mote of the Dying Sun"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore, the Second Falling Star"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "Meteorlatch, the Sky's Last Judgment"
+      },
       "conjured_water4": {
         "name": "Água de Nascente Conjurada"
       },
@@ -13953,6 +14055,11 @@ export const pt_BR: EnTranslations = {
         "name": "FÚRIA",
         "title": "Intendente de Honra",
         "greeting": "As areias lembram cada vitória. Gaste bem sua honra."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "Da Xiong Fashion Welfare Merchant",
+        "title": "Fashion Outfitter",
+        "greeting": "Ten gold apiece. Every look the realm already knows, boxed and ready."
       },
       "warmarshal_draven_kole": {
         "name": "Marechal de Guerra Draven Kole",

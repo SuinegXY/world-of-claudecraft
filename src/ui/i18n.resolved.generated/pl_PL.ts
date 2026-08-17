@@ -1785,6 +1785,7 @@ export const pl_PL: EnTranslations = {
         "spellPower": "Moc zaklęć",
         "critRating": "Ocena krytyczna",
         "hasteRating": "Ocena pośpiechu",
+        "versatilityRating": "Versatility",
         "parry": "Parowanie",
         "hitRating": "Ocena Trafienia",
         "warfare": "Działania wojenne"
@@ -1806,6 +1807,7 @@ export const pl_PL: EnTranslations = {
         "hasteRating": "Ocena pośpiechu z twojego ekwipunku i bonusów zestawów, przyspieszająca twoje ataki i rzucanie zaklęć. Około 10 oceny daje 1% pośpiechu.",
         "parry": "Twoja szansa na całkowite sparowanie ataku wręcz z przodu, bez otrzymania obrażeń. Ciosu zadanego od tyłu nie można sparować.",
         "hitRating": "Ocena trafienia z wyposażenia i bonusów zestawów, zmniejszająca częstotliwość chybień ataków i oparcia zaklęć, szczególnie przeciwko wrogom wyższego poziomu. Około 10 oceny daje 1% trafienia.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Zwiększa obrażenia zadawane graczom o {increase}% i zmniejsza obrażenia otrzymywane od graczy o {reduction}%."
       },
       "effects": {
@@ -6472,6 +6474,7 @@ export const pl_PL: EnTranslations = {
     "highscores": "Najlepsze wyniki",
     "wiki": "Wiki",
     "news": "Aktualności",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Pobierz",
     "loginRegister": "Zaloguj/Zarejestruj",
     "account": "Konto",
@@ -7710,6 +7713,15 @@ export const pl_PL: EnTranslations = {
     "discordCommunity": "Dołącz do społeczności Discord World of ClaudeCraft",
     "donateProject": "Wesprzyj World of ClaudeCraft datkiem"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Obniżono grafikę",
     "body": "Gra nieoczekiwanie zamknęła się podczas wchodzenia do świata, więc grafika jest teraz ustawiona na {preset}. Możesz to zmienić w wyborze grafiki poniżej lub w opcjach w grze.",
@@ -8924,7 +8936,10 @@ export const pl_PL: EnTranslations = {
       "dps": "Obrażenia/s",
       "critChance": "Szansa na trafienie krytyczne",
       "dodge": "Unik",
-      "parry": "Parowanie"
+      "parry": "Parowanie",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",
@@ -12378,6 +12393,93 @@ export const pl_PL: EnTranslations = {
       "pristine_claw": {
         "name": "Nieskazitelny Pazur"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "Guildmark Arming Sword"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "Brasscap Hatchet"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "Tempered Flanged Mace"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "Guildmark Dirk"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "Brasscrown Walking Staff"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "Lacquered Rod"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "Fletcher's Guild Bow"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "Cinderbrand"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "Emberbite"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "Smoulderfall"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "Ashspark Shiv"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "Forgeheart Stave"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "Emberwrought Wand"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "Cinderlatch"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "Ice Fang"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "Glaciersplit"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "Rimecrusher"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "Rime Needle"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "Hoarfrost Vigil"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "Shard of Everwinter"
+      },
+      "winterbite_skin_unlock": {
+        "name": "Winterbite"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim, Last Light of the Dawn"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "Skyrender, the Firmament's Wound"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "Starfall, Judgment of the Heavens"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr, Fang of the Fallen Star"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch, Spire of the Endless Void"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "Emberwish, Mote of the Dying Sun"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore, the Second Falling Star"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "Meteorlatch, the Sky's Last Judgment"
+      },
       "conjured_water4": {
         "name": "Wyczarowana woda źródlana"
       },
@@ -13953,6 +14055,11 @@ export const pl_PL: EnTranslations = {
         "name": "FURIA",
         "title": "Honorowy kwatermistrz",
         "greeting": "Piaski pamiętają każde zwycięstwo. Spędź dobrze swój honor."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "Da Xiong Fashion Welfare Merchant",
+        "title": "Fashion Outfitter",
+        "greeting": "Ten gold apiece. Every look the realm already knows, boxed and ready."
       },
       "warmarshal_draven_kole": {
         "name": "Marszałek Wojenny Draven Kole",

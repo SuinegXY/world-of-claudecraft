@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "ru_RU".
+﻿// Flat dotted-key translation overlay for "ru_RU".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1121,6 +1121,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': 'Сила заклинаний',
   'hudChrome.statInfo.names.critRating': 'Рейтинг крит. удара',
   'hudChrome.statInfo.names.hasteRating': 'Рейтинг ускорения',
+  'hudChrome.statInfo.names.versatilityRating': 'Универсальность',
   'hudChrome.statInfo.names.parry': 'Парирование',
   'hudChrome.statInfo.desc.parry':
     'Ваш шанс полностью парировать фронтальную атаку в ближнем бою и не получить урона. Удар со спины парировать нельзя.',
@@ -1133,6 +1134,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Рейтинг критического удара от снаряжения и бонусов комплекта повышает шанс критического удара. Примерно 10 рейтинга дают 1% крит. удара.',
   'hudChrome.statInfo.desc.hasteRating':
     'Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.',
+  'hudChrome.statInfo.desc.versatilityRating':
+    'Рейтинг универсальности от вторичных аффиксов снаряжения повышает весь наносимый вами урон. Ровно 10 рейтинга дают 1% бонусного урона.',
   'hudChrome.statInfo.desc.spellPower':
     'Увеличивает урон ваших заклинаний и силу исцелений. Каждая единица интеллекта дает немного силы заклинаний, вдобавок к получаемой от снаряжения и усилений.',
   'hudChrome.statInfo.desc.warfare':
@@ -1824,6 +1827,13 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'Открыть проект World of ClaudeCraft на GitHub',
   'a11y.discordCommunity': 'Присоединиться к Discord-сообществу World of ClaudeCraft',
   'a11y.donateProject': 'Пожертвовать на поддержку World of ClaudeCraft',
+  'sponsor.title': 'Поддержать Дасюна',
+  'sponsor.blurb': 'Поддержите Дасюна; при спонсорстве можно оставить сообщение.',
+  'sponsor.alipay': 'Алипей',
+  'sponsor.wechat': 'Вичат Пей',
+  'sponsor.alipayAlt': 'QR-код Alipay для поддержки',
+  'sponsor.wechatAlt': 'QR-код WeChat Pay для поддержки',
+  'sponsor.railLabel': 'QR-коды для поддержки',
   'entryGuard.body':
     'Игра неожиданно закрылась при входе в мир, поэтому графика теперь установлена на {preset}. Вы можете изменить это в переключателе графики ниже или в настройках игры.',
   'entryGuard.dismiss': 'Закрыть',
@@ -9333,6 +9343,41 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.fury.title': 'Интендант чести',
   'entities.npcs.fury.greeting':
     'Пески поля боя помнят каждую победу. Распорядись своей честью достойно.',
+
+  // Exclusive fashion welfare: Armory weapon-skin unlock tokens.
+  'entities.items.guildmark_arming_sword_skin_unlock.name': 'Боевой меч с клеймом гильдии',
+  'entities.items.brasscap_axe_skin_unlock.name': 'Топорик с латунным навершием',
+  'entities.items.tempered_flanged_mace_skin_unlock.name': 'Закалённая шестопёрная булава',
+  'entities.items.guildmark_dirk_skin_unlock.name': 'Дирк с клеймом гильдии',
+  'entities.items.brasscrown_staff_skin_unlock.name': 'Трость с латунной короной',
+  'entities.items.lacquered_wand_skin_unlock.name': 'Лакированный жезл',
+  'entities.items.fletcher_s_guild_bow_skin_unlock.name': 'Лук гильдии Fletcher',
+  'entities.items.cinderbrand_sword_skin_unlock.name': 'Синдербренд',
+  'entities.items.emberbite_axe_skin_unlock.name': 'Эмбербайт',
+  'entities.items.smoulderfall_mace_skin_unlock.name': 'Смолдерфолл',
+  'entities.items.ashspark_dagger_skin_unlock.name': 'Заточка Ashspark',
+  'entities.items.forgeheart_staff_skin_unlock.name': 'Посох Forgeheart',
+  'entities.items.emberwrought_wand_skin_unlock.name': 'Жезл Emberwrought',
+  'entities.items.cinderlatch_crossbow_skin_unlock.name': 'Синдерлатч',
+  'entities.items.ice_fang_sword_skin_unlock.name': 'Ice Fang',
+  'entities.items.glaciersplit_axe_skin_unlock.name': 'Глейшерсплит',
+  'entities.items.rimecrusher_mace_skin_unlock.name': 'Раймкрашер',
+  'entities.items.frostbite_dagger_skin_unlock.name': 'Ледяная игла',
+  'entities.items.hoarfrost_vigil_staff_skin_unlock.name': 'Морозный дозор',
+  'entities.items.everwinter_wand_skin_unlock.name': 'Осколок Вечной Зимы',
+  'entities.items.winterbite_skin_unlock.name': 'Уинтербайт',
+  'entities.items.solheim_sword_skin_unlock.name': 'Solheim, Последний свет зари',
+  'entities.items.skyrender_axe_skin_unlock.name': 'Skyrender, Рана небосвода',
+  'entities.items.starfall_mace_skin_unlock.name': 'Starfall, Суд небес',
+  'entities.items.astravyr_dagger_skin_unlock.name': 'Astravyr, Клык падшей звезды',
+  'entities.items.cosmarch_staff_skin_unlock.name': 'Cosmarch, Шпиль бесконечной пустоты',
+  'entities.items.emberwish_wand_skin_unlock.name': 'Emberwish, Искра угасающего солнца',
+  'entities.items.encore_bow_skin_unlock.name': 'Encore, Вторая падшая звезда',
+  'entities.items.meteorlatch_crossbow_skin_unlock.name': 'Meteorlatch, Последний суд небес',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.name': 'Торговец модой Да Сюн',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.title': 'Портной обликов',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.greeting':
+    'По десять золотых штука. Все облики, что уже есть в мире, здесь готовы.',
   'entities.npcs.warmarshal_draven_kole.name': 'Военный маршал Дравен Коул',
   'entities.npcs.warmarshal_draven_kole.title': 'Хранитель складов Боевой мощи',
   'entities.npcs.warmarshal_draven_kole.greeting':

@@ -943,6 +943,14 @@ const HOLDER_TIER_REFRESH_MS = 60_000;
 const PLAYTIME_GRANT_MS = 5 * 60_000;
 const PLAYTIME_POINTS = 10;
 const DAILY_REWARD_ACTIVITY_MS = 60_000;
+// Exclusive default-off: these two timers write Postgres for every online
+// account (Discord-tier playtime points + daily-reward online minutes). Set
+// PLAYTIME_REWARD_ENABLED=1 / DAILY_REWARD_ACTIVITY_ENABLED=1 to restore the
+// official cadence. Unset or any other value keeps them off.
+const PLAYTIME_REWARD_ENABLED =
+  String(process.env.PLAYTIME_REWARD_ENABLED ?? '').trim() === '1';
+const DAILY_REWARD_ACTIVITY_ENABLED =
+  String(process.env.DAILY_REWARD_ACTIVITY_ENABLED ?? '').trim() === '1';
 const RELAY_COOLDOWN_MS = 8_000; // min gap between a player's "!" community posts
 const ADMIN_LOCATION_POI_RADIUS = 32;
 
@@ -1402,6 +1410,8 @@ function identityFields(e: Entity): Record<string, unknown> {
       if (inst.signer !== undefined) pub.signer = inst.signer;
       if (inst.enchant !== undefined) pub.enchant = inst.enchant;
       if (inst.rolled !== undefined) pub.rolled = inst.rolled;
+      if (inst.secondary !== undefined) pub.secondary = inst.secondary;
+      if (inst.exclusiveScaled) pub.exclusiveScaled = true;
       for (const _ in pub) {
         if (eqi === undefined) eqi = {};
         eqi[slot] = pub;
@@ -2952,12 +2962,26 @@ export class GameServer {
       void this.refreshAllHolderTiers();
     }, HOLDER_TIER_REFRESH_MS);
     // Reward in-game playtime: grant points to active online accounts off-loop.
-    this.playtimeInterval = setInterval(() => {
-      void this.grantPlaytimePoints();
-    }, PLAYTIME_GRANT_MS);
-    this.dailyRewardActivityInterval = setInterval(() => {
-      void this.recordDailyRewardActivity();
-    }, DAILY_REWARD_ACTIVITY_MS);
+    // Exclusive: off unless PLAYTIME_REWARD_ENABLED=1 (avoids periodic DB writes).
+    if (PLAYTIME_REWARD_ENABLED) {
+      this.playtimeInterval = setInterval(() => {
+        void this.grantPlaytimePoints();
+      }, PLAYTIME_GRANT_MS);
+    } else {
+      console.log(
+        '[exclusive] playtime reward grants disabled (set PLAYTIME_REWARD_ENABLED=1 to enable)',
+      );
+    }
+    // Exclusive: off unless DAILY_REWARD_ACTIVITY_ENABLED=1.
+    if (DAILY_REWARD_ACTIVITY_ENABLED) {
+      this.dailyRewardActivityInterval = setInterval(() => {
+        void this.recordDailyRewardActivity();
+      }, DAILY_REWARD_ACTIVITY_MS);
+    } else {
+      console.log(
+        '[exclusive] daily-reward activity recording disabled (set DAILY_REWARD_ACTIVITY_ENABLED=1 to enable)',
+      );
+    }
     this.lastKeepaliveSweepAt = Date.now();
     this.keepaliveInterval = setInterval(() => {
       this.pingLiveSessions();
@@ -3656,6 +3680,40 @@ export class GameServer {
     void grantAccountWeaponSkins(accountId, known)
       .then((cosmetics) => this.updateLiveAccountCosmetics(accountId, cosmetics))
       .catch((err) => console.error('failed to grant account weapon skins:', err));
+  }
+
+  /**
+   * Persist ownership + applied loadout after a weapon-skin unlock item is used.
+   * Must stamp the loadout before any live cosmetics push: updateLiveAccountCosmetics
+   * reseeds every session via setWeaponSkinLoadout, and a grant that only unions
+   * weaponSkinIds would wipe the sim's just-applied skin with an empty loadout.
+   */
+  private noteAccountWeaponSkinFromItem(session: ClientSession, skinId: string): void {
+    if (!WEAPON_SKINS[skinId]) return;
+    const current = session.accountCosmetics;
+    const weaponSkinIds = current.weaponSkinIds.includes(skinId)
+      ? current.weaponSkinIds
+      : [...current.weaponSkinIds, skinId];
+    const weaponSkinLoadout = withWeaponSkinApplied(current.weaponSkinLoadout, skinId) ?? {
+      ...current.weaponSkinLoadout,
+    };
+    this.updateLiveAccountCosmetics(session.accountId, {
+      ...current,
+      weaponSkinIds,
+      weaponSkinLoadout,
+    });
+    this.enqueueWeaponSkinLoadoutSave(session.accountId, weaponSkinLoadout);
+    void grantAccountWeaponSkins(session.accountId, [skinId])
+      .then((cosmetics) => {
+        // Grant returns the DB loadout, which may lag the optimistic apply /
+        // queued save. Keep the live applied loadout so the reseed does not wipe.
+        const live = this.accountCosmeticsByAccount.get(session.accountId);
+        this.updateLiveAccountCosmetics(session.accountId, {
+          ...cosmetics,
+          weaponSkinLoadout: live?.weaponSkinLoadout ?? weaponSkinLoadout,
+        });
+      })
+      .catch((err) => console.error('failed to grant weapon skin from item:', err));
   }
 
   private unequipAccountMechChroma(session: ClientSession, chromaId: string): void {
@@ -6930,6 +6988,8 @@ export class GameServer {
           const slot = Number.isInteger(msg.slot) ? Number(msg.slot) : undefined;
           const result = sim.useItem(msg.item, pid, slot);
           if (result?.type === 'mechChroma') this.noteAccountMechChroma(session, result.chromaId);
+          if (result?.type === 'weaponSkin')
+            this.noteAccountWeaponSkinFromItem(session, result.skinId);
         }
         break;
       case 'discard':
@@ -9007,6 +9067,7 @@ export class GameServer {
     maybe('bval', p.blockValue);
     maybe('crat', p.critRating);
     maybe('hrat', p.hasteRating);
+    maybe('vrat', p.versatilityRating);
     maybe('hirat', p.hitRating);
     maybe('ddiff', this.sim.dungeonDifficulty(anchorSession.pid));
     // The viewer's OWN authored look. It cannot come from the entity list (the

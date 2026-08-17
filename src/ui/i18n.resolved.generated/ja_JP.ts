@@ -1785,6 +1785,7 @@ export const ja_JP: EnTranslations = {
         "spellPower": "呪文威力",
         "critRating": "クリティカルレーティング",
         "hasteRating": "ヘイストレーティング",
+        "versatilityRating": "多様性",
         "parry": "受け流し",
         "hitRating": "命中レーティング",
         "warfare": "ウォーフェア"
@@ -1806,6 +1807,7 @@ export const ja_JP: EnTranslations = {
         "hasteRating": "装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。",
         "parry": "前方からの近接攻撃を完全に受け流し、ダメージを受けない確率です。背後からの一撃は受け流せません。",
         "hitRating": "装備とセットボーナスによる命中レーティング。攻撃がミスする頻度と呪文が抵抗される頻度を減らし、特に高レベルの敵に有効です。約10レーティングで1%命中。",
+        "versatilityRating": "装備の二次アフィックスによる多様性レーティング。与えるすべてのダメージが増加します。レーティング10につきちょうど1%のボーナスダメージ。",
         "warfare": "プレイヤーに与えるダメージが {increase}% 増加し、プレイヤーから受けるダメージが {reduction}% 減少します。"
       },
       "effects": {
@@ -6472,6 +6474,7 @@ export const ja_JP: EnTranslations = {
     "highscores": "ハイスコア",
     "wiki": "Wiki",
     "news": "ニュース",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "ダウンロード",
     "loginRegister": "ログイン/登録",
     "account": "アカウント",
@@ -7710,6 +7713,15 @@ export const ja_JP: EnTranslations = {
     "discordCommunity": "World of ClaudeCraftのDiscordコミュニティに参加",
     "donateProject": "World of ClaudeCraftを支援するために寄付"
   },
+  "sponsor": {
+    "title": "大熊を支援",
+    "blurb": "大熊を支援できます。支援時にメッセージを残せます。",
+    "alipay": "アリペイ",
+    "wechat": "ウィーチャットペイ",
+    "alipayAlt": "Alipay支援用QRコード",
+    "wechatAlt": "WeChat Pay支援用QRコード",
+    "railLabel": "支援用QRコード"
+  },
   "entryGuard": {
     "title": "グラフィックを下げました",
     "body": "ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。",
@@ -8924,7 +8936,10 @@ export const ja_JP: EnTranslations = {
       "dps": "秒間ダメージ",
       "critChance": "クリティカル率",
       "dodge": "回避",
-      "parry": "受け流し"
+      "parry": "受け流し",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",
@@ -12378,6 +12393,93 @@ export const ja_JP: EnTranslations = {
       "pristine_claw": {
         "name": "無傷の鉤爪"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "ギルドマーク・アーミングソード"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "ブラスキャップ・ハチェット"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "焼入れフランジドメイス"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "ギルドマーク・ダーク"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "ブラスクラウン・ウォーキングスタッフ"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "漆塗りのロッド"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "Fletcherギルドの弓"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "シンダーブランド"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "エンバーバイト"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "スモルダーフォール"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "Ashsparkシヴ"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "Forgeheartステイヴ"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "Emberwroughtワンド"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "シンダーラッチ"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "Ice Fang"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "グレイシャースプリット"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "ライムクラッシャー"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "ライムニードル"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "ホアフロスト・ヴィジル"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "エヴァーウィンターの欠片"
+      },
+      "winterbite_skin_unlock": {
+        "name": "ウィンターバイト"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim、暁の最後の光"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "Skyrender、天空の傷"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "Starfall、天の裁き"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr、墜星の牙"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch、果てなき虚空の尖塔"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "Emberwish、死にゆく太陽の火種"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore、二つ目の墜星"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "Meteorlatch、空の最後の裁き"
+      },
       "conjured_water4": {
         "name": "魔法の湧き水"
       },
@@ -13953,6 +14055,11 @@ export const ja_JP: EnTranslations = {
         "name": "フューリー",
         "title": "名誉補給官",
         "greeting": "戦場の砂は、すべての勝利を記憶している。名誉は賢く使うことだ。"
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "大熊ファッション福利商人",
+        "title": "ファッション商人",
+        "greeting": "一点十ゴールド。すでに存在する見た目は、すべてここにある。"
       },
       "warmarshal_draven_kole": {
         "name": "戦元帥ドレイヴン・コール",

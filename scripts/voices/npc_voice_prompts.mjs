@@ -1054,6 +1054,8 @@ export const VOICE_ALIAS = {
   // own VOICE_PROMPTS entry, with the rank and the cold Highwatch authority the
   // greeting carries, once an ElevenLabs key is available to design and render it.
   warmarshal_draven_kole: 'fury',
+  // Exclusive Eastbrook fashion vendor: provisioner register, borrows Wilkes.
+  da_xiong_fashion_welfare_merchant: 'trader_wilkes',
 };
 
 /** Resolve any NPC content id to the id of the voice that should speak for it. */

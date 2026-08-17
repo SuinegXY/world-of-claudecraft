@@ -40,11 +40,9 @@ describe('hudChrome.* keys (English-only catalog module)', () => {
     setLanguage('en');
   });
 
-  it('the translatable keys resolve to non-English under es', () => {
-    setLanguage('es');
-    // emoteWheel / clickMoveLeft / talents.defaultBuildName / tips.joinChannels are all
-    // translated in Spanish. (defaultBuildName keeps the "Build" loanword in some locales
-    // such as de_DE, so this assertion uses es, which translates it.)
+  it('the translatable keys resolve to non-English under zh_CN', async () => {
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
     const translated = [
       'hudChrome.keybinds.emoteWheel',
       'hudChrome.options.clickMoveLeft',
@@ -52,7 +50,7 @@ describe('hudChrome.* keys (English-only catalog module)', () => {
       'hudChrome.tips.joinChannels',
     ] as const;
     for (const key of translated) {
-      expect(t(key), `${key} should be translated in es`).not.toBe(EN[key]);
+      expect(t(key), `${key} should be translated in zh_CN`).not.toBe(EN[key]);
     }
     setLanguage('en');
   });
