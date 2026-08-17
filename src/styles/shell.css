@@ -362,12 +362,10 @@
     font: inherit;
   }
 
-  /* Exclusive: in-game / shell Donate opens a local Alipay + WeChat Pay QR modal. */
-  .sponsor-qr-backdrop {
-    /* Above in-game HUD stacking (mobile #ui ~80-90, drawers ~300): the panel must
-       paint over the live game chrome, not under it. */
-    z-index: 10000;
-  }
+  /* Exclusive: in-game / shell Donate opens a local Alipay + WeChat Pay QR modal.
+     z-index lives on `.modal-backdrop.sponsor-qr-backdrop` AFTER the shared
+     `.modal-backdrop` rule below: same-specificity earlier `.sponsor-qr-backdrop`
+     lost to that rule's z-index:300 and the overlay could sit under game chrome. */
   .sponsor-qr-modal {
     width: min(420px, 100%);
     padding: 18px;
@@ -4654,6 +4652,11 @@
     justify-content: center;
     padding: 24px;
     background: rgba(0, 0, 0, 0.72);
+  }
+  /* Exclusive sponsor QR: above in-game HUD stacking (mobile #ui ~80-90, drawers
+     ~300). Must follow `.modal-backdrop` so this z-index wins the cascade. */
+  .modal-backdrop.sponsor-qr-backdrop {
+    z-index: 10000;
   }
   .modal-backdrop[hidden] {
     display: none;

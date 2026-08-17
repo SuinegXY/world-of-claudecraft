@@ -18,6 +18,8 @@ const PANEL_ID = 'sponsor-qr-panel';
  *  click on the new full-screen backdrop, and pointer-lock release can do the same. */
 const BACKDROP_DISMISS_GRACE_MS = 400;
 
+const wiredRoots = new WeakSet<object>();
+
 function buildQrFigure(src: string, label: string, alt: string): HTMLElement {
   const fig = document.createElement('figure');
   fig.className = 'sponsor-qr-item';
@@ -52,6 +54,11 @@ function buildPanelBody(): HTMLElement {
 
   body.append(blurb, grid);
   return body;
+}
+
+/** True while the exclusive sponsor QR modal is mounted. */
+export function isSponsorQrPanelOpen(): boolean {
+  return document.getElementById(PANEL_ID) !== null;
 }
 
 /** Close any open sponsor modal (idempotent). */
@@ -109,6 +116,7 @@ export function openSponsorQrPanel(focusManager: FocusManager): void {
     if (closed) return;
     closed = true;
     document.removeEventListener('keydown', onKey, true);
+    document.removeEventListener('click', onOpeningGestureCapture, true);
     back.remove();
     focusHandle.release(true);
   };
@@ -117,6 +125,17 @@ export function openSponsorQrPanel(focusManager: FocusManager): void {
     ev.preventDefault();
     ev.stopPropagation();
     close();
+  };
+  // Capture-phase swallow: the opening tap/click (or pointer-lock unlock ghost
+  // click) is often retargeted onto this brand-new full-screen backdrop. Stop it
+  // before the bubble-phase dismiss handler, and before any other document click
+  // listener can treat the overlay as an outside tap.
+  const onOpeningGestureCapture = (ev: Event): void => {
+    if (closed) return;
+    if (performance.now() - openedAt >= BACKDROP_DISMISS_GRACE_MS) return;
+    if (ev.target !== back) return;
+    ev.preventDefault();
+    ev.stopPropagation();
   };
   closeBtn.addEventListener('click', (ev) => {
     ev.preventDefault();
@@ -131,16 +150,34 @@ export function openSponsorQrPanel(focusManager: FocusManager): void {
     close();
   });
   document.addEventListener('keydown', onKey, true);
+  document.addEventListener('click', onOpeningGestureCapture, true);
   closeBtn.focus();
 }
 
-/** Bind every `.js-open-sponsor` control under `root` to open the QR panel. */
+/**
+ * Bind Donate controls under `root` to open the QR panel.
+ *
+ * Uses event delegation (not per-node listeners): the in-game community Donate
+ * button lives inside `#game-ui-template` and is cloned into the live DOM only
+ * when `mountGameUi()` runs. Boot-time `querySelectorAll('.js-open-sponsor')`
+ * never sees that node (same pitfall as `#mm-discord`), so a per-element bind
+ * at module load leaves the in-game control dead.
+ */
 export function wireSponsorTriggers(root: ParentNode, focusManager: FocusManager): void {
-  root.querySelectorAll<HTMLElement>('.js-open-sponsor').forEach((el) => {
-    el.addEventListener('click', (ev) => {
+  if (wiredRoots.has(root as object)) return;
+  wiredRoots.add(root as object);
+  root.addEventListener(
+    'click',
+    (ev) => {
+      const node = ev.target;
+      if (!(node instanceof Element)) return;
+      const trigger = node.closest('.js-open-sponsor');
+      if (!trigger) return;
+      if (root instanceof Element && !root.contains(trigger)) return;
       ev.preventDefault();
       ev.stopPropagation();
       openSponsorQrPanel(focusManager);
-    });
-  });
+    },
+    true,
+  );
 }

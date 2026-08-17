@@ -397,7 +397,11 @@ import { classDisplayName, tEntity } from './ui/entity_i18n';
 import { showEntryGuardBanner } from './ui/entry_guard_banner';
 import { refreshEpicLinkStatus, wireEpicLink } from './ui/epic_link';
 import { FocusManager, type FocusTrapHandle } from './ui/focus_manager';
-import { openSponsorQrPanel, wireSponsorTriggers } from './ui/sponsor_qr_panel';
+import {
+  isSponsorQrPanelOpen,
+  openSponsorQrPanel,
+  wireSponsorTriggers,
+} from './ui/sponsor_qr_panel';
 import {
   attachGatherNodeHoverTooltip,
   gatherNodeToolGateFor,
@@ -1202,6 +1206,9 @@ function mountGameUi(): void {
   // earlier, before any world entry) silently no-ops on it. Re-sync now so the
   // desktop micro-menu entry is revealed the moment the in-game HUD actually exists.
   syncDiscordEntries();
+  // In-game community Donate (`.js-open-sponsor`) is also cloned from this
+  // template. `wireSponsorTriggers` uses document-level delegation, so the
+  // boot-time wire already covers the clone; no re-bind is required here.
 }
 
 // ---------------------------------------------------------------------------
@@ -2158,7 +2165,8 @@ async function startGame(
     // An action inside More may synchronously open another focus-managed
     // window before this observer microtask runs. In that handoff, release the
     // older More trap without restoring focus behind the destination window.
-    hud.syncMobileMoreDialog(open, open || !hud.isWindowOpen());
+    // Sponsor QR is not a Hud window, so treat it as a destination too.
+    hud.syncMobileMoreDialog(open, open || !(hud.isWindowOpen() || isSponsorQrPanelOpen()));
     if (open) {
       // Treat the touch-only More tray as an explicit interaction: cancel autorun
       // so tapping its controls cannot leave the player moving unexpectedly.
