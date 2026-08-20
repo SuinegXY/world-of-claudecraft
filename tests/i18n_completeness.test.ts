@@ -4,67 +4,24 @@ import { beforeAll, describe, expect, it } from 'vitest';
 // @ts-expect-error - shared zero-dep JS tool (no .d.ts); same pattern as tests/i18n_fill_worklist.test.ts.
 import { expandGlossaryTerms, patternToRegExp } from '../scripts/i18n_fill_worklist.mjs';
 import {
-  cs_CZ,
-  da_DK,
-  de_DE,
   en,
-  en_CA,
   ensureLocaleLoaded,
-  es,
-  es_ES,
   formatMoney,
-  fr_CA,
-  fr_FR,
   hasTranslation,
-  id_ID,
-  it_IT,
-  ja_JP,
-  ko_KR,
   languageTag,
-  nl_NL,
-  pl_PL,
-  pt_BR,
-  ru_RU,
   type SupportedLanguage,
   setLanguage,
   supportedLanguages,
-  sv_SE,
   tPlural,
-  tr_TR,
-  vi_VN,
   zh_CN,
-  zh_TW,
 } from '../src/ui/i18n';
 
 // Whole-catalog i18n completeness guards that the per-key sample tests in
-// localization_coverage.test.ts do not cover: full interpolation-token parity
-// across EVERY leaf and locale, per-locale lazy loadability, locale-aware money
-// grouping, an English-leak regression bound for the non-Latin locales, and the
-// CLDR pluralization subsystem (tPlural + the hudChrome.plurals.* keys).
+// localization_coverage.test.ts do not cover. Exclusive CN ship: en + zh_CN only.
 
 const TABLES: Record<SupportedLanguage, unknown> = {
   en,
-  es,
-  es_ES,
-  fr_FR,
-  fr_CA,
-  en_CA,
-  it_IT,
-  de_DE,
   zh_CN,
-  zh_TW,
-  ko_KR,
-  ja_JP,
-  pt_BR,
-  ru_RU,
-  cs_CZ,
-  nl_NL,
-  pl_PL,
-  id_ID,
-  tr_TR,
-  sv_SE,
-  vi_VN,
-  da_DK,
 };
 
 function flatten(
@@ -134,17 +91,16 @@ describe('i18n whole-catalog completeness', () => {
 
   // M17: money grouping must follow the active locale (the compact-money path runs
   // each amount through formatNumber). 12,345 gold exercises a thousands separator.
-  it('formatMoney groups thousands by the active locale', async () => {
+  it('formatMoney groups thousands for en and zh_CN', async () => {
     const bigGold = 12_345 * 10_000; // copper -> 12,345g
-    await ensureLocaleLoaded('de_DE');
     setLanguage('en');
     const enMoney = formatMoney(bigGold);
-    setLanguage('de_DE');
-    const deMoney = formatMoney(bigGold);
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
+    const zhMoney = formatMoney(bigGold);
     setLanguage('en');
     expect(enMoney).toContain('12,345');
-    expect(deMoney).toContain('12.345');
-    expect(deMoney).not.toContain('12,345');
+    expect(zhMoney).toMatch(/12[,.]?345/);
   });
 
   // M16: no untranslated English in the non-Latin locales. A "wordy" en leaf (>=4
@@ -202,7 +158,7 @@ describe('i18n whole-catalog completeness', () => {
     // English-only, like other developer tooling, while release localization remains
     // strict for every namespace that ships to players.
     const isDevelopmentOnly = (key: string) => key.startsWith('devCommand.');
-    const nonLatin: SupportedLanguage[] = ['zh_CN', 'zh_TW', 'ja_JP', 'ko_KR', 'ru_RU'];
+    const nonLatin: SupportedLanguage[] = ['zh_CN'];
     const leaks: string[] = [];
     for (const lang of nonLatin) {
       const flat = flatten(TABLES[lang]);
@@ -300,7 +256,7 @@ describe('i18n whole-catalog completeness', () => {
     // Floor: the five non-Latin locales shipped the aligned fill in Phase 11, so
     // the anchor above must actually have bound for each of them. Without this,
     // dropping a shelf fill back to English would make the anchor skip silently.
-    for (const lang of ['ja_JP', 'ko_KR', 'ru_RU', 'zh_CN', 'zh_TW'] as SupportedLanguage[]) {
+    for (const lang of ['zh_CN'] as SupportedLanguage[]) {
       const flat = flatten(TABLES[lang]);
       expect(flat[navProfessions], `${lang} shelf fill`).not.toBe(enFlat[navProfessions]);
       expect(flat[navProfessions], `${lang} professions anchor`).toBe(flat[professionsTitle]);
@@ -324,7 +280,7 @@ describe('i18n whole-catalog completeness', () => {
       'guide.controls.reliquary',
     ];
     const drift: string[] = [];
-    for (const lang of ['ja_JP', 'ko_KR', 'ru_RU', 'zh_CN', 'zh_TW'] as SupportedLanguage[]) {
+    for (const lang of ['zh_CN'] as SupportedLanguage[]) {
       const flat = flatten(TABLES[lang]);
       const term = flat['hudChrome.reliquary.title'];
       // Anchor must be a real fill, or every equality below is vacuous.
@@ -463,15 +419,11 @@ describe('i18n CLDR pluralization', () => {
     expect(missing, missing.join('\n')).toEqual([]);
   });
 
-  it('tPlural selects the correct Russian 1 / 2-4 / 5+ forms', async () => {
-    await ensureLocaleLoaded('ru_RU');
-    setLanguage('ru_RU');
-    // персонаж (1) / персонажа (2-4) / персонажей (5+)
-    expect(tPlural('hudChrome.plurals.characterCount', 1)).toBe('1 персонаж');
-    expect(tPlural('hudChrome.plurals.characterCount', 3)).toBe('3 персонажа');
-    expect(tPlural('hudChrome.plurals.characterCount', 5)).toBe('5 персонажей');
-    expect(tPlural('hudChrome.plurals.characterCount', 22)).toBe('22 персонажа'); // few
-    expect(tPlural('hudChrome.plurals.characterCount', 25)).toBe('25 персонажей'); // many
+  it('tPlural selects Chinese other-form for shipped zh_CN', async () => {
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
+    expect(tPlural('hudChrome.plurals.characterCount', 1)).toBe('1 个角色');
+    expect(tPlural('hudChrome.plurals.characterCount', 7)).toBe('7 个角色');
     setLanguage('en');
   });
 

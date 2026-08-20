@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "ja_JP".
+﻿// Flat dotted-key translation overlay for "ja_JP".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1119,6 +1119,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '呪文威力',
   'hudChrome.statInfo.names.critRating': 'クリティカルレーティング',
   'hudChrome.statInfo.names.hasteRating': 'ヘイストレーティング',
+  'hudChrome.statInfo.names.versatilityRating': '多様性',
   'hudChrome.statInfo.names.parry': '受け流し',
   'hudChrome.statInfo.desc.parry':
     '前方からの近接攻撃を完全に受け流し、ダメージを受けない確率です。背後からの一撃は受け流せません。',
@@ -1131,6 +1132,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '装備とセットボーナスによるクリティカルレーティング。クリティカル率が上昇します。約10レーティングで1%クリティカル。',
   'hudChrome.statInfo.desc.hasteRating':
     '装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '装備の二次アフィックスによる多様性レーティング。与えるすべてのダメージが増加します。レーティング10につきちょうど1%のボーナスダメージ。',
   'hudChrome.statInfo.desc.spellPower':
     '呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。',
   'hudChrome.statInfo.desc.warfare':
@@ -1811,6 +1814,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': 'GitHubでWorld of ClaudeCraftプロジェクトを開く',
   'a11y.discordCommunity': 'World of ClaudeCraftのDiscordコミュニティに参加',
   'a11y.donateProject': 'World of ClaudeCraftを支援するために寄付',
+  'sponsor.title': '大熊を支援',
+  'sponsor.blurb': '大熊を支援できます。支援時にメッセージを残せます。',
+  'sponsor.alipay': 'アリペイ',
+  'sponsor.wechat': 'ウィーチャットペイ',
+  'sponsor.alipayAlt': 'Alipay支援用QRコード',
+  'sponsor.wechatAlt': 'WeChat Pay支援用QRコード',
+  'sponsor.railLabel': '支援用QRコード',
   'entryGuard.body':
     'ワールドへの入場中にゲームが予期せず終了したため、グラフィックは{preset}に設定されました。下のグラフィック選択またはゲーム内のオプションから変更できます。',
   'entryGuard.dismiss': '閉じる',
@@ -9200,6 +9210,41 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.fury.name': 'フューリー',
   'entities.npcs.fury.title': '名誉補給官',
   'entities.npcs.fury.greeting': '戦場の砂は、すべての勝利を記憶している。名誉は賢く使うことだ。',
+
+  // Exclusive fashion welfare: Armory weapon-skin unlock tokens.
+  'entities.items.guildmark_arming_sword_skin_unlock.name': 'ギルドマーク・アーミングソード',
+  'entities.items.brasscap_axe_skin_unlock.name': 'ブラスキャップ・ハチェット',
+  'entities.items.tempered_flanged_mace_skin_unlock.name': '焼入れフランジドメイス',
+  'entities.items.guildmark_dirk_skin_unlock.name': 'ギルドマーク・ダーク',
+  'entities.items.brasscrown_staff_skin_unlock.name': 'ブラスクラウン・ウォーキングスタッフ',
+  'entities.items.lacquered_wand_skin_unlock.name': '漆塗りのロッド',
+  'entities.items.fletcher_s_guild_bow_skin_unlock.name': 'Fletcherギルドの弓',
+  'entities.items.cinderbrand_sword_skin_unlock.name': 'シンダーブランド',
+  'entities.items.emberbite_axe_skin_unlock.name': 'エンバーバイト',
+  'entities.items.smoulderfall_mace_skin_unlock.name': 'スモルダーフォール',
+  'entities.items.ashspark_dagger_skin_unlock.name': 'Ashsparkシヴ',
+  'entities.items.forgeheart_staff_skin_unlock.name': 'Forgeheartステイヴ',
+  'entities.items.emberwrought_wand_skin_unlock.name': 'Emberwroughtワンド',
+  'entities.items.cinderlatch_crossbow_skin_unlock.name': 'シンダーラッチ',
+  'entities.items.ice_fang_sword_skin_unlock.name': 'Ice Fang',
+  'entities.items.glaciersplit_axe_skin_unlock.name': 'グレイシャースプリット',
+  'entities.items.rimecrusher_mace_skin_unlock.name': 'ライムクラッシャー',
+  'entities.items.frostbite_dagger_skin_unlock.name': 'ライムニードル',
+  'entities.items.hoarfrost_vigil_staff_skin_unlock.name': 'ホアフロスト・ヴィジル',
+  'entities.items.everwinter_wand_skin_unlock.name': 'エヴァーウィンターの欠片',
+  'entities.items.winterbite_skin_unlock.name': 'ウィンターバイト',
+  'entities.items.solheim_sword_skin_unlock.name': 'Solheim、暁の最後の光',
+  'entities.items.skyrender_axe_skin_unlock.name': 'Skyrender、天空の傷',
+  'entities.items.starfall_mace_skin_unlock.name': 'Starfall、天の裁き',
+  'entities.items.astravyr_dagger_skin_unlock.name': 'Astravyr、墜星の牙',
+  'entities.items.cosmarch_staff_skin_unlock.name': 'Cosmarch、果てなき虚空の尖塔',
+  'entities.items.emberwish_wand_skin_unlock.name': 'Emberwish、死にゆく太陽の火種',
+  'entities.items.encore_bow_skin_unlock.name': 'Encore、二つ目の墜星',
+  'entities.items.meteorlatch_crossbow_skin_unlock.name': 'Meteorlatch、空の最後の裁き',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.name': '大熊ファッション福利商人',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.title': 'ファッション商人',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.greeting':
+    '一点十ゴールド。すでに存在する見た目は、すべてここにある。',
   'entities.npcs.warmarshal_draven_kole.name': '戦元帥ドレイヴン・コール',
   'entities.npcs.warmarshal_draven_kole.title': 'ウォーフェア軍需庫の管理者',
   'entities.npcs.warmarshal_draven_kole.greeting':

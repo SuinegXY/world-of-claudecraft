@@ -89,6 +89,7 @@ import {
   TICK_RATE,
   type VcBracket,
   type VcNationId,
+  versatilityDamageFractionFromRating,
   type WeaponSkinType,
 } from '../sim/types';
 import type { VendorBuyOptions } from '../sim/vendor_buy_stack';
@@ -408,11 +409,14 @@ export class Api {
   }
 
   // The realm directory is always read from the page's own server. Sending the
-  // token (when logged in) also returns per-realm character counts.
+  // token (when logged in) also returns per-realm character counts. Bound the
+  // wait: an unbounded hang here wedges login -> charselect on a browning-out
+  // host (exclusive CN symptom: login/charselect stuck, world play fine).
   async realms(): Promise<RealmDirectory> {
     try {
       const res = await fetch(apiUrl('/api/realms'), {
         headers: this.token ? { Authorization: `Bearer ${this.token}` } : {},
+        signal: AbortSignal.timeout(8000),
       });
       if (!res.ok) return { current: '', realms: [], characters: {} };
       const d = await res.json();
@@ -445,6 +449,7 @@ export class Api {
         ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(15000),
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw apiErrorFromBody(data, res.status);
@@ -454,6 +459,7 @@ export class Api {
   private async get<T = LooseJson>(path: string): Promise<T> {
     const res = await fetch(apiUrl(path, this.base), {
       headers: this.token ? { Authorization: `Bearer ${this.token}` } : {},
+      signal: AbortSignal.timeout(8000),
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw apiErrorFromBody(data, res.status);
@@ -468,6 +474,7 @@ export class Api {
         ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(8000),
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw apiErrorFromBody(data, res.status);
@@ -935,10 +942,13 @@ export class Api {
   }
 
   // News & Updates feed for the home page, mirrored from GitHub Releases by the
-  // server. Not realm-scoped — always read from the page's own origin.
+  // server. Not realm-scoped — always read from the page's own origin. Bound so
+  // a stalled proxy cannot leave charselect news spinning forever.
   async releases(limit = 20): Promise<ReleaseEntry[]> {
     try {
-      const res = await fetch(apiUrl(`/api/releases?limit=${limit}`));
+      const res = await fetch(apiUrl(`/api/releases?limit=${limit}`), {
+        signal: AbortSignal.timeout(5000),
+      });
       if (!res.ok) return [];
       const data = await res.json();
       return data.releases ?? [];
@@ -1359,6 +1369,8 @@ function blankEntity(id: number): Entity {
     sharedCritBonus: 0,
     critRating: 0,
     hasteRating: 0,
+    versatilityRating: 0,
+    versatilityDmgBonus: 0,
     hitRating: 0,
     hitBonus: 0,
     critDmgSpellBonus: 0,
@@ -3525,6 +3537,8 @@ export class ClientWorld implements IWorld {
       // Server-recomputed.
       e.critRating = s.crat ?? e.critRating;
       e.hasteRating = s.hrat ?? e.hasteRating;
+      e.versatilityRating = s.vrat ?? e.versatilityRating;
+      e.versatilityDmgBonus = versatilityDamageFractionFromRating(e.versatilityRating);
       e.hitRating = s.hirat ?? e.hitRating;
       e.weapon = s.weapon ?? e.weapon;
       // ticksElapsed is a sim-internal sfx-cadence counter (consume_sfx.ts):

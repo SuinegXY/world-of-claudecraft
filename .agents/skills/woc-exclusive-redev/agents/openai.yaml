@@ -1,0 +1,6 @@
+interface:
+  display_name: "Exclusive Version Bump"
+  short_description: "Merge prior exclusive tip onto a new official exclusive-v0NN branch"
+  default_prompt: "Use $woc-exclusive-redev to merge the prior feature/exclusive branch onto the new official tip and resolve conflicts so both sides survive."
+policy:
+  allow_implicit_invocation: true

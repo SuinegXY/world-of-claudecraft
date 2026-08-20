@@ -62,15 +62,13 @@ describe("Quartermaster's Consignment gear pack", () => {
   });
 
   it('localizes every new item name in a non-English locale', async () => {
-    // Lazy locale flip: await the de_DE chunk so tEntity's synchronous read resolves the
-    // German item names instead of the English fallback.
-    await ensureLocaleLoaded('de_DE');
-    setLanguage('de_DE');
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
     try {
       for (const id of ALL) {
-        const de = tEntity({ kind: 'item', id, field: 'name' });
-        expect(de.trim().length, id).toBeGreaterThan(0);
-        expect(de, id).not.toBe(ITEMS[id].name); // a real German translation, not English
+        const zh = tEntity({ kind: 'item', id, field: 'name' });
+        expect(zh.trim().length, id).toBeGreaterThan(0);
+        expect(zh, id).not.toBe(ITEMS[id].name);
       }
     } finally {
       setLanguage('en');

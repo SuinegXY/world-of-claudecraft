@@ -18,6 +18,7 @@ import {
   getLanguage,
   type InterpolationValues,
   languageTag,
+  type AuthoredLanguage,
   type SupportedLanguage,
   t,
 } from './i18n';
@@ -862,19 +863,19 @@ const localeTextByBase = {
         'Antændelse giver Hærgen: dit næste Undergangslyn kastes markant hurtigere, eller Ildregnens første bølge falder med det samme.',
     },
   },
-} satisfies Record<Exclude<SupportedLanguage, 'es_ES' | 'fr_CA'>, TalentLocaleText>;
+} satisfies Record<Exclude<AuthoredLanguage, 'es_ES' | 'fr_CA'>, TalentLocaleText>;
 
 // es_ES and fr_CA are pure dialect aliases of their base locale (declared base:
 // es_ES->es, fr_CA->fr_FR), matching the main translation table's dialect model.
 // They inherit the base's talent text verbatim, so the value is the base object
 // itself - no `{} as TalentLocaleText` cast and no post-hoc reassignment.
-const localeText: Record<SupportedLanguage, TalentLocaleText> = {
+const localeText: Record<AuthoredLanguage, TalentLocaleText> = {
   ...localeTextByBase,
   es_ES: localeTextByBase.es,
   fr_CA: localeTextByBase.fr_FR,
 };
 
-const CORE_TITLE_OVERRIDES: Partial<Record<SupportedLanguage, Record<string, string>>> = {
+const CORE_TITLE_OVERRIDES: Partial<Record<AuthoredLanguage, Record<string, string>>> = {
   es: { Sunmender: 'Sanador solar', Faithwarden: 'Guardián de fe', Dawnreaver: 'Segador del alba' },
   es_ES: {
     Sunmender: 'Sanador solar',
@@ -937,7 +938,7 @@ const CORE_TITLE_OVERRIDES: Partial<Record<SupportedLanguage, Record<string, str
 // classic-MMO terminology. translateTitle() consults this after ability-name
 // resolution. To add a talent or locale, add its localized name here for each
 // locale — there is no secondary additions/corrections layer.
-const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>> = {
+const titleOverrides: Partial<Record<AuthoredLanguage, Record<string, string>>> = {
   es: {
     'Adrenaline Junkie': 'Adicto a la adrenalina',
     Aetherwell: 'Pozo de Éter',
@@ -10589,7 +10590,7 @@ function statAmount(stat: StatKey, value: number, lang: SupportedLanguage): stri
 }
 
 function translateTitle(source: string, lang: SupportedLanguage): string {
-  if (lang === 'en' || lang === 'en_CA') return source;
+  if (lang === 'en' || (lang as string) === 'en_CA') return source;
   const abilityId = abilityIdByName.get(source) ?? grantAbilityIdByTitle.get(source);
   if (abilityId) {
     const abilityTitle = tEntity({ kind: 'ability', id: abilityId, field: 'name' });
@@ -11204,7 +11205,7 @@ export function tTalent(request: TalentTranslationRequest): string {
   // Release locales generate ordinary effects from data. The narrow retained-description
   // table handles the four Warrior globals whose stance/resource prose cannot be expressed by
   // the generic renderer without losing behavior.
-  if (lang === 'en' || lang === 'en_CA') {
+  if (lang === 'en' || (lang as string) === 'en_CA') {
     if (request.kind === 'talentMastery') {
       return request.field === 'name'
         ? request.spec.mastery.name

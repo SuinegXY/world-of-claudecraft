@@ -21,7 +21,7 @@ import { LOCALE_LOADERS } from './i18n.resolved.generated/loaders';
 export const DICT = translations as Record<string, Record<string, string>>;
 
 const SUPPORTED = Object.keys(DICT);
-let current = 'en';
+let current = 'zh_CN';
 
 // --- en_XA dev-only pseudo-locale (mirrors src/ui/i18n.ts) -------------
 //
@@ -42,7 +42,7 @@ function detect(): string {
       // on a release build, so ?lang=en_XA degrades to the default for operators.
       if (q === DEV_PSEUDO_LOCALE && !isReleaseBuild()) {
         pseudoActive = true;
-        return 'en';
+        return 'zh_CN';
       }
       if (q && SUPPORTED.includes(q)) return q;
     }
@@ -53,7 +53,7 @@ function detect(): string {
   } catch {
     /* ignore */
   }
-  return 'en';
+  return 'zh_CN';
 }
 current = detect();
 

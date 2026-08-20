@@ -18,6 +18,7 @@ import {
   formatNumber,
   getLanguage,
   type InterpolationValues,
+  type AuthoredLanguage,
   type SupportedLanguage,
   supportedLanguages,
   type TranslationKey,
@@ -36,7 +37,6 @@ const baseEnTable = {
   'error.bagSocketsFull': 'All your bag slots are full.',
   'error.bagSwapTooManyItems': 'You have too many items to swap to that bag.',
   'error.bagRemoveTooManyItems': 'You have too many items to remove that bag.',
-  'error.bagEquipHasProperty': 'That bag cannot be equipped while it carries a special property.',
   'error.tradeBagSpace': 'Trade failed: not enough bag space.',
   'log.bagsMigrated': 'Your belongings have been packed into new bags.',
   // Bank (guild-bank-ready pooled bank; src/sim/bank.ts). The error.* lines are the
@@ -626,10 +626,6 @@ const baseEnTable = {
   'aura.solarReprisal': 'Solar Reprisal',
   'aura.dawnsWrath': "Dawn's Wrath",
   'aura.moontide': 'Moontide',
-  // The operator-applied Cheater mark's countdown debuff (src/sim/moderation/).
-  // The sim authors the aura name in English; this row is what stops the debuff
-  // bar and combat log shipping that English to all 21 locales.
-  'aura.cheaterMark': 'Marked as a Cheater',
   'aura.oldBlood': 'Old Blood',
   'aura.verdance': 'Verdance',
   'aura.lopingStride': 'Loping Stride',
@@ -754,7 +750,7 @@ export type SimMessageKey = keyof typeof enTable;
 
 // Per-locale table. Contributors add English only; non-English omissions fall
 // back to English here until the release localization pass fills them.
-const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, string>>> = {
+const BASE_DICT: Record<AuthoredLanguage, Partial<Record<BaseSimMessageKey, string>>> = {
   en: {
     'log.seaFatigue': 'The open sea saps your strength. Swim back to shore!',
     'log.veilEnter': 'A veil of dusk parts before you, and the Hollow opens ahead.',
@@ -1208,8 +1204,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Todos tus huecos de bolsa están ocupados.',
     'error.bagSwapTooManyItems': 'Tienes demasiados objetos para cambiar a esa bolsa.',
     'error.bagRemoveTooManyItems': 'Tienes demasiados objetos para quitar esa bolsa.',
-    'error.bagEquipHasProperty':
-      'No puedes equipar esa bolsa mientras tenga una propiedad especial.',
     'error.tradeBagSpace': 'Intercambio fallido: no hay suficiente espacio en las bolsas.',
     'log.bagsMigrated': 'Tus pertenencias se han guardado en bolsas nuevas.',
     'error.specLevel': 'Puedes elegir una especialización al nivel {level}.',
@@ -1659,8 +1653,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Todos tus huecos de bolsa están ocupados.',
     'error.bagSwapTooManyItems': 'Tienes demasiados objetos para cambiar a esa bolsa.',
     'error.bagRemoveTooManyItems': 'Tienes demasiados objetos para quitar esa bolsa.',
-    'error.bagEquipHasProperty':
-      'No puedes equipar esa bolsa mientras tenga una propiedad especial.',
     'error.tradeBagSpace': 'Intercambio fallido: no hay suficiente espacio en las bolsas.',
     'log.bagsMigrated': 'Tus pertenencias se han guardado en bolsas nuevas.',
     'error.specLevel': 'Podrás elegir una especialización en el nivel {level}.',
@@ -2121,8 +2113,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Tous vos emplacements de sac sont occupés.',
     'error.bagSwapTooManyItems': "Vous avez trop d'objets pour passer à ce sac.",
     'error.bagRemoveTooManyItems': "Vous avez trop d'objets pour retirer ce sac.",
-    'error.bagEquipHasProperty':
-      'Vous ne pouvez pas équiper ce sac tant qu’il possède une propriété spéciale.',
     'error.tradeBagSpace': 'Échange échoué : pas assez de place dans les sacs.',
     'log.bagsMigrated': 'Vos affaires ont été rangées dans de nouveaux sacs.',
     'error.specLevel': 'Vous pourrez choisir une spécialisation au niveau {level}.',
@@ -2583,8 +2573,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Tous vos emplacements de sac sont occupés.',
     'error.bagSwapTooManyItems': "Vous avez trop d'objets pour passer à ce sac.",
     'error.bagRemoveTooManyItems': "Vous avez trop d'objets pour retirer ce sac.",
-    'error.bagEquipHasProperty':
-      'Vous ne pouvez pas équiper ce sac tant qu’il possède une propriété spéciale.',
     'error.tradeBagSpace': 'Échange échoué : pas assez de place dans les sacs.',
     'log.bagsMigrated': 'Vos affaires ont été rangées dans de nouveaux sacs.',
     'error.specLevel': 'Vous pourrez choisir une spécialisation au niveau {level}.',
@@ -3235,8 +3223,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Tutti gli alloggiamenti delle borse sono occupati.',
     'error.bagSwapTooManyItems': 'Hai troppi oggetti per passare a quella borsa.',
     'error.bagRemoveTooManyItems': 'Hai troppi oggetti per rimuovere quella borsa.',
-    'error.bagEquipHasProperty':
-      'Non puoi equipaggiare quella borsa finché possiede una proprietà speciale.',
     'error.tradeBagSpace': 'Scambio fallito: spazio insufficiente nelle borse.',
     'log.bagsMigrated': 'I tuoi averi sono stati riposti in nuove borse.',
     'error.specLevel': 'Puoi scegliere una specializzazione al livello {level}.',
@@ -3691,8 +3677,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Alle Eure Taschenplätze sind belegt.',
     'error.bagSwapTooManyItems': 'Ihr habt zu viele Gegenstände, um zu dieser Tasche zu wechseln.',
     'error.bagRemoveTooManyItems': 'Ihr habt zu viele Gegenstände, um diese Tasche abzulegen.',
-    'error.bagEquipHasProperty':
-      'Diese Tasche kann nicht angelegt werden, solange sie eine besondere Eigenschaft besitzt.',
     'error.tradeBagSpace': 'Handel fehlgeschlagen: nicht genug Taschenplatz.',
     'log.bagsMigrated': 'Eure Habseligkeiten wurden in neue Taschen gepackt.',
     'error.specLevel': 'Ihr könnt auf Stufe {level} eine Spezialisierung wählen.',
@@ -4199,7 +4183,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': '你的所有背包栏位都已占用。',
     'error.bagSwapTooManyItems': '物品太多，无法换成那个背包。',
     'error.bagRemoveTooManyItems': '物品太多，无法移除那个背包。',
-    'error.bagEquipHasProperty': '该背包带有特殊属性时无法装备。',
     'error.tradeBagSpace': '交易失败：背包空间不足。',
     'log.bagsMigrated': '你的物品已装入新背包。',
     'error.specLevel': '你将在{level}级时选择专精。',
@@ -4640,7 +4623,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': '你的所有背包欄位都已佔用。',
     'error.bagSwapTooManyItems': '物品太多，無法換成那個背包。',
     'error.bagRemoveTooManyItems': '物品太多，無法移除那個背包。',
-    'error.bagEquipHasProperty': '此背包帶有特殊屬性時無法裝備。',
     'error.tradeBagSpace': '交易失敗：背包空間不足。',
     'log.bagsMigrated': '你的物品已裝入新背包。',
     'error.specLevel': '你必須達到等級 {level} 才能選擇專精。',
@@ -5088,7 +5070,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': '모든 가방 칸이 사용 중입니다.',
     'error.bagSwapTooManyItems': '소지품이 너무 많아 그 가방으로 교체할 수 없습니다.',
     'error.bagRemoveTooManyItems': '소지품이 너무 많아 그 가방을 해제할 수 없습니다.',
-    'error.bagEquipHasProperty': '특수 속성이 있는 가방은 장착할 수 없습니다.',
     'error.tradeBagSpace': '거래 실패: 가방 공간이 부족합니다.',
     'log.bagsMigrated': '소지품이 새 가방에 담겼습니다.',
     'error.specLevel': '{level}레벨에 전문화를 선택할 수 있습니다.',
@@ -5547,7 +5528,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'バッグスロットはすべて使用中です。',
     'error.bagSwapTooManyItems': 'アイテムが多すぎてそのバッグに交換できません。',
     'error.bagRemoveTooManyItems': 'アイテムが多すぎてそのバッグを外せません。',
-    'error.bagEquipHasProperty': '特殊な特性が付いているバッグは装備できません。',
     'error.tradeBagSpace': '取引失敗：バッグの空きが足りません。',
     'log.bagsMigrated': '持ち物は新しいバッグに収納されました。',
     'error.specLevel': '専門化はレベル{level}で選択できます。',
@@ -5938,8 +5918,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Todos os seus espaços de bolsa estão ocupados.',
     'error.bagSwapTooManyItems': 'Você tem itens demais para trocar para essa bolsa.',
     'error.bagRemoveTooManyItems': 'Você tem itens demais para remover essa bolsa.',
-    'error.bagEquipHasProperty':
-      'Essa bolsa não pode ser equipada enquanto tiver uma propriedade especial.',
     'error.tradeBagSpace': 'Troca falhou: espaço insuficiente nas bolsas.',
     'log.bagsMigrated': 'Seus pertences foram guardados em bolsas novas.',
     'error.specLevel': 'Você pode escolher uma especialização no nível {level}.',
@@ -6459,7 +6437,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.bagSocketsFull': 'Все ячейки для сумок заняты.',
     'error.bagSwapTooManyItems': 'У вас слишком много предметов, чтобы сменить эту сумку.',
     'error.bagRemoveTooManyItems': 'У вас слишком много предметов, чтобы снять эту сумку.',
-    'error.bagEquipHasProperty': 'Эту сумку нельзя экипировать, пока у неё есть особое свойство.',
     'error.tradeBagSpace': 'Обмен не удался: недостаточно места в сумках.',
     'log.bagsMigrated': 'Ваши вещи разложены по новым сумкам.',
     'error.specLevel': 'Выбрать специализацию можно на {level} уровне.',
@@ -6628,7 +6605,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'Tento předmět je vázaný a nelze ho prodat.',
     'error.sellLocked': 'Tento předmět je zamčený a nelze ho prodat.',
     ...BASE_NEW.cs_CZ,
-    'error.bagEquipHasProperty': 'Tuto tašku nelze vybavit, dokud má zvláštní vlastnost.',
     'error.unknownAbility': 'Tuto schopnost neznáš.',
     'error.notEnoughRuin': 'Nedostatek Zkázy!',
     'error.burningPactRequired': 'Vzplanutí vyžaduje Hořící pakt na cíli.',
@@ -6779,8 +6755,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'Dat voorwerp is gebonden en kan niet worden verkocht.',
     'error.sellLocked': 'Dat voorwerp is vergrendeld en kan niet worden verkocht.',
     ...BASE_NEW.nl_NL,
-    'error.bagEquipHasProperty':
-      'Je kunt deze tas niet uitrusten zolang hij een bijzondere eigenschap heeft.',
     'error.unknownAbility': 'Je kent die vaardigheid niet.',
     'error.notEnoughRuin': 'Niet genoeg Ruïne!',
     'error.burningPactRequired': 'Ontvlamming vereist Brandpact op het doelwit.',
@@ -6931,7 +6905,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'Ten przedmiot jest przywiązany i nie można go sprzedać.',
     'error.sellLocked': 'Ten przedmiot jest zablokowany i nie można go sprzedać.',
     ...BASE_NEW.pl_PL,
-    'error.bagEquipHasProperty': 'Nie możesz założyć tej torby, dopóki ma specjalną właściwość.',
     'error.unknownAbility': 'Nie znasz tej zdolności.',
     'error.notEnoughRuin': 'Za mało Ruiny!',
     'error.burningPactRequired': 'Pożoga wymaga Płonącego paktu na celu.',
@@ -7082,7 +7055,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'Barang itu terikat dan tidak dapat dijual.',
     'error.sellLocked': 'Barang itu terkunci dan tidak dapat dijual.',
     ...BASE_NEW.id_ID,
-    'error.bagEquipHasProperty': 'Tas itu tidak bisa dipakai selama memiliki atribut khusus.',
     'error.unknownAbility': 'Kamu belum mengetahui kemampuan itu.',
     'error.notEnoughRuin': 'Ruin tidak cukup!',
     'error.burningPactRequired': 'Kobaran Api membutuhkan Pakta Membara pada target.',
@@ -7233,7 +7205,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'O eşya bağlı ve satılamaz.',
     'error.sellLocked': 'O eşya kilitli ve satılamaz.',
     ...BASE_NEW.tr_TR,
-    'error.bagEquipHasProperty': 'Bu çanta özel bir özelliğe sahip olduğu sürece kuşanılamaz.',
     'error.unknownAbility': 'Bu yeteneği bilmiyorsun.',
     'error.notEnoughRuin': 'Yeterli Harabiyet yok!',
     'error.burningPactRequired': 'Tutuşturma için hedefte Yanan Ahit olmalı.',
@@ -7383,8 +7354,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'Det föremålet är bundet och kan inte säljas.',
     'error.sellLocked': 'Det föremålet är låst och kan inte säljas.',
     ...BASE_NEW.sv_SE,
-    'error.bagEquipHasProperty':
-      'Du kan inte utrusta den här väskan så länge den har en särskild egenskap.',
     'error.unknownAbility': 'Du kan inte den förmågan.',
     'error.notEnoughRuin': 'Inte tillräckligt med Ruin!',
     'error.burningPactRequired': 'Storbrand kräver Brinnande pakt på målet.',
@@ -7535,7 +7504,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'Vật phẩm đó đã bị ràng buộc và không thể bán.',
     'error.sellLocked': 'Vật phẩm đó đã bị khóa và không thể bán.',
     ...BASE_NEW.vi_VN,
-    'error.bagEquipHasProperty': 'Không thể trang bị túi này khi nó còn mang thuộc tính đặc biệt.',
     'error.unknownAbility': 'Bạn chưa học kỹ năng đó.',
     'error.notEnoughRuin': 'Không đủ Ruin!',
     'error.burningPactRequired': 'Bùng Cháy cần mục tiêu đang chịu Khế Ước Rực Cháy.',
@@ -7683,8 +7651,6 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'error.sellBound': 'Den genstand er bundet og kan ikke sælges.',
     'error.sellLocked': 'Den genstand er låst og kan ikke sælges.',
     ...BASE_NEW.da_DK,
-    'error.bagEquipHasProperty':
-      'Du kan ikke iføre dig denne taske, så længe den har en særlig egenskab.',
     'error.unknownAbility': 'Du kender ikke den evne.',
     'error.notEnoughRuin': 'Ikke nok Ruin!',
     'error.burningPactRequired': 'Antændelse kræver Brændende Pagt på målet.',
@@ -7806,7 +7772,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
   },
 };
 
-const ARENA_QUEUE_AUTO_LEAVE_1V1: Record<SupportedLanguage, string> = {
+const ARENA_QUEUE_AUTO_LEAVE_1V1: Record<AuthoredLanguage, string> = {
   en: 'You leave the Ashen Coliseum queue.',
   en_CA: 'You leave the Ashen Coliseum queue.',
   es: 'Sales de la cola del Coliseo Cinéreo.',
@@ -8337,7 +8303,7 @@ const PET_DICT_RU: Record<PetSimMessageKey, string> = {
   'aura.fed': 'Накормлен',
 };
 
-const PET_DICT: Record<SupportedLanguage, Record<PetSimMessageKey, string>> = {
+const PET_DICT: Record<AuthoredLanguage, Record<PetSimMessageKey, string>> = {
   en: PET_DICT_EN,
   en_CA: PET_DICT_EN,
   es: PET_DICT_ES,
@@ -8355,7 +8321,7 @@ const PET_DICT: Record<SupportedLanguage, Record<PetSimMessageKey, string>> = {
   ...PET_NEW,
 };
 
-export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = Object.fromEntries(
+export const DICT: Record<AuthoredLanguage, Record<SimMessageKey, string>> = Object.fromEntries(
   supportedLanguages.map((lang) => [
     lang,
     {
@@ -8365,7 +8331,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = Ob
       'log.arenaQueueAutoLeave1v1': ARENA_QUEUE_AUTO_LEAVE_1V1[lang],
     },
   ]),
-) as Record<SupportedLanguage, Record<SimMessageKey, string>>;
+) as Record<AuthoredLanguage, Record<SimMessageKey, string>>;
 
 function interpolate(template: string, params?: InterpolationValues): string {
   if (!params) return template;
@@ -8451,12 +8417,6 @@ function locPetGrowlAutoState(state: string): string {
 // they share a single English source here.
 const AURA_NAME_KEY: Record<string, SimMessageKey> = {
   Moontide: 'aura.moontide',
-  // The operator-applied Cheater mark's countdown debuff (cheaterMarkAura in
-  // src/sim/moderation/cheater_mark.ts). Without this row localizeSimAuraName
-  // returns null and every caller falls back to the RAW ENGLISH aura name, which
-  // no gate catches: the sanction would read "Marked as a Cheater" in all 21
-  // locales. Keep this string byte-identical to the aura's `name`.
-  'Marked as a Cheater': 'aura.cheaterMark',
   'Old Blood': 'aura.oldBlood',
   Verdance: 'aura.verdance',
   'Loping Stride': 'aura.lopingStride',
@@ -8713,7 +8673,7 @@ type ArenaExtraKey =
   | 'memberTrading'
   | 'memberInstance';
 
-export const ARENA_EXTRA: Record<SupportedLanguage, Record<ArenaExtraKey, string>> = {
+export const ARENA_EXTRA: Record<AuthoredLanguage, Record<ArenaExtraKey, string>> = {
   en: {
     join2v2: 'You join the Ashen Coliseum 2v2 queue. Stand by for opponents...',
     leave2v2: 'You leave the Ashen Coliseum 2v2 queue.',
@@ -8956,7 +8916,7 @@ function tArenaExtra(key: ArenaExtraKey, params?: InterpolationValues): string {
   return interpolate(table[key] ?? ARENA_EXTRA.en[key], params);
 }
 
-const ARENA_MIN_LEVEL_QUEUE_ERROR: Record<SupportedLanguage, string> = {
+const ARENA_MIN_LEVEL_QUEUE_ERROR: Record<AuthoredLanguage, string> = {
   en: 'You must be level {level} to queue for the arena.',
   en_CA: 'You must be level {level} to queue for the arena.',
   es: 'Debes ser nivel {level} para entrar en la cola de la arena.',
@@ -9078,7 +9038,7 @@ const BG_EXTRA_EN: Record<BgExtraKey, string> = {
   errMountInBg: "You can't ride in a battleground.",
 };
 
-export const BG_EXTRA: Record<SupportedLanguage, Record<BgExtraKey, string>> = {
+export const BG_EXTRA: Record<AuthoredLanguage, Record<BgExtraKey, string>> = {
   en: BG_EXTRA_EN,
   zh_CN: {
     errMemberRequeueLocked: '有队伍成员需要等待后才能再次排队进入荆谷原野。',
@@ -10107,7 +10067,7 @@ type QuestExtraKey =
   | 'malricYell'
   | 'vossYell';
 
-export const QUEST_EXTRA: Record<SupportedLanguage, Record<QuestExtraKey, string>> = {
+export const QUEST_EXTRA: Record<AuthoredLanguage, Record<QuestExtraKey, string>> = {
   en: {
     ritualNeedsKey: 'The ritual circle is silent without the Crypt Keystone.',
     aldrenVision1: 'My king was a good man.',
@@ -10398,7 +10358,7 @@ type ItemExtraKey =
   | 'relicBound'
   | 'relicRecovered';
 
-export const ITEM_EXTRA: Record<SupportedLanguage, Record<ItemExtraKey, string>> = {
+export const ITEM_EXTRA: Record<AuthoredLanguage, Record<ItemExtraKey, string>> = {
   en: {
     gearReadout: 'Equipped ({worn}/{total}): {items}.',
     gearEmptySlot: '(empty)',
@@ -10552,7 +10512,7 @@ type RaidExtraKey =
   | 'engagedSealed'
   | 'mustFall';
 
-export const RAID_EXTRA: Record<SupportedLanguage, Record<RaidExtraKey, string>> = {
+export const RAID_EXTRA: Record<AuthoredLanguage, Record<RaidExtraKey, string>> = {
   en: {
     converted: 'Your party has converted to a raid group.',
     memberMoved: '{name} has been moved to raid group {group}.',

@@ -49,7 +49,10 @@ export function makeLazyLocaleChannel<Table extends object>(cfg: {
   const inflight = new Map<SupportedLanguage, Promise<void>>();
 
   const ensure = async (lang: SupportedLanguage): Promise<void> => {
-    if (lang === 'en' || lang === 'en_CA') return;
+    // en is the eager English base. en_CA is not in the exclusive ship set, but
+    // keep the dialect short-circuit as a string compare so upstream fills stay
+    // copy-paste safe if the ship set widens later.
+    if (lang === 'en' || (lang as string) === 'en_CA') return;
     if (resident[lang]) return;
     const existing = inflight.get(lang);
     if (existing) return existing;

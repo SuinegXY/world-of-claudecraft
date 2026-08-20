@@ -101,10 +101,11 @@ describe('ground-pickup line localization (the S3-invisible surface)', () => {
     expect(localizeSimText('You have already done this one.')).not.toBeNull();
   });
 
-  it('pins a known literal per representative locale', () => {
-    expect(DICT.es['groundPickup.supplyCrateDeny']).toBe('El cajón está cerrado con clavos.');
-    expect(DICT.ru_RU['groundPickup.supplyCrateDeny']).toBe('Ящик наглухо заколочен.');
-    expect(DICT.zh_CN['groundPickup.graveSealedDeny']).toBe('坟墓向生者封闭，直到死者召唤你前来。');
+  it('pins a known literal for the shipped Simplified Chinese locale', () => {
+    expect(DICT.zh_CN['groundPickup.graveSealedDeny']).toBe(
+      '坟墓向生者封闭，直到死者召唤你前来。',
+    );
+    expect(DICT.zh_CN['groundPickup.supplyCrateDeny']).not.toBe(DICT.en['groundPickup.supplyCrateDeny']);
   });
 
   it('every non-English locale carries a real translation for every groundPickup key', () => {

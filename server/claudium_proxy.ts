@@ -16,6 +16,7 @@
 // value, they only pass through what the service returns.
 
 import { DESKTOP_WALLET_HANDOFF_TTL_MS, desktopWalletHandoffs } from './desktop_wallet_handoff';
+import { claudiumOutboundEnabled } from './exclusive_outbound';
 
 const SERVICE_TIMEOUT_MS = 5000;
 const NATIVE_CONFIRM_TIMEOUT_MS = 60_000;
@@ -175,9 +176,10 @@ function serviceSecret(): string {
   return process.env.WOC_ECONOMY_INTERNAL_SECRET ?? '';
 }
 
-/** The service is reachable only when BOTH the URL and the secret are set. */
+/** The service is reachable only when outbound is opted in AND URL + secret are set. */
 export function claudiumServiceConfigured(): boolean {
-  return serviceUrl() !== '' && serviceSecret() !== '';
+  // Exclusive: CLAUDIUM_OUTBOUND_ENABLED must be 1 (see exclusive_outbound.ts).
+  return claudiumOutboundEnabled() && serviceUrl() !== '' && serviceSecret() !== '';
 }
 
 let loggedOnce = false;
@@ -203,6 +205,7 @@ interface ServiceRequest {
  * throws: every caller maps a null into its own typed unavailable result.
  */
 async function callService<T>(req: ServiceRequest): Promise<T | null> {
+  if (!claudiumServiceConfigured()) return null;
   const base = serviceUrl();
   const secret = serviceSecret();
   if (base === '' || secret === '') return null;
@@ -232,6 +235,7 @@ export async function claudiumStripeWebhook(
   rawBody: Buffer,
   signatureHeader: string,
 ): Promise<ClaudiumStripeWebhookResult> {
+  if (!claudiumServiceConfigured()) return { received: false };
   const base = serviceUrl();
   if (base === '') return { received: false };
   try {

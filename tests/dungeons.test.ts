@@ -12,6 +12,7 @@ import {
   BUILTIN_WORLD,
   DUNGEON_X_THRESHOLD,
   DUNGEONS,
+  dungeonAt,
   ITEMS,
   instanceOrigin,
   MOBS,
@@ -2756,19 +2757,23 @@ describe('dungeons: raid lockout gate', () => {
     ).toBe(false);
   });
 
-  it('a non-raid party cannot enter the raid-required arena', () => {
+  it('an attuned solo player can enter the raid arena without converting to a raid group', () => {
+    // Exclusive: RAID_REQUIRED is empty so solo / non-raid parties may enter.
     const sim = makeSim();
     const pid = sim.addPlayer('warrior', 'Solo');
     sim.players.get(pid)!.questsDone.add('q_nythraxis_bound_guardian');
+    const before = { ...sim.entities.get(pid)!.pos };
     sim.drainEvents();
-    enterDungeon(sim.ctx, 'nythraxis_boss_arena', pid);
+    expect(enterDungeon(sim.ctx, 'nythraxis_boss_arena', pid)).toBe(true);
     const events = sim.drainEvents() as any[];
     expect(
       events.some(
         (e) =>
           e.type === 'error' && e.text === 'You must convert your party to a raid group first.',
       ),
-    ).toBe(true);
+    ).toBe(false);
+    expect(dungeonAt(sim.entities.get(pid)!.pos.x)?.id).toBe('nythraxis_boss_arena');
+    expect(dist2d(sim.entities.get(pid)!.pos, before)).toBeGreaterThan(1);
   });
 });
 

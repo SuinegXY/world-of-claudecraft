@@ -3,7 +3,7 @@ import { nextRaidResetMs } from '../server/raid_reset';
 import { visualKeyFor } from '../src/render/characters/manifest';
 import { dungeonDaisHasRaisedPlatform } from '../src/render/dungeon';
 import { isBlocked } from '../src/sim/colliders';
-import { BUILTIN_WORLD, DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
+import { BUILTIN_WORLD, DUNGEONS, dungeonAt, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
 import { NYTHRAXIS_LAYOUT } from '../src/sim/dungeon_layout';
 import {
   nythraxisGravebreakerOnMobSwing,
@@ -290,15 +290,17 @@ describe('Nythraxis raid encounter', () => {
     expect(dungeonDaisHasRaisedPlatform('crypt')).toBe(true);
   });
 
-  it('blocks attuned solo players from the Nythraxis arena until they are in a raid group', () => {
+  it('lets an attuned solo player enter the Nythraxis arena without a raid group', () => {
+    // Exclusive: raid doors do not require converting to a raid group.
     const sim = makeWorld();
     const pid = sim.addPlayer('warrior', 'Solo');
     attune(sim, pid);
     const before = { ...sim.entities.get(pid)!.pos };
 
-    sim.enterDungeon('nythraxis_boss_arena', pid);
+    expect(sim.enterDungeon('nythraxis_boss_arena', pid)).toBe(true);
 
-    expect(dist2d(sim.entities.get(pid)!.pos, before)).toBeLessThan(0.1);
+    expect(dist2d(sim.entities.get(pid)!.pos, before)).toBeGreaterThan(1);
+    expect(dungeonAt(sim.entities.get(pid)!.pos.x)?.id).toBe('nythraxis_boss_arena');
   });
 
   it('automatically pulls Nythraxis when a player enters his aggro radius', () => {
@@ -921,7 +923,7 @@ describe('Nythraxis raid encounter', () => {
     expect(boss.nythraxis.soulRendMarks.length).toBeGreaterThan(0);
   });
 
-  it('lets Deathless Rage callout interrupt an active non-critical dialogue set', () => {
+  it('does not arm Deathless Rage when its timer expires (exclusive disable)', () => {
     const sim = makeWorld();
     const tankPid = sim.addPlayer('warrior', 'Tank');
     const origin = enterRaid(sim, tankPid);
@@ -955,9 +957,11 @@ describe('Nythraxis raid encounter', () => {
     const events = sim.tick();
 
     expect(events.some((ev) => ev.type === 'chat' && ev.text === 'Witness true eternity!')).toBe(
-      true,
+      false,
     );
-    expect(boss.castingAbility).toBe('nythraxis_deathless_rage');
+    expect(boss.castingAbility).not.toBe('nythraxis_deathless_rage');
+    expect(boss.nythraxis?.deathlessCastRemaining).toBe(0);
+    expect(boss.nythraxis?.wardChannels).toHaveLength(0);
   });
 
   it('lets Nythraxis immediately swing when his target is inside 8 yards', () => {
@@ -1985,7 +1989,7 @@ describe('Nythraxis raid encounter', () => {
     expect(boss.nythraxis?.soulRendMarks.length).toBeGreaterThan(0);
   });
 
-  it('opens phase two with a 5s settle delay, then Soul Rend and Deathless Rage', () => {
+  it('opens phase two with a 5s settle delay, then Soul Rend (Deathless Rage stays off)', () => {
     const sim = makeWorld();
     const tankPid = sim.addPlayer('warrior', 'Tank');
     const origin = enterRaid(sim, tankPid);
@@ -2021,61 +2025,12 @@ describe('Nythraxis raid encounter', () => {
     expect(firstSoulRendMarks).toHaveLength(3);
     expect(firstSoulRendMarks).not.toContain(tankPid);
     expect(firstSoulRendMarks.every((pid) => markedPids.includes(pid))).toBe(true);
-    expect(boss.nythraxis?.deathlessTimer).toBeGreaterThan(14);
-    expect(boss.nythraxis?.deathlessTimer).toBeLessThanOrEqual(15);
     expect(boss.nythraxis?.soulRendTimer).toBeGreaterThan(29);
     expect(boss.nythraxis?.soulRendTimer).toBeLessThanOrEqual(30);
 
     tickSeconds(sim, 15);
-    expect(boss.castingAbility).toBe('nythraxis_deathless_rage');
-  });
-
-  it('does not overlap Deathless Rage with active Soul Rend marks', () => {
-    const sim = makeWorld();
-    const tankPid = sim.addPlayer('warrior', 'Tank');
-    const origin = enterRaid(sim, tankPid);
-    const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
-    const tank = sim.entities.get(tankPid)!;
-    tank.maxHp = 1e7;
-    tank.hp = tank.maxHp;
-    engage(boss, tank);
-    const markedPids = ['A', 'B', 'C'].map((name, i) => {
-      const pid = sim.addPlayer('mage', name);
-      const p = sim.entities.get(pid)!;
-      p.maxHp = 1e7;
-      p.hp = p.maxHp;
-      teleport(sim, pid, origin.x + i, origin.z + 82);
-      return pid;
-    });
-    boss.nythraxis = {
-      phase: 2,
-      introSpoken: true,
-      transitionStarted: true,
-      transitionTimer: 0,
-      transitionCues: [],
-      transitionReleased: true,
-      gravebreakerTimer: 99,
-      raiseFallenTimer: 99,
-      soulRendTimer: 99,
-      soulRendMarks: markedPids.map((pid) => ({ playerId: pid, remaining: 3 })),
-      soulRendLockout: 0,
-      deathlessTimer: 0,
-      deathlessCastRemaining: 0,
-      deathlessStunRemaining: 0,
-      wardChannels: [],
-      finalStand: false,
-      deathSpoken: false,
-    };
-
-    sim.tick();
     expect(boss.castingAbility).not.toBe('nythraxis_deathless_rage');
-    expect(boss.nythraxis.deathlessTimer).toBeGreaterThan(0);
-    expect(boss.nythraxis.soulRendMarks).toHaveLength(3);
-
-    tickSeconds(sim, 4);
-    expect(boss.nythraxis.soulRendMarks).toHaveLength(0);
-    tickSeconds(sim, 1);
-    expect(boss.castingAbility).toBe('nythraxis_deathless_rage');
+    expect(boss.nythraxis?.deathlessCastRemaining).toBe(0);
   });
 
   it('splits Soul Rend among players stacked within 5 yards and kills isolated marks', () => {
@@ -2289,99 +2244,7 @@ describe('Nythraxis raid encounter', () => {
     ).toBe(false);
   });
 
-  it('interrupts Deathless Rage when three players channel the wardstones', () => {
-    const sim = makeWorld();
-    const tankPid = sim.addPlayer('warrior', 'Tank');
-    const origin = enterRaid(sim, tankPid);
-    const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
-    engage(boss, sim.entities.get(tankPid)!);
-    boss.nythraxis = {
-      phase: 2,
-      introSpoken: true,
-      transitionStarted: true,
-      transitionTimer: 0,
-      transitionCues: [],
-      transitionReleased: true,
-      gravebreakerTimer: 99,
-      raiseFallenTimer: 99,
-      soulRendTimer: 99,
-      soulRendMarks: [],
-      soulRendLockout: 0,
-      deathlessTimer: 0,
-      deathlessCastRemaining: 0,
-      deathlessStunRemaining: 0,
-      wardChannels: [],
-      finalStand: false,
-      deathSpoken: false,
-    };
-    sim.tick();
-    expect(boss.castingAbility).toBe('nythraxis_deathless_rage');
-
-    const channels = deathlessChannelObjects(sim, origin);
-    expect(channels).toHaveLength(3);
-    const channelers = channels.map((ward, i) => {
-      const pid = sim.addPlayer('priest', `Ward${i}`);
-      teleport(sim, pid, ward.pos.x, ward.pos.z);
-      sim.targetEntity(ward.id, pid);
-      sim.interact(pid);
-      return pid;
-    });
-    tickSeconds(sim, 6);
-
-    expect(boss.castingAbility).toBeNull();
-    expect(boss.nythraxis?.deathlessStunRemaining).toBeGreaterThan(0);
-    expect(boss.auras.some((a) => a.id === 'nythraxis_deathless_stun' && a.kind === 'stun')).toBe(
-      true,
-    );
-    expect(channelers.every((pid) => sim.entities.get(pid)!.castingAbility === null)).toBe(true);
-    expect(objects(sim, 'bastion_ward_stone', origin)).toHaveLength(3);
-    expect(objects(sim, 'soulshard_pillar', origin)).toHaveLength(0);
-    expect(origin.x).toBeGreaterThan(3000);
-  });
-
-  it('does not reset a wardstone channel when the same player interacts again', () => {
-    const sim = makeWorld();
-    const tankPid = sim.addPlayer('warrior', 'Tank');
-    const origin = enterRaid(sim, tankPid);
-    const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
-    engage(boss, sim.entities.get(tankPid)!);
-    boss.nythraxis = {
-      phase: 2,
-      introSpoken: true,
-      transitionStarted: true,
-      transitionTimer: 0,
-      transitionCues: [],
-      transitionReleased: true,
-      gravebreakerTimer: 99,
-      raiseFallenTimer: 99,
-      soulRendTimer: 99,
-      soulRendMarks: [],
-      soulRendLockout: 0,
-      deathlessTimer: 0,
-      deathlessCastRemaining: 0,
-      deathlessStunRemaining: 0,
-      wardChannels: [],
-      finalStand: false,
-      deathSpoken: false,
-    };
-    sim.tick();
-
-    const ward = objects(sim, 'bastion_ward_stone', origin)[0];
-    const pid = sim.addPlayer('priest', 'WardSpam');
-    teleport(sim, pid, ward.pos.x, ward.pos.z);
-    sim.targetEntity(ward.id, pid);
-    sim.interact(pid);
-    tickSeconds(sim, 2);
-    const remaining = boss.nythraxis!.wardChannels.find((c) => c.objectId === ward.id)!.remaining;
-    expect(remaining).toBeLessThan(4);
-
-    sim.interact(pid);
-    expect(boss.nythraxis!.wardChannels.find((c) => c.objectId === ward.id)!.remaining).toBeCloseTo(
-      remaining,
-    );
-  });
-
-  it('does not interrupt Deathless Rage unless all three wardstone channels complete', () => {
+  it('never nukes the raid with Deathless Rage after the exclusive disable', () => {
     const sim = makeWorld();
     const tankPid = sim.addPlayer('warrior', 'Tank');
     const origin = enterRaid(sim, tankPid);
@@ -2410,113 +2273,25 @@ describe('Nythraxis raid encounter', () => {
       deathSpoken: false,
     };
     sim.tick();
-
-    const ward = objects(sim, 'bastion_ward_stone', origin)[0];
-    teleport(sim, tankPid, ward.pos.x, ward.pos.z);
-    sim.targetEntity(ward.id, tankPid);
-    sim.interact(tankPid);
-    sim.tick();
-
-    expect(tank.castingAbility).toBe('nythraxis_ward_channel');
-    expect(tank.channeling).toBe(true);
-    expect(boss.castingAbility).toBe('nythraxis_deathless_rage');
-    expect(boss.nythraxis?.wardChannels.every((c) => c.complete)).toBe(false);
-
-    tickSeconds(sim, 6);
-
-    expect(boss.nythraxis?.wardChannels.filter((c) => c.complete)).toHaveLength(1);
-    expect(boss.nythraxis?.deathlessStunRemaining).toBe(0);
-    tickSeconds(sim, 5);
-    expect(boss.castingAbility).toBeNull();
-    expect(boss.nythraxis?.deathlessStunRemaining).toBe(0);
-    expect(tank.hp).toBeLessThan(tank.maxHp);
-  });
-
-  it('does not interrupt Deathless Rage when one player completes all wardstones', () => {
-    const sim = makeWorld();
-    const tankPid = sim.addPlayer('warrior', 'Tank');
-    const origin = enterRaid(sim, tankPid);
-    const tank = sim.entities.get(tankPid)!;
-    tank.maxHp = 1e7;
-    tank.hp = tank.maxHp;
-    const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
-    engage(boss, tank);
-    boss.nythraxis = {
-      phase: 2,
-      introSpoken: true,
-      transitionStarted: true,
-      transitionTimer: 0,
-      transitionCues: [],
-      transitionReleased: true,
-      gravebreakerTimer: 99,
-      raiseFallenTimer: 99,
-      soulRendTimer: 99,
-      soulRendMarks: [],
-      soulRendLockout: 0,
-      deathlessTimer: 0,
-      deathlessCastRemaining: 0,
-      deathlessStunRemaining: 0,
-      wardChannels: [],
-      finalStand: false,
-      deathSpoken: false,
-    };
-    sim.tick();
-
+    expect(boss.castingAbility).not.toBe('nythraxis_deathless_rage');
     expect(deathlessChannelObjects(sim, origin)).toHaveLength(3);
-    for (const channel of boss.nythraxis!.wardChannels) {
-      channel.playerId = tankPid;
-      channel.complete = true;
-      channel.remaining = 0;
-    }
-    sim.tick();
-
-    expect(boss.castingAbility).toBe('nythraxis_deathless_rage');
-    expect(boss.nythraxis?.deathlessStunRemaining).toBe(0);
-    tickSeconds(sim, 10);
-    expect(boss.nythraxis?.deathlessStunRemaining).toBe(0);
-    expect(tank.hp).toBeLessThan(tank.maxHp);
-  });
-
-  it('starts wardstone channels through the object click pickup path', () => {
-    const sim = makeWorld();
-    const tankPid = sim.addPlayer('warrior', 'Tank');
-    const origin = enterRaid(sim, tankPid);
-    const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
-    engage(boss, sim.entities.get(tankPid)!);
-    boss.nythraxis = {
-      phase: 2,
-      introSpoken: true,
-      transitionStarted: true,
-      transitionTimer: 0,
-      transitionCues: [],
-      transitionReleased: true,
-      gravebreakerTimer: 99,
-      raiseFallenTimer: 99,
-      soulRendTimer: 99,
-      soulRendMarks: [],
-      soulRendLockout: 0,
-      deathlessTimer: 0,
-      deathlessCastRemaining: 0,
-      deathlessStunRemaining: 0,
-      wardChannels: [],
-      finalStand: false,
-      deathSpoken: false,
-    };
-    sim.tick();
 
     const ward = objects(sim, 'bastion_ward_stone', origin)[0];
     const pid = sim.addPlayer('priest', 'Clicker');
     teleport(sim, pid, ward.pos.x, ward.pos.z);
-    expect(sim.pickUpObject(ward.id, pid)).toBe(true);
-
-    const channel = boss.nythraxis!.wardChannels.find((c) => c.objectId === ward.id)!;
-    expect(channel.playerId).toBe(pid);
-    expect(sim.entities.get(pid)!.castingAbility).toBe('nythraxis_ward_channel');
-    expect(ward.lootable).toBe(true);
-    expect(
-      sim.players.get(pid)!.inventory.some((slot) => slot?.itemId === 'bastion_ward_stone'),
-    ).toBe(false);
+    // Wardstones still exist as props, but with no cast armed they do not start a channel.
     expect(sim.pickUpObject(ward.id, pid)).toBe(false);
+    expect(sim.entities.get(pid)!.castingAbility).not.toBe('nythraxis_ward_channel');
+    expect(boss.nythraxis?.wardChannels).toHaveLength(0);
+
+    const events = [];
+    for (let i = 0; i < 20 * 20; i++) events.push(...sim.tick());
+    expect(boss.castingAbility).not.toBe('nythraxis_deathless_rage');
+    expect(boss.nythraxis?.deathlessStunRemaining).toBe(0);
+    expect(events.some((ev) => ev.type === 'damage' && ev.ability === 'Deathless Rage')).toBe(
+      false,
+    );
+    expect(objects(sim, 'soulshard_pillar', origin)).toHaveLength(0);
   });
 
   it('never leashes/resets when kited — keeps chasing instead of evading home', () => {

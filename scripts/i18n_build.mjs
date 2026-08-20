@@ -37,6 +37,7 @@ import path from 'node:path';
 import * as esbuild from 'esbuild';
 import { flatten, unflatten } from './i18n_flatten.mjs';
 import { pseudoLocalize } from './i18n_pseudo.mjs';
+import { ALL_LOCALES, SHIP_LOCALES } from './i18n_ship_locales.mjs';
 import { writeModuleDir } from './lib/write_module_dir.mjs';
 
 const root = process.cwd();
@@ -59,36 +60,12 @@ const KEYS_PATH = process.env.I18N_OUT_DIR
   ? path.join(OUT_DIR, KEYS_FILE)
   : path.join(root, 'src/ui/i18n.catalog', KEYS_FILE);
 
-// The authoritative ordered locale set. `en` is the nested base; the others are
-// the flat dotted-key overlay files (src/ui/i18n.locales/<lang>.ts). This list
-// drives both the emit order and the runtime supportedLanguages (Object.keys of
-// the generated `translations`). The generator reads these SOURCE modules directly
-// and never imports src/ui/i18n.ts, so it never depends on the file it generates
-// (no circular import at build time).
-const LOCALES = [
-  'en',
-  'es',
-  'es_ES',
-  'fr_FR',
-  'fr_CA',
-  'en_CA',
-  'it_IT',
-  'de_DE',
-  'zh_CN',
-  'zh_TW',
-  'ko_KR',
-  'ja_JP',
-  'pt_BR',
-  'ru_RU',
-  'cs_CZ',
-  'nl_NL',
-  'pl_PL',
-  'id_ID',
-  'tr_TR',
-  'sv_SE',
-  'vi_VN',
-  'da_DK',
-];
+// Authoritative ordered locale set for DENSE emit (every authored overlay). The
+// exclusive CN ship set (SHIP_LOCALES: en + zh_CN by default) drives the runtime
+// SUPPORTED_LANGUAGES / LOCALE_LOADERS / translations map so vite only emits those
+// locale chunks. The generator reads SOURCE modules directly and never imports
+// src/ui/i18n.ts (no circular import at build time).
+const LOCALES = ALL_LOCALES;
 
 // Dialect locales declare a base locale. A dialect's (now
 // divergence-only) overlay is applied ON TOP of its base locale's overlay, which
@@ -262,28 +239,26 @@ function emitTranslationKeysModule(enFlatKeys) {
 // the runtime `translations` key set (en + the 13 non-en locales, NOT en_XA). Nothing
 // imports this module yet - the runtime still static-imports every slice via the
 // barrel for now, so the bundle is unchanged; the async loader wires these in later.
-function emitLoadersModule(locales) {
+function emitLoadersModule(shipLocales) {
   const lines = [fileBanner(), '', 'export const LOCALE_LOADERS = {'];
-  for (const lang of locales) {
+  for (const lang of shipLocales) {
     if (lang === 'en') continue; // en is eager; en_XA is excluded by construction
     lines.push(`  ${lang}: () => import('./${lang}'),`);
   }
   lines.push('};');
   lines.push('');
   lines.push(
-    `export const SUPPORTED_LANGUAGES = [${locales.map((l) => `'${l}'`).join(', ')}] as const;`,
+    `export const SUPPORTED_LANGUAGES = [${shipLocales.map((l) => `'${l}'`).join(', ')}] as const;`,
   );
   lines.push('');
   return lines.join('\n');
 }
 
-// The back-compat barrel. Re-exports every dense locale slice + en_XA + pending and
-// assembles the runtime `translations` map. The key order is the LOCALES list, so
-// Object.keys(translations) - and therefore supportedLanguages - is unchanged. This
-// preserves the EXACT import surface src/ui/i18n.ts and the tests/hash harness expect:
-// directory-index resolution of './i18n.resolved.generated' -> index.ts under the
-// project's moduleResolution "Bundler".
-function emitBarrel(locales) {
+// The back-compat barrel. Re-exports every dense locale slice + en_XA + pending so
+// tests can still import any authored locale by name. The runtime `translations`
+// map (and therefore the admin DICT / ship surface) only includes SHIP_LOCALES so
+// unused locale modules tree-shake out of production bundles.
+function emitBarrel(locales, shipLocales) {
   const lines = [fileBanner(), ''];
   for (const lang of locales) lines.push(`import { ${lang} } from './${lang}';`);
   lines.push('');
@@ -292,7 +267,7 @@ function emitBarrel(locales) {
   lines.push("export { pending } from './pending';");
   lines.push('');
   lines.push('export const translations = {');
-  for (const lang of locales) lines.push(`  ${lang},`);
+  for (const lang of shipLocales) lines.push(`  ${lang},`);
   lines.push('};');
   lines.push('');
   return lines.join('\n');
@@ -305,10 +280,11 @@ function emitBarrel(locales) {
 // lockstep so the build's runtime `pending` and the registry's `pending` agree.
 const isPresent = (v) => typeof v === 'string' && v.trim().length > 0;
 
-function computePending(en, locales) {
+function computePending(en, locales, shipLocales) {
   const enFlatKeys = Object.keys(flatten(en));
   const pending = {};
-  for (const lang of LOCALES) {
+  // Pending is ship-scoped: unshipped locales never enter the runtime release gate.
+  for (const lang of shipLocales) {
     if (lang === 'en') continue; // en is the authoritative source, never pending
     const provided = new Set();
     const own = locales[lang] || {};
@@ -350,7 +326,7 @@ async function main() {
     }
     resolved[lang] = out;
   }
-  const pending = computePending(en, locales);
+  const pending = computePending(en, locales, SHIP_LOCALES);
   // Generate en_XA from the resolved (dense) `en` so the pseudo table carries every
   // leaf, then emit it as a separate dev-only export (never in `translations`).
   const enXA = pseudoLocalize(resolved.en);
@@ -362,8 +338,8 @@ async function main() {
   for (const lang of LOCALES) modules[`${lang}.ts`] = emitLocaleModule(lang, resolved[lang]);
   modules['en_XA.ts'] = emitEnXaModule(enXA);
   modules['pending.ts'] = emitPendingModule(pending);
-  modules['loaders.ts'] = emitLoadersModule(LOCALES);
-  modules['index.ts'] = emitBarrel(LOCALES);
+  modules['loaders.ts'] = emitLoadersModule(SHIP_LOCALES);
+  modules['index.ts'] = emitBarrel(LOCALES, SHIP_LOCALES);
 
   const { totalBytes, rewritten, total } = writeModuleDir(OUT_DIR, modules);
 
@@ -378,7 +354,7 @@ async function main() {
 
   console.log(
     `generated ${path.relative(root, OUT_DIR)}/ ` +
-      `(${LOCALES.length} locales + en_XA pseudo + barrel + loaders + pending, ` +
+      `(${LOCALES.length} dense locales, ship=${SHIP_LOCALES.join('+')}, en_XA + barrel + loaders + pending, ` +
       `${totalBytes} bytes, ${rewritten}/${total} rewritten)`,
   );
   console.log(`generated ${path.relative(root, KEYS_PATH)} (flat TranslationKey union)`);

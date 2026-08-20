@@ -1801,6 +1801,7 @@ export const en_XA: EnTranslations = {
         "spellPower": "[Šþéļļ Þóŵéŕ]",
         "critRating": "[Çŕíţ Ŕáţíñĝ]",
         "hasteRating": "[Ĥášţé Ŕáţíñĝ]",
+        "versatilityRating": "[Ʋéŕšáţíļíţý]",
         "parry": "[Þáŕŕý]",
         "hitRating": "[Ĥíţ Ŕáţíñĝ]",
         "warfare": "[Ŵáŕƒáŕé]"
@@ -1822,6 +1823,7 @@ export const en_XA: EnTranslations = {
         "hasteRating": "[Ĥášţé ŕáţíñĝ ƒŕóɱ ýóúŕ ĝéáŕ áñð šéţ ƀóñúšéš, šþééðíñĝ úþ ýóúŕ áţţáçķš áñð šþéļļçášţíñĝ. Éʋéŕý 20 ŕáţíñĝ ĝŕáñţš éẋáçţļý 1% ĥášţé.]",
         "parry": "[Ýóúŕ çĥáñçé ţó ƒúļļý þáŕŕý á ƒŕóñţáļ ɱéļéé áţţáçķ, ţáķíñĝ ñó ðáɱáĝé. Á ƀļóŵ ƒŕóɱ ƀéĥíñð çáññóţ ƀé þáŕŕíéð.]",
         "hitRating": "[Ĥíţ ŕáţíñĝ ƒŕóɱ ýóúŕ ĝéáŕ áñð šéţ ƀóñúšéš, ŕéðúçíñĝ ĥóŵ óƒţéñ ýóúŕ áţţáçķš ɱíšš áñð ýóúŕ šþéļļš áŕé ŕéšíšţéð, éšþéçíáļļý áĝáíñšţ ĥíĝĥéŕ-ļéʋéļ éñéɱíéš. Éʋéŕý 10 ŕáţíñĝ ĝŕáñţš éẋáçţļý 1% ĥíţ.]",
+        "versatilityRating": "[Ʋéŕšáţíļíţý ŕáţíñĝ ƒŕóɱ šéçóñðáŕý áƒƒíẋéš óñ ýóúŕ ĝéáŕ, íñçŕéášíñĝ áļļ ðáɱáĝé ýóú ðéáļ. Éʋéŕý 10 ŕáţíñĝ ĝŕáñţš éẋáçţļý 1% ƀóñúš ðáɱáĝé.]",
         "warfare": "[Íñçŕéášéš ðáɱáĝé ðéáļţ ţó þļáýéŕš ƀý {increase}% áñð ŕéðúçéš ðáɱáĝé ţáķéñ ƒŕóɱ þļáýéŕš ƀý {reduction}%.]"
       },
       "effects": {
@@ -6489,6 +6491,7 @@ export const en_XA: EnTranslations = {
     "highscores": "[Ĥíĝĥ Šçóŕéš]",
     "wiki": "[Ŵíķí]",
     "news": "[Ñéŵš]",
+    "exclusiveUpdates": "[Éẋçļúšíʋé Úþðáţéš]",
     "download": "[Ðóŵñļóáð]",
     "loginRegister": "[Ļóĝíñ/Ŕéĝíšţéŕ]",
     "account": "[Áççóúñţ]",
@@ -7728,6 +7731,15 @@ export const en_XA: EnTranslations = {
     "discordCommunity": "[Ĵóíñ ţĥé Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ Ðíšçóŕð çóɱɱúñíţý]",
     "donateProject": "[Ðóñáţé ţó šúþþóŕţ Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ]"
   },
+  "sponsor": {
+    "title": "[Šþóñšóŕ ÐáẊíóñĝ]",
+    "blurb": "[Šþóñšóŕ ÐáẊíóñĝ; ýóú çáñ ļéáʋé á ɱéššáĝé ŵĥéñ šþóñšóŕíñĝ.]",
+    "alipay": "[Áļíþáý]",
+    "wechat": "[ŴéÇĥáţ Þáý]",
+    "alipayAlt": "[Áļíþáý šþóñšóŕ ɊŔ çóðé]",
+    "wechatAlt": "[ŴéÇĥáţ Þáý šþóñšóŕ ɊŔ çóðé]",
+    "railLabel": "[Šþóñšóŕ ɊŔ çóðéš]"
+  },
   "entryGuard": {
     "title": "[Ĝŕáþĥíçš ļóŵéŕéð]",
     "body": "[Ţĥé ĝáɱé çļóšéð úñéẋþéçţéðļý ŵĥíļé éñţéŕíñĝ ţĥé ŵóŕļð, šó ĝŕáþĥíçš áŕé ñóŵ šéţ ţó {preset}. Ýóú çáñ çĥáñĝé ţĥíš íñ ţĥé ĝŕáþĥíçš šéļéçţóŕ ƀéļóŵ óŕ íñ ţĥé íñ-ĝáɱé Óþţíóñš.]",
@@ -8942,7 +8954,10 @@ export const en_XA: EnTranslations = {
       "dps": "[Ðáɱáĝé/šéç]",
       "critChance": "[Çŕíţ Çĥáñçé]",
       "dodge": "[Ðóðĝé]",
-      "parry": "[Þáŕŕý]"
+      "parry": "[Þáŕŕý]",
+      "versatilityRating": "[+{value} Ʋéŕšáţíļíţý]",
+      "secondaryCritRating": "[+{value} Çŕíţíçáļ Šţŕíķé]",
+      "secondaryHasteRating": "[+{value} Ĥášţé]"
     },
     "tooltip": {
       "qualityKind": "[{quality} {kind}]",
@@ -12399,6 +12414,93 @@ export const en_XA: EnTranslations = {
       "dawnhold_posy": {
         "name": "[Ðáŵñĥóļð Ĝáŕðéñ Þóšý]"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "[Ĝúíļðɱáŕķ Áŕɱíñĝ Šŵóŕð]"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "[Ɓŕáššçáþ Ĥáţçĥéţ]"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "[Ţéɱþéŕéð Ƒļáñĝéð Ɱáçé]"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "[Ĝúíļðɱáŕķ Ðíŕķ]"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "[Ɓŕáššçŕóŵñ Ŵáļķíñĝ Šţáƒƒ]"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "[Ļáçɋúéŕéð Ŕóð]"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "[Ƒļéţçĥéŕ'š Ĝúíļð Ɓóŵ]"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "[Çíñðéŕƀŕáñð]"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "[Éɱƀéŕƀíţé]"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "[Šɱóúļðéŕƒáļļ]"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "[Ášĥšþáŕķ Šĥíʋ]"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "[Ƒóŕĝéĥéáŕţ Šţáʋé]"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "[Éɱƀéŕŵŕóúĝĥţ Ŵáñð]"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "[Çíñðéŕļáţçĥ]"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "[Íçé Ƒáñĝ]"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "[Ĝļáçíéŕšþļíţ]"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "[Ŕíɱéçŕúšĥéŕ]"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "[Ŕíɱé Ñééðļé]"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "[Ĥóáŕƒŕóšţ Ʋíĝíļ]"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "[Šĥáŕð óƒ Éʋéŕŵíñţéŕ]"
+      },
+      "winterbite_skin_unlock": {
+        "name": "[Ŵíñţéŕƀíţé]"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "[Šóļĥéíɱ, Ļášţ Ļíĝĥţ óƒ ţĥé Ðáŵñ]"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "[Šķýŕéñðéŕ, ţĥé Ƒíŕɱáɱéñţ'š Ŵóúñð]"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "[Šţáŕƒáļļ, Ĵúðĝɱéñţ óƒ ţĥé Ĥéáʋéñš]"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "[Ášţŕáʋýŕ, Ƒáñĝ óƒ ţĥé Ƒáļļéñ Šţáŕ]"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "[Çóšɱáŕçĥ, Šþíŕé óƒ ţĥé Éñðļéšš Ʋóíð]"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "[Éɱƀéŕŵíšĥ, Ɱóţé óƒ ţĥé Ðýíñĝ Šúñ]"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "[Éñçóŕé, ţĥé Šéçóñð Ƒáļļíñĝ Šţáŕ]"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "[Ɱéţéóŕļáţçĥ, ţĥé Šķý'š Ļášţ Ĵúðĝɱéñţ]"
+      },
       "conjured_water4": {
         "name": "[Çóñĵúŕéð Šþŕíñĝŵáţéŕ]"
       },
@@ -13983,6 +14085,11 @@ export const en_XA: EnTranslations = {
         "name": "[ƑÚŔÝ]",
         "title": "[Ĥóñóŕ Ɋúáŕţéŕɱášţéŕ]",
         "greeting": "[Ţĥé šáñðš ŕéɱéɱƀéŕ éʋéŕý ʋíçţóŕý. Šþéñð ýóúŕ ĥóñóŕ ŵéļļ.]"
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "[Ðá Ẋíóñĝ Ƒášĥíóñ Ŵéļƒáŕé Ɱéŕçĥáñţ]",
+        "title": "[Ƒášĥíóñ Óúţƒíţţéŕ]",
+        "greeting": "[Ţéñ ĝóļð áþíéçé. Éʋéŕý ļóóķ ţĥé ŕéáļɱ áļŕéáðý ķñóŵš, ƀóẋéð áñð ŕéáðý.]"
       },
       "warmarshal_draven_kole": {
         "name": "[Ŵáŕɱáŕšĥáļ Ðŕáʋéñ Ķóļé]",

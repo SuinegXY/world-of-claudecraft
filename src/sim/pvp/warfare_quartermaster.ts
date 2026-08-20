@@ -16,9 +16,10 @@
 // tests/warfare_vendor_npc.test.ts asserts directly against a world built
 // without the def.
 //
-// The reserved id follows the two singletons that already exist:
-// VALE_CUP_BRAM_ID is 1_000_000_000 and FURY_ENTITY_ID is 1_000_000_001, so
-// this takes 1_000_000_002. STATIC_WORLD_SERVICE_ENTITY_ID_MIN (types.ts) is
+// The reserved id follows the three singletons that already exist:
+// VALE_CUP_BRAM_ID is 1_000_000_000, FURY_ENTITY_ID is 1_000_000_001, and
+// the Eastbrook fashion welfare merchant is 1_000_000_003, so this takes
+// 1_000_000_002. STATIC_WORLD_SERVICE_ENTITY_ID_MIN (types.ts) is
 // 2_000_000_001, so the singleton band still has room, and nextId grows by
 // roughly one per mob respawn, so reaching 1e9 sequentially is unrealizable.
 

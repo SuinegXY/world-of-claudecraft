@@ -712,7 +712,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
         (building) => ({ id: `${building.id}:entrance`, point: building.frontStandingPoint }),
       ),
     ];
-    expect(destinations).toHaveLength(36);
+    expect(destinations).toHaveLength(37);
     const moverProfiles = [
       { id: 'player', bodyRadius: PLAYER_BODY_RADIUS },
       // Pet locomotion deliberately shares PLAYER_BODY_RADIUS; keep this

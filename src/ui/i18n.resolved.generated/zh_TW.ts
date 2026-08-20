@@ -1801,6 +1801,7 @@ export const zh_TW: EnTranslations = {
         "spellPower": "法術強度",
         "critRating": "暴擊等級",
         "hasteRating": "急速等級",
+        "versatilityRating": "全能等級",
         "parry": "招架",
         "hitRating": "命中等級",
         "warfare": "戰爭"
@@ -1822,6 +1823,7 @@ export const zh_TW: EnTranslations = {
         "hasteRating": "來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。",
         "parry": "你招架正面近戰攻擊、完全不受傷害的機率。來自背後的攻擊無法招架。",
         "hitRating": "來自裝備和套裝獎勵的命中等級，降低你的攻擊被閃避和法術被抵抗的機率，對更高等級的敵人尤其有效。約每10點等級提供1%命中。",
+        "versatilityRating": "來自裝備次要詞綴的全能等級，提高你造成的所有傷害。每10點等級恰好提供1%額外傷害。",
         "warfare": "對玩家造成的傷害提高 {increase}%，受到玩家造成的傷害降低 {reduction}%。"
       },
       "effects": {
@@ -6489,11 +6491,12 @@ export const zh_TW: EnTranslations = {
     "highscores": "排行榜",
     "wiki": "百科指南",
     "news": "最新消息",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "下載客戶端",
     "loginRegister": "登入/註冊",
     "account": "帳號",
     "logout": "登出",
-    "donate": "捐贈"
+    "donate": "贊助大熊"
   },
   "stats": {
     "title": "世界狀態",
@@ -7728,6 +7731,15 @@ export const zh_TW: EnTranslations = {
     "discordCommunity": "加入 World of ClaudeCraft 的 Discord 社群",
     "donateProject": "捐贈支持 World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "贊助大熊",
+    "blurb": "贊助大熊,可在贊助時留言",
+    "alipay": "支付寶",
+    "wechat": "微信支付",
+    "alipayAlt": "支付寶贊助二維碼",
+    "wechatAlt": "微信支付贊助二維碼",
+    "railLabel": "贊助二維碼"
+  },
   "entryGuard": {
     "title": "已降低圖形設定",
     "body": "進入世界時遊戲意外關閉，圖形設定現已設為{preset}。你可以在下方的圖形選擇器或遊戲內選項中變更。",
@@ -8942,7 +8954,10 @@ export const zh_TW: EnTranslations = {
       "dps": "每秒傷害",
       "critChance": "暴擊機率",
       "dodge": "閃躲",
-      "parry": "招架"
+      "parry": "招架",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality}{kind}",
@@ -12399,6 +12414,93 @@ export const zh_TW: EnTranslations = {
       "dawnhold_posy": {
         "name": "晨曦堡花園小花束"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "公會印記武裝劍"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "黃銅帽手斧"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "淬火凸緣錘"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "公會印記短劍"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "黃銅冠手杖"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "漆木短杖"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "製弓師公會弓"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "燼痕"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "餘燼之噬"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "悶燃墜擊"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "灰火匕"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "爐心法杖"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "餘燼鍛造魔杖"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "燼鎖"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "冰牙"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "裂冰"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "霜碎"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "霜針"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "白霜守望"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "永冬碎片"
+      },
+      "winterbite_skin_unlock": {
+        "name": "寒冬之噬"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim，黎明最後之光"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "裂天者，蒼穹之傷"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "星隕，諸天裁決"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr，隕星之牙"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch，無盡虛空尖塔"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "餘燼之願，垂死太陽之火種"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore，第二顆墜星"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "星隕鎖扣，天空最後的裁決"
+      },
       "conjured_water4": {
         "name": "魔法泉水"
       },
@@ -13983,6 +14085,11 @@ export const zh_TW: EnTranslations = {
         "name": "怒焰",
         "title": "榮譽軍需官",
         "greeting": "戰場黃沙銘記每一場勝利。願你妥善運用這份榮譽。"
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "大熊時裝福利商人",
+        "title": "時裝商人",
+        "greeting": "每件十金。凡是世間已有的樣子，這裡都有現成的。"
       },
       "warmarshal_draven_kole": {
         "name": "戰帥德拉文·科爾",
