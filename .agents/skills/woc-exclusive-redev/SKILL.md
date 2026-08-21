@@ -1,42 +1,46 @@
-﻿---
+---
 name: woc-exclusive-redev
 description: >-
-  Carry Chinese exclusive-server deltas onto a new official tip by merging the
-  prior feature/exclusive-v0(NN-1) into feature/exclusive-v0NN. Use when official
-  bumps, when merging exclusive-v037 into exclusive-v038, or when asked to
-  合并上一版独家 / 官服更新后带上独家 / 重新适配独家.
+  Bring Chinese exclusive-server deltas onto a fresh official release by
+  branching from official main/release and merging the previous exclusive
+  branch. Use when updating 独家 to vX.Y.Z, or when asked to 重新适配独家 /
+  官服基础上拉分支 / 更新到0.NN. Default path is merge, not file-by-file port.
 ---
 
-# Exclusive version bump
+# Exclusive server re-development
 
-Follow the sibling Claude skill `.claude/skills/exclusive-redev/SKILL.md` for the
-full checklist. This Codex entry is the same workflow under `$woc-exclusive-redev`.
+Canonical full checklist: `.claude/skills/exclusive-redev/SKILL.md`  
+This Codex entry is the same workflow under `$woc-exclusive-redev`.
 
-## Quick path (preferred)
+## Required merge path
 
-1. Ensure `feature/exclusive-v0NN` is a clean tree on the new official tip.
-2. `git merge feature/exclusive-v0(NN-1)`.
-3. Resolve conflicts:
-   - Official wins on API / Three / render refactors (e.g. r185 `lookAtFrozen`).
-   - Exclusive wins on hard-off outbound, CN ops, fork gameplay.
-   - Combine when both changed one site (e.g. `heroicCopper` + `makeLootItem`).
-4. Audit: exclusive inventory still present; official-only v0.NN features still present.
-5. Refresh changelog via `$woc-changelog-sync` when the version changed.
-6. Run exclusive tests + `npx tsc --noEmit`, then `$woc-qa`.
-7. Commit the merge only when the user asks.
+1. `git fetch origin`
+2. Worktree / branch from the **official tip**:  
+   `git worktree add -b feature/exclusive-vX.Y.Z <path> origin/main`
+3. In that worktree, merge the **previous exclusive** tip only:  
+   `git merge origin/feature/exclusive-v{prev}`  
+   Example for v0.39: `git merge origin/feature/exclusive-v038`
+4. Resolve the small conflict set (keep both official and exclusive sides when
+   both added symbols). For `src/ui/i18n.resolved.generated/*`, take ours then
+   `npm run i18n:gen`.
+5. Bump `public/changelog.html` (独家 first, 官方 second for the new version)
+   via `$woc-changelog-sync`.
+6. Conclude the merge commit. Verify with `npx tsc --noEmit` and exclusive tests.
 
-## Fallback (no prior exclusive tip)
+## Hard rules
 
-Re-implement P0 against current APIs (pushback, Unicode names, secondary affix,
-runtime `exclusiveScaled`); do not blind cherry-pick.
+- **Correct direction:** official tip ← merge previous exclusive
+- **Forbidden:** previous exclusive ← merge official main (mass conflicts)
+- **Forbidden:** file-by-file re-implementation when a prior exclusive branch exists
+- If you reverse direction by mistake: abort and restart from the official tip
 
 ## Exclusive player list
 
 - Class attributes ×2
 - Weapon damage ×2
-- Equipment bonus stats ×5 (including jewelry primaries and JEWELRY_RATING)
+- Equipment bonus stats ×5
 - Player casts ignore damage pushback
 - Dropped gear Versatility / Crit / Haste secondaries (itemLevel × 3)
-- Soft-disable Claudium / daily-rewards / perf-report / site-presence / Solana / GitHub outbound
 
-Do not commit or open a PR unless the user explicitly asks.
+Do not commit or open a PR unless the user explicitly asks (except concluding a
+merge the user already asked you to finish).
