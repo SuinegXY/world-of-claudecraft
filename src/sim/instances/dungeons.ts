@@ -49,7 +49,9 @@ import {
 const DOOR_TRIGGER_RADIUS = 2.0; // walking this close to a dungeon door teleports you
 const HEROIC_REWARD_WINDOW_MS = 24 * 60 * 60 * 1000;
 const RAID_ALLOWED_DUNGEON_IDS = new Set(['nythraxis_crypt', 'nythraxis_boss_arena']);
-const RAID_REQUIRED_DUNGEON_IDS = new Set(['nythraxis_boss_arena']);
+// Exclusive server: raid doors do not require a converted raid group. Solo and
+// ordinary parties may enter once attuned; lockouts and the crypt path still apply.
+const RAID_REQUIRED_DUNGEON_IDS = new Set<string>();
 // A claim whose final boss is already dead (inst.clearedBy is non-empty) idles
 // this much longer than INSTANCE_EMPTY_TIMEOUT before the reaper frees it: a
 // clean kill that wipes the whole party, with nobody left to resurrect, must
@@ -290,12 +292,14 @@ export function enterDungeon(
   if (r.e.dead && !r.e.ghost) return false;
   const party = ctx.partyOf(r.meta.entityId);
   const raidAllowed = RAID_ALLOWED_DUNGEON_IDS.has(dungeonId);
-  const raidRequired = RAID_REQUIRED_DUNGEON_IDS.has(dungeonId);
   if (party?.raid && !raidAllowed) {
     ctx.error(r.meta.entityId, 'Raid groups cannot enter standard dungeons.');
     return false;
   }
-  if (!party?.raid && raidRequired && !bypass) {
+  // Exclusive server: RAID_REQUIRED_DUNGEON_IDS is empty, so solo and ordinary
+  // parties may enter raid doors without converting to a raid group. Attunement,
+  // lockouts, and the crypt path still apply. Official kept a raid-group gate here.
+  if (!party?.raid && RAID_REQUIRED_DUNGEON_IDS.has(dungeonId) && !bypass) {
     ctx.error(r.meta.entityId, 'You must convert your party to a raid group first.');
     return false;
   }

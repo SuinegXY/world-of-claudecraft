@@ -151,8 +151,10 @@ export function validCharName(n: unknown): n is string {
   return validCharNameShape(n) && !offensiveName(n);
 }
 
+// Lockstep with src/ui/auth_utils.ts validateCharacterName and
+// src/main.ts sanitizeOfflineName — all three must use the same pattern.
 export function validCharNameShape(n: unknown): n is string {
-  return typeof n === 'string' && /^[A-Za-z][A-Za-z' -]{1,15}$/.test(n);
+  return typeof n === 'string' && /^\p{L}[\p{L}' -]{1,15}$/u.test(n);
 }
 
 // Server-side canonical form for a character name: trim the ends and collapse

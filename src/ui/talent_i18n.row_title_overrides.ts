@@ -1,4 +1,4 @@
-import type { SupportedLanguage } from './i18n';
+import type { AuthoredLanguage } from './i18n';
 
 // Canonical non-grant choice-row titles. PR #1756 deliberately treats these
 // fantasy names as proper names in non-CJK locales; the four CJK locales carry
@@ -181,7 +181,7 @@ const ORIGINAL_TITLES = Object.freeze(
   Object.fromEntries(RETAINED_ROW_TITLE_SOURCES.map((title) => [title, title])),
 ) as TitleMap;
 
-const WARRIOR_TITLES: Partial<Record<SupportedLanguage, Partial<TitleMap>>> = {
+const WARRIOR_TITLES: Partial<Record<AuthoredLanguage, Partial<TitleMap>>> = {
   es: {
     'Double Charge': 'Intervenir',
     Pursuit: 'Persecución',
@@ -392,7 +392,7 @@ const WARRIOR_TITLES: Partial<Record<SupportedLanguage, Partial<TitleMap>>> = {
   },
 };
 
-const CJK_TITLES: Partial<Record<SupportedLanguage, Partial<TitleMap>>> = {
+const CJK_TITLES: Partial<Record<AuthoredLanguage, Partial<TitleMap>>> = {
   zh_CN: {
     'Steadfast Step': '坚定步伐',
     'Divine Steed': '神圣战马',
@@ -1068,7 +1068,7 @@ const CJK_TITLES: Partial<Record<SupportedLanguage, Partial<TitleMap>>> = {
 };
 
 export const RETAINED_ROW_TITLE_OVERRIDES: Partial<
-  Record<SupportedLanguage, Readonly<Record<string, string>>>
+  Record<AuthoredLanguage, Readonly<Record<string, string>>>
 > = {
   es: { ...ORIGINAL_TITLES, ...WARRIOR_TITLES.es },
   es_ES: { ...ORIGINAL_TITLES, ...WARRIOR_TITLES.es_ES },

@@ -417,6 +417,55 @@
     height: 16px;
     display: block;
   }
+  button.donate-cta {
+    cursor: pointer;
+    font: inherit;
+  }
+
+  /* Exclusive: in-game / shell Donate opens a local Alipay + WeChat Pay QR modal.
+     z-index lives on `.modal-backdrop.sponsor-qr-backdrop` AFTER the shared
+     `.modal-backdrop` rule below: same-specificity earlier `.sponsor-qr-backdrop`
+     lost to that rule's z-index:300 and the overlay could sit under game chrome. */
+  .sponsor-qr-modal {
+    width: min(420px, 100%);
+    padding: 18px;
+  }
+  .sponsor-qr-blurb {
+    margin: 0 0 14px;
+    color: var(--color-text-muted);
+    line-height: 1.45;
+    font-size: 13px;
+  }
+  .sponsor-qr-grid,
+  .homepage-sponsor-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .sponsor-qr-item {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .sponsor-qr-item img {
+    display: block;
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 6px;
+    padding: 6px;
+    box-sizing: border-box;
+  }
+  .sponsor-qr-item figcaption {
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 700;
+  }
 
   /* Wallet verification CTA. It is a gold action until the account has a
      server-verified wallet, then settles into a green verified state. */
@@ -2022,6 +2071,7 @@
     text-decoration: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     transition: all var(--transition-speed) var(--transition-ease);
+    cursor: pointer;
   }
 
   .social-link:hover,
@@ -4668,6 +4718,11 @@
     justify-content: center;
     padding: 24px;
     background: rgba(0, 0, 0, 0.72);
+  }
+  /* Exclusive sponsor QR: above in-game HUD stacking (mobile #ui ~80-90, drawers
+     ~300). Must follow `.modal-backdrop` so this z-index wins the cascade. */
+  .modal-backdrop.sponsor-qr-backdrop {
+    z-index: 10000;
   }
   .modal-backdrop[hidden] {
     display: none;

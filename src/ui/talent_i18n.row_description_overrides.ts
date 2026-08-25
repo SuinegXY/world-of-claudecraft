@@ -1,4 +1,4 @@
-import type { SupportedLanguage } from './i18n';
+import type { AuthoredLanguage } from './i18n';
 
 // Authored winning-Warrior row descriptions that cannot be generated from
 // primitive effect metadata alone. Keep description data separate from title data.
@@ -78,7 +78,7 @@ type DescriptionMap = Readonly<
 >;
 
 export const RETAINED_ROW_DESCRIPTION_OVERRIDES: Partial<
-  Record<SupportedLanguage, DescriptionMap>
+  Record<AuthoredLanguage, DescriptionMap>
 > = {
   es: {
     wlk_r17_death_coil:

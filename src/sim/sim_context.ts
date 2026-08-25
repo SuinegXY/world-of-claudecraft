@@ -964,14 +964,20 @@ export interface SimContextCallbacks {
   // startFishing now routes to the fishing module (src/sim/professions/fishing.ts,
   // Professions 2.0), called with the live ctx the same way runEffects is;
   // its body no longer lives on Sim (completeFishing, declared above, moved with it).
-  // unlockMechChromaFromItem / openSkinSelect are cosmetics internals (facet W7);
-  // isSwimming is a shared terrain predicate. unlockMechChromaFromItem's return value
-  // flows out through useItem to the server `use` case (result?.type === 'mechChroma').
+  // unlockMechChromaFromItem / unlockWeaponSkinFromItem / openSkinSelect are cosmetics
+  // internals (facet W7); isSwimming is a shared terrain predicate. Their return values
+  // flow out through useItem to the server `use` case (result?.type === 'mechChroma' /
+  // 'weaponSkin').
   startFishing(p: Entity, meta: PlayerMeta): void;
   unlockMechChromaFromItem(
     meta: PlayerMeta,
     itemId: string,
     chromaId: string,
+  ): ItemUseResult | undefined;
+  unlockWeaponSkinFromItem(
+    meta: PlayerMeta,
+    itemId: string,
+    skinId: string,
   ): ItemUseResult | undefined;
   openSkinSelect(meta: PlayerMeta, catalog: SkinCatalog, itemId: string): void;
   isSwimming(e: Entity): boolean;
@@ -1596,6 +1602,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: host.startFishing,
     unlockMechChromaFromItem: host.unlockMechChromaFromItem,
+    unlockWeaponSkinFromItem: host.unlockWeaponSkinFromItem,
     openSkinSelect: host.openSkinSelect,
     isSwimming: host.isSwimming,
     // W3 interaction: the two still-on-Sim quest-NPC delegates the moved interact dispatches to.

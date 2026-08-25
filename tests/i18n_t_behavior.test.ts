@@ -51,38 +51,30 @@ describe("t(): untracked key (absent from the table and from en)", () => {
 });
 
 describe("t(): pending key (untranslated; the dense table English-fills it)", () => {
-  // After the lazy locale flip the runtime no longer reads the barrel's `translations`
-  // map; it reads the eager `en` slice plus a `resident.es` that ensureLocaleLoaded("es")
-  // populates from LOCALE_LOADERS.es() (a dynamic import of ./es), plus the static
-  // `pending` set. So inject the synthetic pending key at THOSE seams: add it to the es
-  // slice (so resident.es carries it after the await) and list it in pending.es (so the
-  // release hard-fail fires). Mocking the old barrel `translations` would no longer feed
-  // the table the runtime reads - the lookup would miss and throw an UNTRACKED error, a
-  // different throw - so the assertion below would silently test the wrong thing.
-  const ES = "../src/ui/i18n.resolved.generated/es";
+  // After the lazy locale flip the runtime reads eager `en` plus a `resident.zh_CN`
+  // that ensureLocaleLoaded("zh_CN") populates from LOCALE_LOADERS.zh_CN. Inject the
+  // synthetic pending key into the zh_CN slice and pending.zh_CN.
+  const ZH = "../src/ui/i18n.resolved.generated/zh_CN";
   const PENDING = "../src/ui/i18n.resolved.generated/pending";
   const SAMPLE = "__samplePendingKey";
   const FILL = "English fill {name}";
 
   async function loadWithPending() {
     vi.resetModules();
-    vi.doMock(ES, async () => {
-      const actual = await vi.importActual<typeof import("../src/ui/i18n.resolved.generated/es")>(ES);
-      const table = { ...actual.es, [SAMPLE]: FILL };
-      // Expose both `es` (the source named export) and `default` (the production-chunk
-      // shape) so the loader's shape-tolerant `mod.default ?? mod.es` read resolves without
-      // the vitest mock proxy throwing on an undefined `default` access.
-      return { es: table, default: table };
+    vi.doMock(ZH, async () => {
+      const actual = await vi.importActual<typeof import("../src/ui/i18n.resolved.generated/zh_CN")>(ZH);
+      const table = { ...actual.zh_CN, [SAMPLE]: FILL };
+      return { zh_CN: table, default: table };
     });
     vi.doMock(PENDING, async () => {
       const actual = await vi.importActual<typeof import("../src/ui/i18n.resolved.generated/pending")>(PENDING);
-      return { pending: { ...actual.pending, es: [...(actual.pending.es ?? []), SAMPLE] } };
+      return { pending: { ...actual.pending, zh_CN: [...(actual.pending.zh_CN ?? []), SAMPLE] } };
     });
     return await import("../src/ui/i18n");
   }
 
   afterEach(() => {
-    vi.doUnmock(ES);
+    vi.doUnmock(ZH);
     vi.doUnmock(PENDING);
     vi.resetModules();
   });
@@ -90,8 +82,8 @@ describe("t(): pending key (untranslated; the dense table English-fills it)", ()
   it("renders the English fill on a non-release build", async () => {
     delete process.env.I18N_RELEASE;
     const mod = await loadWithPending();
-    mod.setLanguage("es");
-    await mod.ensureLocaleLoaded("es"); // make resident.es carry the synthetic key
+    mod.setLanguage("zh_CN");
+    await mod.ensureLocaleLoaded("zh_CN");
     const tm = mod.t as unknown as (k: string, v?: Record<string, string | number>) => string;
     expect(tm("__samplePendingKey", { name: "Aki" })).toBe("English fill Aki");
   });
@@ -99,8 +91,8 @@ describe("t(): pending key (untranslated; the dense table English-fills it)", ()
   it("hard-fails on a release build (English must never ship to a translated player)", async () => {
     process.env.I18N_RELEASE = "1";
     const mod = await loadWithPending();
-    mod.setLanguage("es");
-    await mod.ensureLocaleLoaded("es");
+    mod.setLanguage("zh_CN");
+    await mod.ensureLocaleLoaded("zh_CN");
     const tm = mod.t as unknown as (k: string) => string;
     expect(() => tm("__samplePendingKey")).toThrow(/pending/);
   });
@@ -121,7 +113,7 @@ describe.runIf(RELEASE_TIER)("t(): the committed pending set is empty (release t
     // Non-vacuous floor: the gate must actually enumerate the non-en locales, so a
     // future regression that collapsed `pending` to `{}` cannot pass by iterating
     // zero times.
-    expect(Object.keys(realPending).length, "pending must enumerate the non-en locales").toBeGreaterThan(10);
+    expect(Object.keys(realPending).length, "pending must enumerate the shipped non-en locales").toBeGreaterThan(0);
     assertNoPending(realPending);
   });
 });

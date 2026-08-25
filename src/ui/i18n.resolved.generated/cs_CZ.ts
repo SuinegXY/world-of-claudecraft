@@ -1967,6 +1967,7 @@ export const cs_CZ: EnTranslations = {
         "spellPower": "Síla kouzel",
         "critRating": "Hodnocení kritického zásahu",
         "hasteRating": "Hodnocení rychlosti",
+        "versatilityRating": "Versatility",
         "parry": "Odražení",
         "hitRating": "Hodnocení zásahu",
         "warfare": "Válečnictví"
@@ -1988,6 +1989,7 @@ export const cs_CZ: EnTranslations = {
         "hasteRating": "Hodnocení rychlosti z tvé výbavy a bonusů sad, které zrychluje tvé útoky a sesílání kouzel. Přibližně 10 hodnocení dá 1 % rychlosti.",
         "parry": "Tvoje šance zcela odrazit čelní útok na blízko a neutrpět žádné poškození. Úder zezadu odrazit nelze.",
         "hitRating": "Hodnocení zásahu z vybavení a bonusů sady, snižující četnost mašení tvých útoků a odolávání tvým kouzlům, zejména proti nepřátelům vyšší úrovně. Přibližně 10 bodů hodnocení přidá 1 % zásahu.",
+        "versatilityRating": "Versatility rating from secondary affixes on your gear, increasing all damage you deal. Every 10 rating grants exactly 1% bonus damage.",
         "warfare": "Zvýší poškození způsobené hráčům o {increase} % a sníží poškození utrpěné od hráčů o {reduction} %."
       },
       "effects": {
@@ -6930,6 +6932,7 @@ export const cs_CZ: EnTranslations = {
     "highscores": "Žebříčky",
     "wiki": "Wiki",
     "news": "Novinky",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Stáhnout",
     "loginRegister": "Přihlášení/Registrace",
     "account": "Účet",
@@ -8170,6 +8173,15 @@ export const cs_CZ: EnTranslations = {
     "discordCommunity": "Připojit se ke komunitě World of ClaudeCraft na Discordu",
     "donateProject": "Přispět na podporu World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Sponsor DaXiong",
+    "blurb": "Sponsor DaXiong; you can leave a message when sponsoring.",
+    "alipay": "Alipay",
+    "wechat": "WeChat Pay",
+    "alipayAlt": "Alipay sponsor QR code",
+    "wechatAlt": "WeChat Pay sponsor QR code",
+    "railLabel": "Sponsor QR codes"
+  },
   "entryGuard": {
     "title": "Grafika snížena",
     "body": "Hra se při vstupu do světa neočekávaně ukončila, grafika je proto nyní nastavena na {preset}. Můžete to změnit ve výběru grafiky níže nebo v nastavení ve hře.",
@@ -9388,7 +9400,10 @@ export const cs_CZ: EnTranslations = {
       "dps": "Poškození/s",
       "critChance": "Šance na kritický zásah",
       "dodge": "Vyhnutí",
-      "parry": "Odražení"
+      "parry": "Odražení",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",
@@ -12871,6 +12886,93 @@ export const cs_CZ: EnTranslations = {
       "ps_passing_stone": {
         "name": "Kámen přechodu"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "Guildmark Arming Sword"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "Brasscap Hatchet"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "Tempered Flanged Mace"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "Guildmark Dirk"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "Brasscrown Walking Staff"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "Lacquered Rod"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "Fletcher's Guild Bow"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "Cinderbrand"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "Emberbite"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "Smoulderfall"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "Ashspark Shiv"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "Forgeheart Stave"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "Emberwrought Wand"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "Cinderlatch"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "Ice Fang"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "Glaciersplit"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "Rimecrusher"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "Rime Needle"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "Hoarfrost Vigil"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "Shard of Everwinter"
+      },
+      "winterbite_skin_unlock": {
+        "name": "Winterbite"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim, Last Light of the Dawn"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "Skyrender, the Firmament's Wound"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "Starfall, Judgment of the Heavens"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr, Fang of the Fallen Star"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch, Spire of the Endless Void"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "Emberwish, Mote of the Dying Sun"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore, the Second Falling Star"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "Meteorlatch, the Sky's Last Judgment"
+      },
       "conjured_water4": {
         "name": "Vyčarovaná pramenitá voda"
       },
@@ -14461,6 +14563,11 @@ export const cs_CZ: EnTranslations = {
         "name": "FÚRIE",
         "title": "Intendant cti",
         "greeting": "Písky si pamatují každé vítězství. Utrácej svou čest moudře."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "Da Xiong Fashion Welfare Merchant",
+        "title": "Fashion Outfitter",
+        "greeting": "Ten gold apiece. Every look the realm already knows, boxed and ready."
       },
       "warmarshal_draven_kole": {
         "name": "Válečný maršál Draven Kole",

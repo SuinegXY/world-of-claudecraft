@@ -222,6 +222,7 @@ const CALLBACK_KEYS = [
   // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
   'startFishing',
   'unlockMechChromaFromItem',
+  'unlockWeaponSkinFromItem',
   'openSkinSelect',
   'isSwimming',
   // W3 interaction: the two still-on-Sim quest-NPC delegates the moved interact dispatches to.
@@ -561,6 +562,7 @@ function makeFakeHost() {
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: vi.fn(),
     unlockMechChromaFromItem: vi.fn(),
+    unlockWeaponSkinFromItem: vi.fn(),
     openSkinSelect: vi.fn(),
     isSwimming: vi.fn(() => false),
     // W3 interaction: the two still-on-Sim quest-NPC delegates the moved interact dispatches to.

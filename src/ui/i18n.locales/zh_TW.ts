@@ -1,4 +1,4 @@
-// Flat dotted-key translation overlay for "zh_TW".
+﻿// Flat dotted-key translation overlay for "zh_TW".
 //
 // One key per leaf of the authoritative nested `en` (src/ui/i18n.catalog), keys
 // in `en`'s leaf order. This is the translator-edited source: edit a value to
@@ -1196,6 +1196,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.statInfo.names.spellPower': '法術強度',
   'hudChrome.statInfo.names.critRating': '暴擊等級',
   'hudChrome.statInfo.names.hasteRating': '急速等級',
+  'hudChrome.statInfo.names.versatilityRating': '全能等級',
   'hudChrome.statInfo.names.parry': '招架',
   'hudChrome.statInfo.desc.parry':
     '你招架正面近戰攻擊、完全不受傷害的機率。來自背後的攻擊無法招架。',
@@ -1208,6 +1209,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '來自裝備和套裝加成的暴擊等級，提升你的暴擊機率。約每10點等級提供1%暴擊。',
   'hudChrome.statInfo.desc.hasteRating':
     '來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。',
+  'hudChrome.statInfo.desc.versatilityRating':
+    '來自裝備次要詞綴的全能等級，提高你造成的所有傷害。每10點等級恰好提供1%額外傷害。',
   'hudChrome.statInfo.desc.spellPower':
     '提高你法術造成的傷害與治療的強度。每點智力都會提供少量法術強度，此外還有來自裝備與增益的加成。',
   'hudChrome.statInfo.desc.warfare':
@@ -1551,7 +1554,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'nav.download': '下載客戶端',
   'nav.loginRegister': '登入/註冊',
   'nav.logout': '登出',
-  'nav.donate': '捐贈',
+  'nav.donate': '贊助大熊',
   'stats.title': '世界狀態',
   'stats.accountsCreated': '玩家',
   'stats.charactersCreated': '已創建角色',
@@ -1851,6 +1854,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'a11y.githubProject': '開啟 World of ClaudeCraft 的 GitHub 專案',
   'a11y.discordCommunity': '加入 World of ClaudeCraft 的 Discord 社群',
   'a11y.donateProject': '捐贈支持 World of ClaudeCraft',
+  'sponsor.title': '贊助大熊',
+  'sponsor.blurb': '贊助大熊,可在贊助時留言',
+  'sponsor.alipay': '支付寶',
+  'sponsor.wechat': '微信支付',
+  'sponsor.alipayAlt': '支付寶贊助二維碼',
+  'sponsor.wechatAlt': '微信支付贊助二維碼',
+  'sponsor.railLabel': '贊助二維碼',
   'entryGuard.body':
     '進入世界時遊戲意外關閉，圖形設定現已設為{preset}。你可以在下方的圖形選擇器或遊戲內選項中變更。',
   'entryGuard.dismiss': '關閉',
@@ -9073,6 +9083,41 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.fury.name': '怒焰',
   'entities.npcs.fury.title': '榮譽軍需官',
   'entities.npcs.fury.greeting': '戰場黃沙銘記每一場勝利。願你妥善運用這份榮譽。',
+
+  // Exclusive fashion welfare: Armory weapon-skin unlock tokens.
+  'entities.items.guildmark_arming_sword_skin_unlock.name': '公會印記武裝劍',
+  'entities.items.brasscap_axe_skin_unlock.name': '黃銅帽手斧',
+  'entities.items.tempered_flanged_mace_skin_unlock.name': '淬火凸緣錘',
+  'entities.items.guildmark_dirk_skin_unlock.name': '公會印記短劍',
+  'entities.items.brasscrown_staff_skin_unlock.name': '黃銅冠手杖',
+  'entities.items.lacquered_wand_skin_unlock.name': '漆木短杖',
+  'entities.items.fletcher_s_guild_bow_skin_unlock.name': '製弓師公會弓',
+  'entities.items.cinderbrand_sword_skin_unlock.name': '燼痕',
+  'entities.items.emberbite_axe_skin_unlock.name': '餘燼之噬',
+  'entities.items.smoulderfall_mace_skin_unlock.name': '悶燃墜擊',
+  'entities.items.ashspark_dagger_skin_unlock.name': '灰火匕',
+  'entities.items.forgeheart_staff_skin_unlock.name': '爐心法杖',
+  'entities.items.emberwrought_wand_skin_unlock.name': '餘燼鍛造魔杖',
+  'entities.items.cinderlatch_crossbow_skin_unlock.name': '燼鎖',
+  'entities.items.ice_fang_sword_skin_unlock.name': '冰牙',
+  'entities.items.glaciersplit_axe_skin_unlock.name': '裂冰',
+  'entities.items.rimecrusher_mace_skin_unlock.name': '霜碎',
+  'entities.items.frostbite_dagger_skin_unlock.name': '霜針',
+  'entities.items.hoarfrost_vigil_staff_skin_unlock.name': '白霜守望',
+  'entities.items.everwinter_wand_skin_unlock.name': '永冬碎片',
+  'entities.items.winterbite_skin_unlock.name': '寒冬之噬',
+  'entities.items.solheim_sword_skin_unlock.name': 'Solheim，黎明最後之光',
+  'entities.items.skyrender_axe_skin_unlock.name': '裂天者，蒼穹之傷',
+  'entities.items.starfall_mace_skin_unlock.name': '星隕，諸天裁決',
+  'entities.items.astravyr_dagger_skin_unlock.name': 'Astravyr，隕星之牙',
+  'entities.items.cosmarch_staff_skin_unlock.name': 'Cosmarch，無盡虛空尖塔',
+  'entities.items.emberwish_wand_skin_unlock.name': '餘燼之願，垂死太陽之火種',
+  'entities.items.encore_bow_skin_unlock.name': 'Encore，第二顆墜星',
+  'entities.items.meteorlatch_crossbow_skin_unlock.name': '星隕鎖扣，天空最後的裁決',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.name': '大熊時裝福利商人',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.title': '時裝商人',
+  'entities.npcs.da_xiong_fashion_welfare_merchant.greeting':
+    '每件十金。凡是世間已有的樣子，這裡都有現成的。',
   'entities.npcs.warmarshal_draven_kole.name': '戰帥德拉文·科爾',
   'entities.npcs.warmarshal_draven_kole.title': '戰爭軍備庫總管',
   'entities.npcs.warmarshal_draven_kole.greeting':

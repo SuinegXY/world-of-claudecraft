@@ -11,7 +11,7 @@ const HEROIC_ADD_IDS = [
 
 function heroicBoss(sim: Sim, pid: number): { boss: Entity; st: NonNullable<Entity['nythraxis']> } {
   sim.chat('/dev raid heroic', pid);
-  sim.chat('/dev god', pid); // survive the Deathless Rage nuke so the encounter runs on
+  sim.chat('/dev god', pid);
   const boss = [...sim.entities.values()].find(
     (e) => e.kind === 'mob' && e.templateId === 'nythraxis_scourge_of_thornpeak',
   ) as Entity;
@@ -22,9 +22,9 @@ function heroicBoss(sim: Sim, pid: number): { boss: Entity; st: NonNullable<Enti
   return { boss, st: boss.nythraxis! };
 }
 
-// Drop the boss into phase 2 with an imminent, uncontested Deathless Rage, then
-// tick until it lands and the summon channel resolves.
-function forcePillarCast(sim: Sim, st: NonNullable<Entity['nythraxis']>): void {
+// Drop the boss into phase 2 with an imminent Deathless Rage timer, then wait
+// long enough that the old pillar cast would have resolved.
+function forcePillarCastWindow(sim: Sim, st: NonNullable<Entity['nythraxis']>): void {
   st.phase = 2;
   st.deathlessTimer = 0;
   st.soulRendTimer = 100;
@@ -33,13 +33,13 @@ function forcePillarCast(sim: Sim, st: NonNullable<Entity['nythraxis']>): void {
   for (let i = 0; i < 20 * 16; i++) sim.tick();
 }
 
-describe('heroic Nythraxis raises his court on the phase-2 pillar cast', () => {
+describe('heroic Nythraxis court summon stays tied to Deathless Rage (exclusive off)', () => {
   const countHeroicAdds = (sim: Sim) =>
     [...sim.entities.values()].filter(
       (e) => e.kind === 'mob' && !e.dead && HEROIC_ADD_IDS.includes(e.templateId),
     ).length;
 
-  it('summons exactly one court after an uninterrupted Deathless Rage, not on engage', () => {
+  it('does not summon the court when Deathless Rage is disabled', () => {
     const sim = new Sim({
       seed: 4,
       playerClass: 'warrior',
@@ -48,46 +48,10 @@ describe('heroic Nythraxis raises his court on the phase-2 pillar cast', () => {
       world: EMPTY_TEST_WORLD,
     });
     sim.setPlayerLevel(20);
-    const { st } = heroicBoss(sim, sim.playerId);
-    expect(countHeroicAdds(sim)).toBe(0); // phase 1: no court
-    forcePillarCast(sim, st);
-    expect(countHeroicAdds(sim)).toBe(3); // Aldren + Malric + Voss, exactly once
-  });
-
-  it('does NOT stack a second court while the first is still alive', () => {
-    const sim = new Sim({
-      seed: 4,
-      playerClass: 'warrior',
-      autoEquip: true,
-      devCommands: true,
-      world: EMPTY_TEST_WORLD,
-    });
-    sim.setPlayerLevel(20);
-    const { st } = heroicBoss(sim, sim.playerId);
-    forcePillarCast(sim, st);
-    expect(countHeroicAdds(sim)).toBe(3);
-    // A second Deathless Rage with the court still up must not summon a fresh set.
-    forcePillarCast(sim, st);
-    expect(countHeroicAdds(sim)).toBe(3);
-  });
-
-  it('re-summons the court on the next pillar once the previous court has fallen', () => {
-    const sim = new Sim({
-      seed: 4,
-      playerClass: 'warrior',
-      autoEquip: true,
-      devCommands: true,
-      world: EMPTY_TEST_WORLD,
-    });
-    sim.setPlayerLevel(20);
-    const { st } = heroicBoss(sim, sim.playerId);
-    forcePillarCast(sim, st);
-    expect(countHeroicAdds(sim)).toBe(3);
-    // Kill the court, then the next pillar raises a fresh one.
-    for (const e of sim.entities.values()) {
-      if (e.kind === 'mob' && HEROIC_ADD_IDS.includes(e.templateId)) e.dead = true;
-    }
-    forcePillarCast(sim, st);
-    expect(countHeroicAdds(sim)).toBe(3);
+    const { boss, st } = heroicBoss(sim, sim.playerId);
+    expect(countHeroicAdds(sim)).toBe(0);
+    forcePillarCastWindow(sim, st);
+    expect(boss.castingAbility).not.toBe('nythraxis_deathless_rage');
+    expect(countHeroicAdds(sim)).toBe(0);
   });
 });
