@@ -46,7 +46,7 @@ describe('Ignivar encounter dialogue', () => {
       'dialogue.varkhulEngage',
       'dialogue.varkhulMasterpiece',
     ] as const;
-    for (const language of ['zh_CN', 'zh_TW', 'ja_JP', 'ko_KR', 'ru_RU'] as const) {
+    for (const language of ['zh_CN'] as const) {
       for (const key of keys) {
         expect(DICT[language][key], `${language}: ${key}`).not.toBe(DICT.en[key]);
       }

@@ -4,24 +4,67 @@ import { beforeAll, describe, expect, it } from 'vitest';
 // @ts-expect-error - shared zero-dep JS tool (no .d.ts); same pattern as tests/i18n_fill_worklist.test.ts.
 import { expandGlossaryTerms, patternToRegExp } from '../scripts/i18n_fill_worklist.mjs';
 import {
+  cs_CZ,
+  da_DK,
+  de_DE,
   en,
+  en_CA,
   ensureLocaleLoaded,
+  es,
+  es_ES,
   formatMoney,
+  fr_CA,
+  fr_FR,
   hasTranslation,
+  id_ID,
+  it_IT,
+  ja_JP,
+  ko_KR,
   languageTag,
+  nl_NL,
+  pl_PL,
+  pt_BR,
+  ru_RU,
+  type AuthoredLanguage,
   type SupportedLanguage,
   setLanguage,
   supportedLanguages,
+  sv_SE,
   tPlural,
+  tr_TR,
+  vi_VN,
   zh_CN,
+  zh_TW,
 } from '../src/ui/i18n';
 
 // Whole-catalog i18n completeness guards that the per-key sample tests in
-// localization_coverage.test.ts do not cover. Exclusive CN ship: en + zh_CN only.
+// localization_coverage.test.ts do not cover. Exclusive CN ship: runtime
+// supportedLanguages is en + zh_CN; TABLES still pin every authored dense slice
+// (generated for tests, not emitted as production chunks).
 
-const TABLES: Record<SupportedLanguage, unknown> = {
+const TABLES: Record<AuthoredLanguage, unknown> = {
   en,
+  es,
+  es_ES,
+  fr_FR,
+  fr_CA,
+  en_CA,
+  it_IT,
+  de_DE,
   zh_CN,
+  zh_TW,
+  ko_KR,
+  ja_JP,
+  pt_BR,
+  ru_RU,
+  cs_CZ,
+  nl_NL,
+  pl_PL,
+  id_ID,
+  tr_TR,
+  sv_SE,
+  vi_VN,
+  da_DK,
 };
 
 function flatten(
@@ -201,7 +244,7 @@ describe('i18n whole-catalog completeness', () => {
       sv_SE: '0c441e36aeb4e410fa33b22bd6b9d5e688cfa6ffed19969938d73e7719e62eec',
       vi_VN: '74316c1ae2c6aed1bac93823c13666d525f5323524fb3a32779b6e3d1c0f6aca',
       da_DK: '980fac6b6bd64a0566b3624da401131f59375ff7b7efb0d2e4a9c7afc91896f6',
-    } as const satisfies Partial<Record<SupportedLanguage, string>>;
+    } as const satisfies Partial<Record<AuthoredLanguage, string>>;
 
     for (const [lang, digest] of Object.entries(expected) as Array<
       [keyof typeof expected, string]

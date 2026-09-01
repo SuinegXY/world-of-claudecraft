@@ -110,7 +110,7 @@ describe('ground-pickup line localization (the S3-invisible surface)', () => {
   });
 
   it('every non-English locale carries a real translation for every groundPickup key', () => {
-    const nonEnglish = supportedLanguages.filter((l) => l !== 'en' && l !== 'en_CA');
+    const nonEnglish = supportedLanguages.filter((l) => l !== 'en' && (l as string) !== 'en_CA');
     for (const lang of nonEnglish) {
       for (const key of GROUND_PICKUP_KEYS) {
         if (PENDING_LOCALE_KEYS.has(key)) continue; // English-pending (see above)

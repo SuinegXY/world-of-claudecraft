@@ -731,7 +731,10 @@ describe('the family reaper honors a cleared sibling claim', () => {
 
 describe('every raid boss room declares its lockout boundary explicitly', () => {
   it('raid rooms with a final boss sit in exactly one of the weekly/daily sets', () => {
-    for (const dungeonId of RAID_REQUIRED_DUNGEON_IDS) {
+    // Exclusive: RAID_REQUIRED_DUNGEON_IDS is empty (solo/party may enter raid
+    // doors). Lockout classification still walks the weekly/daily room sets.
+    const lockoutRooms = [...WEEKLY_LOCKOUT_RAID_ROOMS, ...DAILY_LOCKOUT_RAID_ROOMS];
+    for (const dungeonId of lockoutRooms) {
       const hasFinalBoss = HEROIC_DUNGEON_TUNING[dungeonId]?.finalBossId !== undefined;
       const weekly = WEEKLY_LOCKOUT_RAID_ROOMS.has(dungeonId);
       const daily = DAILY_LOCKOUT_RAID_ROOMS.has(dungeonId);
@@ -746,25 +749,23 @@ describe('every raid boss room declares its lockout boundary explicitly', () => 
     }
   });
 
-  it('the two sets never overlap and name only raid-tier rooms', () => {
+  it('the two sets never overlap', () => {
     for (const dungeonId of WEEKLY_LOCKOUT_RAID_ROOMS) {
       expect(DAILY_LOCKOUT_RAID_ROOMS.has(dungeonId), dungeonId).toBe(false);
-      expect(RAID_REQUIRED_DUNGEON_IDS.has(dungeonId), dungeonId).toBe(true);
-    }
-    for (const dungeonId of DAILY_LOCKOUT_RAID_ROOMS) {
-      expect(RAID_REQUIRED_DUNGEON_IDS.has(dungeonId), dungeonId).toBe(true);
     }
   });
 
   it('pins the shipped memberships, so a silent weekly/daily swap fails loudly here', () => {
-    // The guard loops above are structural; this floor is the literal anchor.
-    // NOTE: the guard's reach is exactly RAID_REQUIRED_DUNGEON_IDS, so a future
-    // raid-tier boss room must join that set (it must, for the raid-group door
-    // rule) before the declaration guard can see it.
+    // Exclusive keeps RAID_REQUIRED empty so the raid-group door gate never
+    // fires. Lockout rooms still have to exist as authored dungeon defs.
+    expect([...RAID_REQUIRED_DUNGEON_IDS]).toEqual([]);
     expect([...WEEKLY_LOCKOUT_RAID_ROOMS].sort()).toEqual([
       'ignivar_inner_crucible',
       'ignivar_raid_arena',
     ]);
     expect([...DAILY_LOCKOUT_RAID_ROOMS]).toEqual(['nythraxis_boss_arena']);
+    for (const dungeonId of [...WEEKLY_LOCKOUT_RAID_ROOMS, ...DAILY_LOCKOUT_RAID_ROOMS]) {
+      expect(DUNGEONS[dungeonId], dungeonId).toBeDefined();
+    }
   });
 });

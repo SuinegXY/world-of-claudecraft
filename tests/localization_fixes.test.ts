@@ -228,7 +228,7 @@ describe('B1: server log-type messages localize through the log path', () => {
       for (const m of logMessages) {
         const out = localizeServerText(m);
         expect(out, `${lang}: "${m}" should be recognized`).not.toBeNull();
-        if (lang !== 'en' && lang !== 'en_CA')
+        if (lang !== 'en' && (lang as string) !== 'en_CA')
           expect(out, `${lang}: "${m}" should not stay English`).not.toBe(m);
       }
     }
@@ -244,7 +244,7 @@ describe('L3/L4: additional server-message coverage', () => {
       setLanguage(lang);
       const out = localizeServerText(msg);
       expect(out, `${lang}`).not.toBeNull();
-      if (lang !== 'en' && lang !== 'en_CA') expect(out, `${lang}`).not.toBe(msg);
+      if (lang !== 'en' && (lang as string) !== 'en_CA') expect(out, `${lang}`).not.toBe(msg);
     }
     setLanguage('en');
   });
@@ -267,7 +267,7 @@ describe('H1: every talent name resolves via override or ability name', () => {
 
   it('each talent name has an explicit override or is an ability name in every translated locale', () => {
     for (const lang of supportedLanguages) {
-      if (lang === 'en' || lang === 'en_CA') continue;
+      if (lang === 'en' || (lang as string) === 'en_CA') continue;
       for (const e of nameEntries) {
         const ok = hasTalentTitleOverride(lang, e.source) || abilityNames.has(e.source);
         expect(
@@ -383,7 +383,7 @@ describe('H3: DICT key parity, non-empty values, placeholder integrity', () => {
   function checkNoCopiedEnglish(dict: Record<string, Record<string, string>>, label: string) {
     const en = dict.en;
     for (const lang of Object.keys(dict)) {
-      if (lang === 'en' || lang === 'en_CA') continue;
+      if (lang === 'en' || (lang as string) === 'en_CA') continue;
       for (const k of Object.keys(en)) {
         const v = dict[lang][k];
         if (v !== en[k]) continue;
@@ -417,7 +417,7 @@ describe('H1b: talent names are unique within a class tree', () => {
   );
   it('has zero same-tree name collisions in any translated locale', () => {
     for (const lang of supportedLanguages) {
-      if (lang === 'en' || lang === 'en_CA') continue;
+      if (lang === 'en' || (lang as string) === 'en_CA') continue;
       setLanguage(lang);
       const perClass = new Map<string, Map<string, Set<string>>>();
       for (const e of nameEntries) {
@@ -534,7 +534,7 @@ describe('H4b: talent-name resolution is complete (no silent English fallthrough
       for (const e of nameEntries) {
         const rendered = renderTalentManifestEntry(e);
         expect(rendered.trim().length, `${lang}: "${e.source}" rendered empty`).toBeGreaterThan(0);
-        if (lang !== 'en' && lang !== 'en_CA') {
+        if (lang !== 'en' && (lang as string) !== 'en_CA') {
           // must resolve via an explicit override or be an ability name (which tEntity localizes)
           const resolved = hasTalentTitleOverride(lang, e.source) || abilityNames.has(e.source);
           expect(
@@ -602,7 +602,7 @@ describe('S1: sim event-text pipeline is localized in every locale', () => {
           out,
           `${lang}: sim text "${s}" not recognized (would leak raw English)`,
         ).not.toBeNull();
-        if (lang !== 'en' && lang !== 'en_CA') {
+        if (lang !== 'en' && (lang as string) !== 'en_CA') {
           expect(out, `${lang}: sim text "${s}" stayed English`).not.toBe(s);
         }
       }
@@ -946,7 +946,7 @@ describe('A1: admin classLabel localizes the raw class id', () => {
       for (const id of classIds) {
         const label = classLabel(id);
         expect(label.trim().length, `${lang}.${id}`).toBeGreaterThan(0);
-        if (lang !== 'en' && lang !== 'en_CA') {
+        if (lang !== 'en' && (lang as string) !== 'en_CA') {
           expect(label, `${lang}: class "${id}" not localized`).not.toBe(id);
         }
       }
@@ -1639,7 +1639,7 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
             leaks.push(`${lang} (${type}) ${JSON.stringify(s)} not recognized`);
             continue;
           }
-          if (lang === 'en' || lang === 'en_CA') continue;
+          if (lang === 'en' || (lang as string) === 'en_CA') continue;
           const out = localizedOut(s);
           if (out !== null && out === s)
             leaks.push(`${lang} (${type}) ${JSON.stringify(s)} stayed English`);
@@ -1879,7 +1879,7 @@ describe('vendor sell log line localizes the item name for both a single item an
         // The regression this guards: the item name (and the sim's bare "xN"
         // spelling) must never survive verbatim inside an otherwise-localized
         // sentence.
-        if (lang !== 'en' && lang !== 'en_CA') {
+        if (lang !== 'en' && (lang as string) !== 'en_CA') {
           expect(out, lang).not.toContain('Copper Ore x2');
           expect(out, lang).not.toBe('Sold Copper Ore x2 for 8c.');
         }

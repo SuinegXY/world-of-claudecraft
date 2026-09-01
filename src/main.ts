@@ -3488,6 +3488,19 @@ async function startGame(
         };
       },
     };
+      if (!NATIVE_APP) {
+        hud.attachClaudium(claudiumHooks);
+        if (
+          shouldShowStorePromo({
+            nativeApp: NATIVE_APP,
+            desktopApp: DESKTOP_APP,
+            mobileTouch: document.body.classList.contains('mobile-touch'),
+          })
+        ) {
+          hud.attachStorePromoCard();
+        }
+      }
+    }
     attachWocMarketExchange({
       hud,
       api,
@@ -3498,18 +3511,6 @@ async function startGame(
         desktopAuthorize: desktopWalletBrowserHandoffAvailable() ? wocDesktopAuthorize : null,
       },
     }).catch((err) => console.warn('[woc] exchange attach failed', err));
-    if (!NATIVE_APP) {
-      hud.attachClaudium(claudiumHooks);
-      if (
-        shouldShowStorePromo({
-          nativeApp: NATIVE_APP,
-          desktopApp: DESKTOP_APP,
-          mobileTouch: document.body.classList.contains('mobile-touch'),
-        })
-      ) {
-        hud.attachStorePromoCard();
-      }
-    }
   }
   // The deliberate Thornhollow Fields flag press: always attempted, the world
   // owns every rule (radius, team, the return-beats-press race), so a stray

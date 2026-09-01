@@ -55,10 +55,10 @@ describe('admin t(): pending key (English-only legal at PR; hard-fail at release
         ...actual,
         translations: {
           ...actual.translations,
-          es: { ...actual.translations.es, [SAMPLE]: FILL },
+          zh_CN: { ...actual.translations.zh_CN, [SAMPLE]: FILL },
           en: { ...actual.translations.en, [SAMPLE]: FILL },
         },
-        pending: { ...actual.pending, es: [...(actual.pending.es ?? []), SAMPLE] },
+        pending: { ...actual.pending, zh_CN: [...(actual.pending.zh_CN ?? []), SAMPLE] },
       };
     });
     return await import('../src/admin/i18n');
@@ -73,14 +73,14 @@ describe('admin t(): pending key (English-only legal at PR; hard-fail at release
   it('renders the English fill on a non-release build (PR tier is English-only legal)', async () => {
     delete process.env.I18N_RELEASE;
     const mod = await loadAdminWithPending();
-    mod.setAdminLanguage('es');
+    mod.setAdminLanguage('zh_CN');
     expect(mod.t(SAMPLE, { name: 'Aki' })).toBe('English fill Aki');
   });
 
   it('hard-fails on a release build (English must never ship to a translated operator)', async () => {
     process.env.I18N_RELEASE = '1';
     const mod = await loadAdminWithPending();
-    mod.setAdminLanguage('es');
+    mod.setAdminLanguage('zh_CN');
     expect(() => mod.t(SAMPLE)).toThrow(/pending/);
   });
 

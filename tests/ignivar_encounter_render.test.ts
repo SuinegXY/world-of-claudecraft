@@ -89,7 +89,7 @@ import {
 } from '../src/sim/ignivar_forge_judgment';
 import { DUNGEON_MINIBOSS_STOMP_ABILITY_ID } from '../src/sim/mob/dungeon_miniboss_stomp';
 import { IGNIVAR_BOSS_ID } from '../src/sim/types';
-import { DICT, localizeSimAuraName, localizeSimText } from '../src/ui/sim_i18n';
+import { IGNIVAR_DICT, localizeSimAuraName, localizeSimText } from '../src/ui/sim_i18n';
 
 function expectAuthoredFireBeamInside(
   beam: THREE.Object3D,
@@ -918,22 +918,22 @@ describe('Ignivar encounter renderer', () => {
     expect(localizeSimAuraName('Brand of the Pyre')).not.toBeNull();
     expect(localizeSimAuraName('Searing Torrent')).not.toBeNull();
     expect(localizeSimAuraName('Judgment of the Forge')).not.toBeNull();
-    expect(DICT.es_ES['aura.ignivarBrandOfThePyre']).toBe('Marca de la Pira');
-    expect(DICT.es_ES['mechanic.ignivarSearingTorrent']).toBe('Torrente abrasador');
-    expect(DICT.es_ES['mechanic.ignivarApocalypse']).toBe('Apocalipsis');
-    expect(DICT.es_ES['mechanic.ignivarForgeStrike']).toBe('Golpe de Fundición');
-    expect(DICT.es_ES['aura.ignivarMoltenArmor']).toBe('Armadura Fundida');
-    expect(DICT.es_ES['aura.ignivarLastInferno']).toBe('Último Infierno');
+    expect(IGNIVAR_DICT.es_ES?.['aura.ignivarBrandOfThePyre']).toBe('Marca de la Pira');
+    expect(IGNIVAR_DICT.es_ES?.['mechanic.ignivarSearingTorrent']).toBe('Torrente abrasador');
+    expect(IGNIVAR_DICT.es_ES?.['mechanic.ignivarApocalypse']).toBe('Apocalipsis');
+    expect(IGNIVAR_DICT.es_ES?.['mechanic.ignivarForgeStrike']).toBe('Golpe de Fundición');
+    expect(IGNIVAR_DICT.es_ES?.['aura.ignivarMoltenArmor']).toBe('Armadura Fundida');
+    expect(IGNIVAR_DICT.es_ES?.['aura.ignivarLastInferno']).toBe('Último Infierno');
     expect(localizeSimAuraName('Molten Armor')).not.toBeNull();
     expect(localizeSimAuraName('Last Inferno')).not.toBeNull();
     expect(localizeSimAuraName('Shared Pyre')).not.toBeNull();
     expect(localizeSimAuraName('Chains of the Forge')).not.toBeNull();
     expect(localizeSimAuraName('Rain of Cinders')).not.toBeNull();
     expect(localizeSimAuraName('Revolving Inferno')).not.toBeNull();
-    expect(DICT.es_ES['mechanic.ignivarRevolvingInferno']).toBe('Infierno giratorio');
+    expect(IGNIVAR_DICT.es_ES?.['mechanic.ignivarRevolvingInferno']).toBe('Infierno giratorio');
     expect(localizeSimAuraName('Forge Wave')).not.toBeNull();
-    expect(DICT.es_ES['mechanic.ignivarForgeWave']).toBe('Onda de la Forja');
-    expect(DICT.es_ES['mechanic.ignivarJudgmentOfTheForge']).toBe('Juicio de la Forja');
+    expect(IGNIVAR_DICT.es_ES?.['mechanic.ignivarForgeWave']).toBe('Onda de la Forja');
+    expect(IGNIVAR_DICT.es_ES?.['mechanic.ignivarJudgmentOfTheForge']).toBe('Juicio de la Forja');
     for (const line of IGNIVAR_DIALOGUE_LINES) {
       expect(localizeSimText(line), line).not.toBeNull();
     }

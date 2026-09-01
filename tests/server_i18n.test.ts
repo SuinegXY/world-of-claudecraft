@@ -112,7 +112,7 @@ describe('server-sent message localization', () => {
       for (const s of samples) {
         const out = localizeServerText(s);
         expect(out, `${lang}: "${s}" should be recognized`).not.toBeNull();
-        if (lang !== 'en' && lang !== 'en_CA') {
+        if (lang !== 'en' && (lang as string) !== 'en_CA') {
           expect(out, `${lang}: "${s}" should not stay English`).not.toBe(s);
         }
       }

@@ -138,7 +138,7 @@ export function isSupportedLanguage(value: string): value is SupportedLanguage {
   return SUPPORTED_SET.has(value);
 }
 
-export function languageTag(lang: SupportedLanguage): string {
+export function languageTag(lang: AuthoredLanguage): string {
   return lang.replace('_', '-');
 }
 
@@ -202,7 +202,8 @@ export function getI18nRevision(): number {
   return resolutionRevision;
 }
 
-export function setLanguage(lang: SupportedLanguage): void {
+export function setLanguage(lang: AuthoredLanguage): void {
+  if (!isSupportedLanguage(lang)) return;
   const resolutionChanged = pseudoActive || currentLanguage !== lang;
   pseudoActive = false; // selecting a real locale leaves the dev pseudo-locale
   currentLanguage = lang;
@@ -231,8 +232,8 @@ const resident: Partial<Record<SupportedLanguage, EnTranslations>> & { en: EnTra
 // import instead of racing N of them.
 const inflight = new Map<SupportedLanguage, Promise<void>>();
 
-export function isLocaleResident(lang: SupportedLanguage): boolean {
-  return lang === 'en' || resident[lang] !== undefined;
+export function isLocaleResident(lang: AuthoredLanguage): boolean {
+  return isSupportedLanguage(lang) && (lang === 'en' || resident[lang] !== undefined);
 }
 
 // Soft failure hook for a locale chunk that failed to load (a real risk once the lazy locale flip
@@ -245,7 +246,8 @@ function reportLocaleLoadFailure(lang: SupportedLanguage, err: unknown): void {
   }
 }
 
-export async function ensureLocaleLoaded(lang: SupportedLanguage): Promise<void> {
+export async function ensureLocaleLoaded(lang: AuthoredLanguage): Promise<void> {
+  if (!isSupportedLanguage(lang)) return;
   if (lang === 'en' || isLocaleResident(lang)) return; // English-instant / already loaded
   const existing = inflight.get(lang);
   if (existing) return existing; // coalesce onto the in-flight import
@@ -535,7 +537,7 @@ function numberFormatFor(tag: string, options?: Intl.NumberFormatOptions): Intl.
 export function formatNumber(
   value: number,
   options?: Intl.NumberFormatOptions,
-  lang: SupportedLanguage = currentLanguage,
+  lang: AuthoredLanguage = currentLanguage,
 ): string {
   return numberFormatFor(languageTag(lang), options).format(value);
 }
@@ -544,7 +546,7 @@ export function formatNumber(
 // server-supplied retry delay this way; the server sends the raw seconds and never
 // localizes). Uses Intl's unit style so each locale's plural rules apply, including
 // the Slavic 3-form split; shares the cached NumberFormat pool with formatNumber.
-export function formatDuration(seconds: number, lang: SupportedLanguage = currentLanguage): string {
+export function formatDuration(seconds: number, lang: AuthoredLanguage = currentLanguage): string {
   return numberFormatFor(languageTag(lang), {
     style: 'unit',
     unit: 'second',
@@ -560,7 +562,7 @@ export function formatDuration(seconds: number, lang: SupportedLanguage = curren
 const listFormatCache = new Map<string, Intl.ListFormat>();
 export function formatList(
   items: readonly string[],
-  lang: SupportedLanguage = currentLanguage,
+  lang: AuthoredLanguage = currentLanguage,
 ): string {
   const tag = languageTag(lang);
   let fmt = listFormatCache.get(tag);

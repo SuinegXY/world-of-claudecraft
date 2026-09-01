@@ -9,7 +9,7 @@
 // shape-tolerant module read. New channel: call the factory with the loaders
 // and dialect map, then register the returned `ensure` in
 // src/ui/locale_channels.ts so every main.ts site awaits it.
-import type { SupportedLanguage } from './i18n';
+import { type AuthoredLanguage, isSupportedLanguage, type SupportedLanguage } from './i18n';
 
 /** The chunk module shape every content channel ships: the base table plus an
  *  optional per-dialect override layer (es_ES over es, fr_CA over fr_FR). */
@@ -28,10 +28,10 @@ export interface LazyLocaleChannel<Table> {
    *  can start a fresh import; the caller decides the UI (boot falls back to
    *  English and keeps going, the language picker keeps the active locale and
    *  reports the failure). */
-  ensure: (lang: SupportedLanguage) => Promise<void>;
+  ensure: (lang: AuthoredLanguage) => Promise<void>;
   /** The resident table for `lang`, or undefined until its chunk resolves
    *  (callers fall back to the authored English). */
-  get: (lang: SupportedLanguage) => Table | undefined;
+  get: (lang: AuthoredLanguage) => Table | undefined;
 }
 
 export function makeLazyLocaleChannel<Table extends object>(cfg: {
@@ -48,7 +48,10 @@ export function makeLazyLocaleChannel<Table extends object>(cfg: {
   // fetch of one locale leaves a retry possible and never blocks another.
   const inflight = new Map<SupportedLanguage, Promise<void>>();
 
-  const ensure = async (lang: SupportedLanguage): Promise<void> => {
+  const ensure = async (lang: AuthoredLanguage): Promise<void> => {
+    // Exclusive ship set is en + zh_CN. Authored codes stay type-legal so
+    // upstream tests compile; unshipped locales are a resident no-op.
+    if (!isSupportedLanguage(lang)) return;
     // en is the eager English base. en_CA is not in the exclusive ship set, but
     // keep the dialect short-circuit as a string compare so upstream fills stay
     // copy-paste safe if the ship set widens later.
@@ -79,5 +82,5 @@ export function makeLazyLocaleChannel<Table extends object>(cfg: {
     return task;
   };
 
-  return { ensure, get: (lang) => resident[lang] };
+  return { ensure, get: (lang) => (isSupportedLanguage(lang) ? resident[lang] : undefined) };
 }

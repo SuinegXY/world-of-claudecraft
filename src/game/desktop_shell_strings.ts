@@ -7,7 +7,7 @@
 // tests/desktop_shell_strings.test.ts.
 
 import type { DesktopBridge } from '../runtime';
-import type { SupportedLanguage } from '../ui/i18n';
+import type { AuthoredLanguage } from '../ui/i18n';
 import { ensureLocaleLoaded, getLanguage, isLocaleResident, t } from '../ui/i18n';
 
 export function desktopShellStringsPayload(): Record<string, string> {
@@ -31,10 +31,10 @@ export function desktopShellStringsPayload(): Record<string, string> {
 // keep the decision Node-testable (tests/desktop_shell_strings.test.ts).
 export function repushWhenLocaleResident(
   push: () => void,
-  lang: SupportedLanguage = getLanguage(),
+  lang: AuthoredLanguage = getLanguage(),
   deps: {
-    isLocaleResident: (lang: SupportedLanguage) => boolean;
-    ensureLocaleLoaded: (lang: SupportedLanguage) => Promise<void>;
+    isLocaleResident: (lang: AuthoredLanguage) => boolean;
+    ensureLocaleLoaded: (lang: AuthoredLanguage) => Promise<void>;
   } = { isLocaleResident, ensureLocaleLoaded },
 ): void {
   if (deps.isLocaleResident(lang)) return;

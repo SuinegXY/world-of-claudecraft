@@ -16,7 +16,7 @@ import {
 import { ensureLocaleLoaded, setLanguage, supportedLanguages, t } from '../src/ui/i18n';
 import { localizeSimText } from '../src/ui/sim_i18n';
 
-const translatedLocales = supportedLanguages.filter((l) => l !== 'en' && l !== 'en_CA');
+const translatedLocales = supportedLanguages.filter((l) => l !== 'en' && (l as string) !== 'en_CA');
 
 afterEach(() => {
   setLanguage('en');

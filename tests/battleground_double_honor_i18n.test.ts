@@ -24,7 +24,7 @@ afterEach(() => {
   setLanguage('en');
 });
 
-const NON_ENGLISH = supportedLanguages.filter((lang) => lang !== 'en' && lang !== 'en_CA');
+const NON_ENGLISH = supportedLanguages.filter((lang) => lang !== 'en' && (lang as string) !== 'en_CA');
 
 describe('Double Honor Weekend copy renders on a release build in every locale', () => {
   it.each(NON_ENGLISH)('%s: the queue chip and calendar entry never throw', async (lang) => {

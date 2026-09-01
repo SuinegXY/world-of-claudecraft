@@ -9009,7 +9009,7 @@ const PET_DICT: Record<AuthoredLanguage, Record<PetSimMessageKey, string>> = {
 };
 
 const RAID_BOSS_DIALOGUE_DICT: Partial<
-  Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, string>>>
+  Record<AuthoredLanguage, Partial<Record<BaseSimMessageKey, string>>>
 > = {
   zh_CN: {
     'dialogue.ignivarFinalBrand': '承受最后之焰。让它审判你。',
@@ -9094,7 +9094,9 @@ const RAID_BOSS_DIALOGUE_DICT: Partial<
   },
 };
 
-const IGNIVAR_DICT: Partial<Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, string>>>> =
+export const IGNIVAR_DICT: Partial<
+  Record<AuthoredLanguage, Partial<Record<BaseSimMessageKey, string>>>
+> =
   {
     es: {
       'error.ignivarExitSealedInCombat':
@@ -9319,7 +9321,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = Ob
       ...IGNIVAR_DICT[lang],
     },
   ]),
-) as Record<AuthoredLanguage, Record<SimMessageKey, string>>;
+) as Record<SupportedLanguage, Record<SimMessageKey, string>>;
 
 function interpolate(template: string, params?: InterpolationValues): string {
   if (!params) return template;

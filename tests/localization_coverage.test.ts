@@ -833,7 +833,7 @@ describe('i18n Localization Key Coverage', () => {
         expect(rendered, `${lang}.${entry.key}`).not.toMatch(/\{(overTime|buff|duration)\}/);
         if (
           lang !== 'en' &&
-          lang !== 'en_CA' &&
+          (lang as string) !== 'en_CA' &&
           entry.kind === 'ability' &&
           entry.field === 'description'
         ) {
@@ -905,7 +905,7 @@ describe('i18n Localization Key Coverage', () => {
         // RELEASE-TIER ONLY: a sparse/English-only overlay renders the English fill
         // for an untranslated item name, which is legal on a PR (a `pending` row)
         // and blocked only at the release gate (matches the world-content check below).
-        if (RELEASE_TIER && lang !== 'en' && lang !== 'en_CA') {
+        if (RELEASE_TIER && lang !== 'en' && (lang as string) !== 'en_CA') {
           expect(
             rendered,
             `${lang}.${entry.key} should not copy canonical English item text`,
@@ -1028,7 +1028,7 @@ describe('i18n Localization Key Coverage', () => {
         if (
           RELEASE_TIER &&
           lang !== 'en' &&
-          lang !== 'en_CA' &&
+          (lang as string) !== 'en_CA' &&
           entry.kind === 'quest' &&
           (entry.field === 'text' || entry.field === 'completion')
         ) {
@@ -1065,7 +1065,7 @@ describe('i18n Localization Key Coverage', () => {
     );
 
     for (const lang of supportedLanguages) {
-      if (lang === 'en' || lang === 'en_CA') continue;
+      if (lang === 'en' || (lang as string) === 'en_CA') continue;
       setLanguage(lang);
       const rendered = descriptions.map(renderTalentManifestEntry).join('\n').toLowerCase();
       for (const fragment of englishEffectFragments) {
@@ -1110,7 +1110,7 @@ describe('i18n Localization Key Coverage', () => {
         expect(rendered, `${lang}.${entry.id}.${entry.field}`).not.toMatch(placeholderPattern);
         // RELEASE-TIER ONLY (copied-English talent content): an untranslated talent
         // renders the English fill on a PR (a `pending` row), blocked at release.
-        if (RELEASE_TIER && lang !== 'en' && lang !== 'en_CA' && entry.field === 'description') {
+        if (RELEASE_TIER && lang !== 'en' && (lang as string) !== 'en_CA' && entry.field === 'description') {
           expect(
             copiedEnglishComparable(rendered),
             `${lang}.${entry.id}.${entry.field} should not copy canonical English talent prose`,
@@ -1124,7 +1124,7 @@ describe('i18n Localization Key Coverage', () => {
         if (
           RELEASE_TIER &&
           lang !== 'en' &&
-          lang !== 'en_CA' &&
+          (lang as string) !== 'en_CA' &&
           entry.field === 'name' &&
           !hasTalentTitleOverride(lang, entry.source)
         ) {
@@ -1237,7 +1237,7 @@ describe('i18n Localization Key Coverage', () => {
         // RELEASE-TIER ONLY (copied-English deed prose): an unfilled deed desc
         // renders the authored English fallback, which is legal on a PR (the
         // English-only contributor rule) and blocked only at the release gate.
-        if (RELEASE_TIER && lang !== 'en' && lang !== 'en_CA' && entry.field === 'desc') {
+        if (RELEASE_TIER && lang !== 'en' && (lang as string) !== 'en_CA' && entry.field === 'desc') {
           expect(
             copiedEnglishComparable(rendered),
             `${lang}.${entry.id}.desc should not copy canonical English deed prose`,
@@ -1250,7 +1250,7 @@ describe('i18n Localization Key Coverage', () => {
         if (
           RELEASE_TIER &&
           lang !== 'en' &&
-          lang !== 'en_CA' &&
+          (lang as string) !== 'en_CA' &&
           entry.field !== 'desc' &&
           !(deedCognateAllowlist[lang] ?? []).includes(`${entry.id}.${entry.field}`)
         ) {
@@ -1360,7 +1360,7 @@ describe('i18n Localization Key Coverage', () => {
 
       const questIds = Object.keys(QUESTS);
       const checkedLanguages = supportedLanguages.filter(
-        (lang) => lang !== 'en' && lang !== 'en_CA',
+        (lang) => lang !== 'en' && (lang as string) !== 'en_CA',
       );
 
       for (const lang of checkedLanguages) {

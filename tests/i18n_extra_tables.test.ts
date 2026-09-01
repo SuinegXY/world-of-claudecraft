@@ -121,7 +121,7 @@ describe('sim/server EXTRA localization tables (untracked by the registry)', () 
     for (const row of ALL) {
       if (!hasTranslatableText(row.en)) continue;
       for (const lang of supportedLanguages) {
-        if (lang === 'en' || lang === 'en_CA') continue;
+        if (lang === 'en' || (lang as string) === 'en_CA') continue;
         const v = row.byLocale[lang];
         if (typeof v === 'string' && v === row.en)
           leaks.push(`${row.id} :: ${lang} = ${JSON.stringify(v)}`);

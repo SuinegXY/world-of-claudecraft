@@ -8,7 +8,7 @@
 // English (clean English is preferable to a broken guess).
 
 import { DEEDS } from '../sim/content/deeds';
-import { getLanguage, type SupportedLanguage, t } from './i18n';
+import { type AuthoredLanguage, getLanguage, type SupportedLanguage, t } from './i18n';
 import { maybePseudoString, pseudoLocaleString } from './i18n_pseudo_port';
 import { makeLazyLocaleChannel } from './lazy_locale_channel';
 
@@ -97,7 +97,7 @@ const deedChannel = makeLazyLocaleChannel<DeedLocaleTable>({
  *  failed fetch with the in-flight slot cleared so a retry can start fresh, and
  *  the caller decides the UI: boot falls back to English and keeps going, the
  *  language picker keeps the active locale and reports the failure). */
-export const ensureDeedLocalesLoaded: (lang: SupportedLanguage) => Promise<void> =
+export const ensureDeedLocalesLoaded: (lang: AuthoredLanguage) => Promise<void> =
   deedChannel.ensure;
 
 // --- en_XA dev pseudo-locale port ---------------------------------------------

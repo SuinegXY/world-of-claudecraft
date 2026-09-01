@@ -430,7 +430,7 @@ describe('title bake (locale-sweep re-mount)', () => {
     expect(titleEl.textContent).toContain(TARGET.name);
 
     titleEl.textContent = '';
-    const otherLanguage = i18nModule.getLanguage() === 'de_DE' ? 'fr_FR' : 'de_DE';
+    const otherLanguage = i18nModule.getLanguage() === 'zh_CN' ? 'en' : 'zh_CN';
     // A changed getLanguage() reading is one of the two real staleness
     // triggers the probe compares on (appearance_panel_locale.test.ts pins
     // the other: an unchanged language whose resolved TABLE moved). Spied

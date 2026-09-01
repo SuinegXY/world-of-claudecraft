@@ -169,7 +169,7 @@ describe('reviewed localization semantics', () => {
       'entities.abilities.ossuary_mark.description',
     ];
     const localeNames = Object.keys(translations).filter(
-      (lang) => lang !== 'en' && lang !== 'en_CA',
+      (lang) => lang !== 'en' && (lang as string) !== 'en_CA',
     );
 
     for (const lang of localeNames) {

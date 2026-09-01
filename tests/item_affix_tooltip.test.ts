@@ -55,14 +55,15 @@ describe('itemAffixTooltipLines: literal English lines', () => {
   });
 });
 
-describe('itemAffixTooltipLines: localized labels (the ja_JP overlay fills)', () => {
+describe('itemAffixTooltipLines: localized labels (the zh_CN overlay fills)', () => {
   it('resolves both labels and the +{value} pattern through the active locale', async () => {
-    // LOADED, not merely selected: setLanguage alone leaves t() on the
-    // English fallback for a lazy locale (the bank_bonus_view idiom).
-    await ensureLocaleLoaded('ja_JP');
-    setLanguage('ja_JP');
+    // Exclusive ships English + Simplified Chinese only. LOADED, not merely
+    // selected: setLanguage alone leaves t() on the English fallback for a
+    // lazy locale (the bank_bonus_view idiom).
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
     expect(itemAffixTooltipLines(item({ spellPower: 25, healPower: 40 }))).toBe(
-      '<div class="tt-green">+25 呪文威力</div><div class="tt-green">+40 治癒力</div>',
+      '<div class="tt-green">+25 法术强度</div><div class="tt-green">+40 治疗强度</div>',
     );
   });
 });

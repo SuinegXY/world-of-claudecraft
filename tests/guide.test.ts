@@ -114,7 +114,13 @@ import {
 } from '../src/sim/professions/wield_gate';
 import type { DeedDef } from '../src/sim/types';
 import { DEED_IMAGE_IDS } from '../src/ui/deed_image_ids';
-import { ensureLocaleLoaded, type SupportedLanguage, setLanguage, t } from '../src/ui/i18n';
+import {
+  ensureLocaleLoaded,
+  type AuthoredLanguage,
+  isSupportedLanguage,
+  setLanguage,
+  t,
+} from '../src/ui/i18n';
 import { guideStrings } from '../src/ui/i18n.catalog/guide';
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -1385,7 +1391,7 @@ describe('Guide deeds cross-page surfaces', () => {
     expect(wildheartBoss, 'wildheart_high_priest mob missing from content').toBeTruthy();
     const personalName = (wildheartBoss?.name ?? '').split(',')[0];
     expect(personalName).toBe('Zulgar');
-    const forbiddenByLocale: Partial<Record<SupportedLanguage, string>> = {
+    const forbiddenByLocale: Partial<Record<AuthoredLanguage, string>> = {
       cs_CZ: personalName,
       da_DK: personalName,
       de_DE: personalName,
@@ -1406,9 +1412,12 @@ describe('Guide deeds cross-page surfaces', () => {
       zh_TW: '祖爾加',
     };
     for (const [locale, forbidden] of Object.entries(forbiddenByLocale) as [
-      SupportedLanguage,
+      AuthoredLanguage,
       string,
     ][]) {
+      // Exclusive ship set is en + zh_CN. Authored overlays stay in TABLES for
+      // hash pins; the wiki render path cannot select an unshipped locale.
+      if (!isSupportedLanguage(locale)) continue;
       await ensureLocaleLoaded(locale);
       setLanguage(locale);
       const html = dungeonsPage.render({

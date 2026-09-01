@@ -830,7 +830,10 @@ describe('loot_roll: bind-on-pickup party trade window on soulbound awards', () 
     const slot = expectDefined(
       playerMeta(sim, a).inventory.find((s) => s.itemId === 'greyjaw_hide_boots'),
     );
-    expect(slot.instance).toBeUndefined();
+    // Exclusive stamps exclusiveScaled on granted gear; official left this
+    // copy instance-free. The BoP party-trade window must still stay off.
+    expect(slot.instance?.partyTrade).toBeUndefined();
+    expect(slot.instance?.exclusiveScaled).toBe(true);
   });
 
   it('an everyone-passed return picked up from the corpse still carries the window', () => {
@@ -874,6 +877,9 @@ describe('loot_roll: bind-on-pickup party trade window on soulbound awards', () 
     const slot = expectDefined(
       playerMeta(sim, a).inventory.find((s) => s.itemId === 'slagbreaker_helmet'),
     );
-    expect(slot.instance).toBeUndefined();
+    // Exclusive stamps exclusiveScaled on the solo grant; official left the
+    // copy instance-free. No shared kill means no party-trade window.
+    expect(slot.instance?.partyTrade).toBeUndefined();
+    expect(slot.instance?.exclusiveScaled).toBe(true);
   });
 });

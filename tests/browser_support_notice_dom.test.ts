@@ -25,7 +25,7 @@ import { ensureLocaleLoaded, type SupportedLanguage, setLanguage, t } from '../s
 // five locales (zh_CN, zh_TW, ja_JP, ko_KR, ru_RU); the rest stay pending
 // English-only under the PR-tier gate, so `es` would silently fall back and
 // make the relocalize assertions below vacuous.
-const OTHER: SupportedLanguage = 'ja_JP';
+const OTHER: SupportedLanguage = 'zh_CN';
 
 beforeAll(async () => {
   await ensureLocaleLoaded(OTHER);

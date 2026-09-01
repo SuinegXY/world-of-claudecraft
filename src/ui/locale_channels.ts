@@ -9,9 +9,9 @@
 // this list: the start-screen warm gates its reveal on that one alone, so the
 // call sites compose it beside this registry.
 import { ensureDeedLocalesLoaded } from './deed_i18n';
-import type { SupportedLanguage } from './i18n';
+import type { AuthoredLanguage } from './i18n';
 import { ensureReliquaryLocalesLoaded } from './reliquary_i18n';
 
 export const CONTENT_LOCALE_CHANNEL_ENSURERS: readonly ((
-  lang: SupportedLanguage,
+  lang: AuthoredLanguage,
 ) => Promise<void>)[] = [ensureDeedLocalesLoaded, ensureReliquaryLocalesLoaded];

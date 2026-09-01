@@ -852,7 +852,7 @@ describe('talent tooltip generator never leaks raw notation', () => {
     const offenders: string[] = [];
 
     for (const lang of supportedLanguages) {
-      if (lang === 'en' || lang === 'en_CA') continue;
+      if (lang === 'en' || (lang as string) === 'en_CA') continue;
       await ensureLocaleLoaded(lang);
       setLanguage(lang);
       for (const entry of [...rowChoices, ...masteriesAndRows, ...specs]) {
