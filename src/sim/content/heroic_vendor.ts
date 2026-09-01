@@ -22,6 +22,8 @@ import type { ItemDef } from '../types';
 // Combat rating: every piece also carries ONE combat rating (hit / crit / haste)
 // at JEWELRY_RATING (25 -> 2.5%), chosen by its stat identity. Ratings are off the
 // primary-stat budget (like spellPower), so the sums above stay budget-enforced.
+// Exclusive realms apply x5 at grant via exclusiveScaled (loot/exclusive_gear_scale.ts);
+// keep this constant at the official 25 so stamped copies land at 125, never 625.
 // This is jewelry's endgame identity; see docs/prd/combat-ratings-and-jewelry.md.
 
 export const HEROIC_VENDOR_NPC_ID = 'heroic_quartermaster';

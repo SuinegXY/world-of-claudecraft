@@ -122,6 +122,9 @@ const NYTHRAXIS_DEATHLESS_EVERY = 45;
 const NYTHRAXIS_DEATHLESS_CAST = 10;
 const NYTHRAXIS_DEATHLESS_CHANNEL = 5;
 const NYTHRAXIS_DEATHLESS_STUN = 5;
+// Exclusive: Deathless Rage (three wardstone channels or full-raid AOE) is off.
+// Keep the helpers/tests for the mechanic, but never arm the cast in phase 2.
+const NYTHRAXIS_DEATHLESS_RAGE_ENABLED = false;
 const NYTHRAXIS_HEROIC_SUMMON_CHANNEL = 3;
 const NYTHRAXIS_DREAD_CURSE_EVERY = 15;
 const NYTHRAXIS_DREAD_CURSE_DURATION = 45;
@@ -437,11 +440,13 @@ export function updateNythraxisEncounter(ctx: SimContext, boss: Entity): void {
       if (canCastNythraxisSoulRend(st)) castNythraxisSoulRend(ctx, boss, st);
       else st.soulRendTimer = 1;
     }
-    st.deathlessTimer -= DT;
-    if (st.deathlessTimer <= 0) {
-      if (st.soulRendMarks.length === 0 && st.soulRendLockout <= 0)
-        startNythraxisDeathlessRage(ctx, boss, st);
-      else st.deathlessTimer = 1;
+    if (NYTHRAXIS_DEATHLESS_RAGE_ENABLED) {
+      st.deathlessTimer -= DT;
+      if (st.deathlessTimer <= 0) {
+        if (st.soulRendMarks.length === 0 && st.soulRendLockout <= 0)
+          startNythraxisDeathlessRage(ctx, boss, st);
+        else st.deathlessTimer = 1;
+      }
     }
   }
 }
@@ -1162,6 +1167,10 @@ export function startNythraxisDeathlessRage(
   boss: Entity,
   st: NonNullable<Entity['nythraxis']>,
 ): void {
+  if (!NYTHRAXIS_DEATHLESS_RAGE_ENABLED) {
+    st.deathlessTimer = NYTHRAXIS_DEATHLESS_EVERY;
+    return;
+  }
   st.deathlessTimer = NYTHRAXIS_DEATHLESS_EVERY;
   st.deathlessCastRemaining = NYTHRAXIS_DEATHLESS_CAST;
   st.soulRendLockout = NYTHRAXIS_DEATHLESS_SOUL_REND_LOCKOUT;

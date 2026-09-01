@@ -94,6 +94,12 @@ Everything else is a sibling module in one of these families:
   moves). All display-only, all gated by the reduced-motion switch; driven
   from `renderer.ts` `updateCamera` and the hud event hooks
   (`tests/camera_*_core.test.ts`).
+- `static_matrix.ts`: freeze helpers for never-moving subtrees, plus
+  `refreshFrozenWorldMatrix` / `lookAtFrozen` for objects that set
+  `matrixWorldAutoUpdate = false` (the chase camera). Three r185 gates a
+  frozen node's own compose on that flag; a plain `updateMatrixWorld` /
+  `lookAt` no longer composes, so every explicit refresh and aim must use
+  those helpers (the r185 camera regressions).
 ## Module-first: pure core + thin painter (where NEW render logic lands)
 New per-frame decision logic (visibility, anchors, interpolation, region/LOD
 selection) is its own Three/DOM/i18n-free `*_core.ts` or `*_view.ts` module,

@@ -241,7 +241,7 @@ import {
 } from './discord';
 import { pruneDiscordOAuthStates, pruneDiscordPendingLogins } from './discord_db';
 import { emailAccountCreated } from './email';
-import { stopEpicMirror } from './epic/mirror';
+import { githubOutboundEnabled } from './exclusive_outbound';
 import { GameServer } from './game';
 import {
   closeGeneralChatQuotaPool,
@@ -532,6 +532,8 @@ const STATIC_PAGE_ALIASES = new Map([
   ['/data-deletion/', '/data-deletion.html'],
   ['/support', '/support.html'],
   ['/support/', '/support.html'],
+  ['/changelog', '/changelog.html'],
+  ['/changelog/', '/changelog.html'],
   ['/wiki', '/guide.html'],
   ['/wiki/', '/guide.html'],
   ['/editor', '/editor.html'],
@@ -1192,6 +1194,8 @@ let releasesCache: { at: number; entries: ReleaseEntry[] } | null = null;
 setUsageCacheSize('github.releases', 0, RELEASES_SIZE);
 
 async function refreshReleases(): Promise<ReleaseEntry[]> {
+  // Exclusive default-off: never dial api.github.com unless opted in.
+  if (!githubOutboundEnabled()) return [];
   recordUsageMetric('github.releases.fetch');
   try {
     const { githubRepo, githubToken } = activeConfig();
@@ -4187,7 +4191,7 @@ export async function startServer(): Promise<http.Server> {
     // independently (D21) and CONCURRENTLY: the two stops share one 5s
     // wall-clock budget, so a wedged Steam upstream cannot delay the Epic
     // drain (or double the shutdown window) by serializing behind it.
-    await Promise.all([stopSteamMirror(5000), stopEpicMirror(5000)]);
+    // await Promise.all([stopSteamMirror(5000), stopEpicMirror(5000)]);
     // Drop every character load lease this process holds so a clean restart can
     // reload its characters immediately instead of waiting out the lease TTL.
     // Runs before pool.end(); a failure here must not abort the shutdown, so log

@@ -17,6 +17,7 @@
 
 import { parseClaudiumSpendWireResult } from './claudium_spend_wire';
 import { DESKTOP_WALLET_HANDOFF_TTL_MS, desktopWalletHandoffs } from './desktop_wallet_handoff';
+import { claudiumOutboundEnabled } from './exclusive_outbound';
 import { requestNeverReachedService } from './service_reachability';
 
 const SERVICE_TIMEOUT_MS = 5000;
@@ -180,9 +181,10 @@ function serviceSecret(): string {
   return process.env.WOC_ECONOMY_INTERNAL_SECRET ?? '';
 }
 
-/** The service is reachable only when BOTH the URL and the secret are set. */
+/** The service is reachable only when outbound is opted in AND URL + secret are set. */
 export function claudiumServiceConfigured(): boolean {
-  return serviceUrl() !== '' && serviceSecret() !== '';
+  // Exclusive: CLAUDIUM_OUTBOUND_ENABLED must be 1 (see exclusive_outbound.ts).
+  return claudiumOutboundEnabled() && serviceUrl() !== '' && serviceSecret() !== '';
 }
 
 let loggedOnce = false;
@@ -222,6 +224,7 @@ interface ServiceCallOutcome<T> {
  * ambiguous: bytes reached an application, so a debit is possible.
  */
 async function callServiceDetailed<T>(req: ServiceRequest): Promise<ServiceCallOutcome<T>> {
+  if (!claudiumServiceConfigured()) return { data: null, neverReached: true };
   const base = serviceUrl();
   const secret = serviceSecret();
   if (base === '' || secret === '') return { data: null, neverReached: true };
@@ -280,6 +283,7 @@ export async function claudiumStripeWebhook(
   rawBody: Buffer,
   signatureHeader: string,
 ): Promise<ClaudiumStripeWebhookResult> {
+  if (!claudiumServiceConfigured()) return { received: false };
   const base = serviceUrl();
   if (base === '') return { received: false };
   try {

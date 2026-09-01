@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -51,37 +51,14 @@
   })();
 </script>
 
-<!-- Cloudflare Turnstile (bot gate on login/registration). Rendered explicitly
-     by src/main.ts only when VITE_TURNSTILE_SITEKEY is configured. -->
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <!-- Canonical URL -->
 <link rel="canonical" href="https://worldofclaudecraft.com/" />
 
 <!-- GEO / Multilingual Alternates -->
-<link rel="alternate" hreflang="en" href="https://worldofclaudecraft.com/" />
-<link rel="alternate" hreflang="es" href="https://worldofclaudecraft.com/?lang=es" />
-<link rel="alternate" hreflang="es-ES" href="https://worldofclaudecraft.com/?lang=es_ES" />
-<link rel="alternate" hreflang="fr-FR" href="https://worldofclaudecraft.com/?lang=fr_FR" />
-<link rel="alternate" hreflang="fr-CA" href="https://worldofclaudecraft.com/?lang=fr_CA" />
-<link rel="alternate" hreflang="en-CA" href="https://worldofclaudecraft.com/?lang=en_CA" />
-<link rel="alternate" hreflang="it-IT" href="https://worldofclaudecraft.com/?lang=it_IT" />
-<link rel="alternate" hreflang="de-DE" href="https://worldofclaudecraft.com/?lang=de_DE" />
 <link rel="alternate" hreflang="zh-CN" href="https://worldofclaudecraft.com/?lang=zh_CN" />
-<link rel="alternate" hreflang="zh-TW" href="https://worldofclaudecraft.com/?lang=zh_TW" />
-<link rel="alternate" hreflang="ko-KR" href="https://worldofclaudecraft.com/?lang=ko_KR" />
-<link rel="alternate" hreflang="ja-JP" href="https://worldofclaudecraft.com/?lang=ja_JP" />
-<link rel="alternate" hreflang="pt-BR" href="https://worldofclaudecraft.com/?lang=pt_BR" />
-<link rel="alternate" hreflang="ru-RU" href="https://worldofclaudecraft.com/?lang=ru_RU" />
-<link rel="alternate" hreflang="cs-CZ" href="https://worldofclaudecraft.com/?lang=cs_CZ" />
-<link rel="alternate" hreflang="nl-NL" href="https://worldofclaudecraft.com/?lang=nl_NL" />
-<link rel="alternate" hreflang="pl-PL" href="https://worldofclaudecraft.com/?lang=pl_PL" />
-<link rel="alternate" hreflang="id-ID" href="https://worldofclaudecraft.com/?lang=id_ID" />
-<link rel="alternate" hreflang="tr-TR" href="https://worldofclaudecraft.com/?lang=tr_TR" />
-<link rel="alternate" hreflang="sv-SE" href="https://worldofclaudecraft.com/?lang=sv_SE" />
-<link rel="alternate" hreflang="vi-VN" href="https://worldofclaudecraft.com/?lang=vi_VN" />
-<link rel="alternate" hreflang="da-DK" href="https://worldofclaudecraft.com/?lang=da_DK" />
-<link rel="alternate" hreflang="x-default" href="https://worldofclaudecraft.com/" />
+<link rel="alternate" hreflang="en" href="https://worldofclaudecraft.com/?lang=en" />
+<link rel="alternate" hreflang="x-default" href="https://worldofclaudecraft.com/?lang=zh_CN" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
@@ -164,31 +141,9 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <link rel="preload" as="image" href="./ui/cursors/gauntlet.png" />
 <link rel="preload" as="image" href="./ui/cursors/arrow.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<!-- Google tag (gtag.js) - skipped on localhost so dev sessions don't pollute analytics -->
-<script>
-  if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-BR5Z7GT7C2';
-    document.head.appendChild(s);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ dataLayer.push(arguments); };
-    gtag('js', new Date());
-    gtag('config', 'G-BR5Z7GT7C2');
-  }
-</script>
-<!-- Meta Pixel Code - skipped on localhost so dev sessions don't pollute analytics -->
-<script>
-  if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
-    !((f,b,e,v,n,t,s)=> {if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1692101265042180');
-    fbq('track', 'PageView');
-  }
-</script>
-<!-- End Meta Pixel Code -->
+<!-- Exclusive: Google Analytics, Meta Pixel, and Google Fonts removed. China
+     hosts cannot reach those origins; keep analytics off unless self-hosted. -->
+
 <link rel="stylesheet" href="/src/styles/index.extra.css" />
 <style>
   /* Game CSS now lives in src/styles/* (the CSS extraction). The shared
@@ -204,7 +159,6 @@
        infra). Targets live inside #game-ui-template, cloned into the page in-game. -->
   <a class="hud-skip" href="#ui" data-i18n="hudChrome.skipLinks.mainHud">Skip to Main HUD</a>
   <a class="hud-skip" href="#chatlog" data-i18n="hudChrome.skipLinks.chat">Skip to Chat</a>
-  <noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=1692101265042180&ev=PageView&noscript=1" /></noscript>
   <canvas id="game-canvas"></canvas>
   <div id="nameplates" aria-hidden="true"></div>
   <img
@@ -340,6 +294,14 @@
                the Discord (U) icon-rail button (#mm-discord), which opens the richer
                account-linking/rank panel and (for an unlinked player) still offers a
                plain "join the server" action, so this tray does not duplicate it. -->
+          <a class="community-link github" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.githubProject" data-i18n-aria="a11y.githubProject" title="Open the World of ClaudeCraft GitHub project" aria-label="Open the World of ClaudeCraft GitHub project">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            <span>GitHub</span>
+          </a>
+          <button type="button" class="community-link donate js-open-sponsor" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span data-i18n="nav.donate">Donate</span>
+          </button>
         </div>
       </details>
     </nav>
@@ -733,6 +695,9 @@
                 <button type="button" class="nav-link" id="nav-btn-news" aria-pressed="false" data-i18n="nav.news">News</button>
               </li>
               <li class="nav-item">
+                <button type="button" class="nav-link" id="nav-btn-exclusive" aria-pressed="false" data-i18n="nav.exclusiveUpdates">Exclusive Updates</button>
+              </li>
+              <li class="nav-item">
                 <button type="button" class="nav-link" id="nav-btn-download" aria-pressed="false" data-i18n="nav.download">Download</button>
               </li>
               <li class="nav-item">
@@ -766,13 +731,36 @@
           <a class="steam-wishlist steam-wishlist-cta" href="https://store.steampowered.com/app/4897790/World_of_ClaudeCraft/" target="_blank" rel="noopener noreferrer" data-icon="steam" data-i18n-title="hudChrome.steam.wishlistAria" data-i18n-aria="hudChrome.steam.wishlistAria" title="Wishlist on Steam: open the World of ClaudeCraft store page" aria-label="Wishlist on Steam: open the World of ClaudeCraft store page">
             <span data-i18n="hudChrome.steam.wishlist">Wishlist on Steam</span>
           </a>
-          <a class="donate-cta" href="https://ko-fi.com/worldofclaudecraft" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+          <button type="button" class="donate-cta js-open-sponsor" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span data-i18n="nav.donate">Donate</span>
-          </a>
+          </button>
         </div>
       </div>
     </header>
+
+    <!-- Exclusive: homepage sponsor rail (Alipay + WeChat Pay QR images). -->
+    <aside
+      id="homepage-sponsor-rail"
+      class="homepage-sponsor-rail"
+      data-i18n-aria="sponsor.railLabel"
+      aria-label="Sponsor QR codes"
+    >
+      <p class="homepage-sponsor-title" id="homepage-sponsor-title" data-i18n="sponsor.title">Sponsor DaXiong</p>
+      <p class="homepage-sponsor-blurb" data-i18n="sponsor.blurb">
+        Sponsor DaXiong; you can leave a message when sponsoring.
+      </p>
+      <div class="homepage-sponsor-grid">
+        <figure class="sponsor-qr-item">
+          <img src="/donate/ali.png" width="140" height="140" decoding="async" loading="lazy" data-i18n-alt="sponsor.alipayAlt" alt="Alipay sponsor QR code" />
+          <figcaption data-i18n="sponsor.alipay">Alipay</figcaption>
+        </figure>
+        <figure class="sponsor-qr-item">
+          <img src="/donate/wx.png" width="140" height="140" decoding="async" loading="lazy" data-i18n-alt="sponsor.wechatAlt" alt="WeChat Pay sponsor QR code" />
+          <figcaption data-i18n="sponsor.wechat">WeChat Pay</figcaption>
+        </figure>
+      </div>
+    </aside>
 
     <div id="homepage-views-container">
       <section id="hero-view" class="view-section" aria-hidden="false">
@@ -1602,10 +1590,10 @@
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>
           <span data-i18n="footer.discordLabel">Join the Discord</span>
         </a>
-        <a class="social-link donate" href="https://ko-fi.com/worldofclaudecraft" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+        <button type="button" class="social-link donate js-open-sponsor" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
           <span data-i18n="nav.donate">Donate</span>
-        </a>
+        </button>
       </div>
       <div id="game-version">v0.41.0</div>
       </div>
@@ -1618,28 +1606,8 @@
         <div class="language-selector">
           <label for="lang-select" class="visually-hidden" data-i18n="a11y.languageSelection">Language selection</label>
           <select id="lang-select" class="lang-select-dropdown">
+            <option value="zh_CN" selected>简体中文</option>
             <option value="en">English (US)</option>
-            <option value="es">Español (LatAm)</option>
-            <option value="es_ES">Español (España)</option>
-            <option value="fr_FR">Français (France)</option>
-            <option value="fr_CA">Français (Canada)</option>
-            <option value="en_CA">English (Canada)</option>
-            <option value="it_IT">Italiano</option>
-            <option value="de_DE">Deutsch</option>
-            <option value="zh_CN">简体中文</option>
-            <option value="zh_TW">繁體中文</option>
-            <option value="ko_KR">한국어</option>
-            <option value="ja_JP">日本語</option>
-            <option value="pt_BR">Português (Brasil)</option>
-            <option value="ru_RU">Русский</option>
-            <option value="cs_CZ">Čeština</option>
-            <option value="nl_NL">Nederlands</option>
-            <option value="pl_PL">Polski</option>
-            <option value="id_ID">Bahasa Indonesia</option>
-            <option value="tr_TR">Türkçe</option>
-            <option value="sv_SE">Svenska</option>
-            <option value="vi_VN">Tiếng Việt</option>
-            <option value="da_DK">Dansk</option>
           </select>
           <span id="lang-select-status" class="visually-hidden" role="status" aria-live="polite"></span>
         </div>

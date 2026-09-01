@@ -404,11 +404,11 @@ describe('pushbackCast honors castPushbackReduction', () => {
   });
 });
 
-describe('caster lineage 2-piece: damage delays a cast half as much (end to end)', () => {
-  // Runs the REAL inbound path: dealDamage's spell-pushback block fires
-  // ctx.pushbackCast on every landed hit against a casting target, and the
-  // lineage 2-piece castPushbackReduction of 0.5 halves the delay (full
-  // immunity moved to the new raid tier's caster sets in the retune).
+describe('caster 2-piece: damage never delays a cast (end to end)', () => {
+  // Exclusive server: every player cast already ignores damage pushback, so the
+  // 2-piece still sets castPushbackReduction (0.5 after the v0.41 retune) but
+  // a landed hit never delays or rolls back the player's cast. Interrupts
+  // stay unchanged.
   const castThenHit = (equipSet: boolean) => {
     const sim = new Sim({ seed: 77, playerClass: 'mage' });
     sim.setPlayerLevel(20);
@@ -433,15 +433,16 @@ describe('caster lineage 2-piece: damage delays a cast half as much (end to end)
     return { p, rem0 };
   };
 
-  it('with 2 Mournweave pieces the delay is halved', () => {
+  it('with 2 Mournweave pieces the cast timer is untouched by a landed hit', () => {
     const { p, rem0 } = castThenHit(true);
     expect(p.castingAbility).toBe('fireball'); // still casting
-    expect(p.castRemaining).toBeCloseTo(rem0 + CAST_PUSHBACK_SEC * 0.5, 9);
+    expect(p.castRemaining).toBe(rem0);
   });
 
-  it('without the set the same hit delays the cast in full (control)', () => {
+  it('without the set a landed hit still leaves the player cast untouched (exclusive)', () => {
     const { p, rem0 } = castThenHit(false);
-    expect(p.castRemaining).toBeCloseTo(rem0 + CAST_PUSHBACK_SEC, 9);
+    expect(p.castingAbility).toBe('fireball');
+    expect(p.castRemaining).toBe(rem0);
   });
 });
 

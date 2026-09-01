@@ -1,4 +1,5 @@
 import type { ItemDef, PlayerClass } from '../types';
+import { FASHION_WELFARE_PRICE_COPPER } from './fashion_welfare_vendor';
 
 // Archetype groups for class-locked rewards (REWARD_ARCHETYPE hands warrior
 // rewards to paladins/shamans etc., so the lock must admit the whole group).
@@ -1061,7 +1062,8 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     buyValue: 320,
   },
   // Cosmetic event reward: using it rolls a rarity rank (server-side) and opens
-  // the skin-select overlay. See src/sim/content/skins.ts. Dev-grant for now.
+  // the skin-select overlay. See src/sim/content/skins.ts. Also stocked by the
+  // Eastbrook fashion welfare merchant at a flat 10g (buyValue).
   event_skin_token: {
     id: 'event_skin_token',
     name: 'Mysterious Cosmetic Cache',
@@ -1069,6 +1071,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     use: { type: 'skinSelect', catalog: 'class' },
     sellValue: 0,
+    buyValue: FASHION_WELFARE_PRICE_COPPER,
   },
   // Heroic-dungeon participation token: the final boss of a heroic instance
   // directly awards marks to every eligible participant (awardHeroicMarks in

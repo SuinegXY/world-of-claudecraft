@@ -395,6 +395,17 @@ describe('Nythraxis encounter module (N1)', () => {
     expect(b.hp).toBe(400);
   });
 
+  it('startNythraxisDeathlessRage is a no-op under the exclusive disable', () => {
+    const { ctx, boss } = setup({ difficulty: 'heroic' });
+    const st = nythraxis.initNythraxisEncounter(boss);
+    st.phase = 2;
+    st.deathlessTimer = 0;
+    nythraxis.startNythraxisDeathlessRage(ctx, boss, st);
+    expect(st.deathlessCastRemaining).toBe(0);
+    expect(st.wardChannels).toHaveLength(0);
+    expect(boss.castingAbility).not.toBe('nythraxis_deathless_rage');
+  });
+
   it('heroic Deathless Rage is lethal on a failed wardstone channel (115% max hp)', () => {
     const heroic = setup({ difficulty: 'heroic' });
     let st = nythraxis.initNythraxisEncounter(heroic.boss);
@@ -523,35 +534,20 @@ describe('Nythraxis encounter module (N1)', () => {
     }
   });
 
-  it('a three-player wardstone channel interrupts Deathless Rage and self-stuns the boss', () => {
-    const { sim, ctx, boss, dps } = setup();
+  it('phase-two ticks never arm Deathless Rage after the exclusive disable', () => {
+    const { ctx, boss } = setup();
     const st = nythraxis.initNythraxisEncounter(boss);
     st.phase = 2;
-    nythraxis.startNythraxisDeathlessRage(ctx, boss, st);
-    expect(st.deathlessCastRemaining).toBeGreaterThan(0);
-    expect(st.wardChannels.length).toBe(3);
-    const wards = [...ctx.entities.values()]
-      .filter(
-        (e) =>
-          e.kind === 'object' &&
-          e.objectItemId === 'bastion_ward_stone' &&
-          dist2d(e.pos, boss.spawnPos) < 100,
-      )
-      .sort((a, b) => a.id - b.id) as AnyEntity[];
-    // Three distinct players each claim a distinct wardstone via the object-click entry.
-    wards.forEach((ward, i) => {
-      const channeler = dps[i];
-      teleport(sim, channeler, ward.pos.x, ward.pos.z, ward.pos.y);
-      const handled = nythraxis.tryStartNythraxisWardChannel(ctx, ward, channeler);
-      expect(handled).toBe(true);
-    });
-    // Mark every channel complete (the per-tick channel progress is covered by the
-    // parity golden) and run one Deathless Rage tick: the interrupt should fire.
-    for (const c of st.wardChannels) c.complete = true;
-    nythraxis.updateNythraxisDeathlessRage(ctx, boss, st);
-    expect(st.deathlessStunRemaining).toBeGreaterThan(0);
+    st.transitionReleased = true;
+    st.soulRendTimer = 999;
+    st.soulRendMarks = [];
+    st.soulRendLockout = 0;
+    st.deathlessTimer = 0;
+    st.gravebreakerTimer = 999;
+    nythraxis.updateNythraxisEncounter(ctx, boss);
+    expect(boss.castingAbility).not.toBe('nythraxis_deathless_rage');
     expect(st.deathlessCastRemaining).toBe(0);
-    expect(boss.auras.some((a) => a.id === 'nythraxis_deathless_stun')).toBe(true);
+    expect(st.wardChannels).toHaveLength(0);
   });
 
   it('heroic Dread Curse stacks on the active tank and resets on a tank swap', () => {
@@ -578,44 +574,27 @@ describe('Nythraxis encounter module (N1)', () => {
     expect(swapped?.value).toBeCloseTo(0.1);
   });
 
-  it('heroic wardstone interrupt leads to a three second add summon channel', () => {
-    const { sim, ctx, boss, dps } = setup({ difficulty: 'heroic' });
+  it('heroic court summon stays gated behind Deathless Rage (disabled, so no court)', () => {
+    const { ctx, boss } = setup({ difficulty: 'heroic' });
     const st = nythraxis.initNythraxisEncounter(boss);
     st.phase = 2;
-    nythraxis.startNythraxisDeathlessRage(ctx, boss, st);
-    const wards = [...ctx.entities.values()]
-      .filter(
-        (e) =>
-          e.kind === 'object' &&
-          e.objectItemId === 'bastion_ward_stone' &&
-          dist2d(e.pos, boss.spawnPos) < 100,
-      )
-      .sort((a, b) => a.id - b.id) as AnyEntity[];
-    wards.forEach((ward, i) => {
-      const channeler = dps[i];
-      teleport(sim, channeler, ward.pos.x, ward.pos.z, ward.pos.y);
-      expect(nythraxis.tryStartNythraxisWardChannel(ctx, ward, channeler)).toBe(true);
-    });
-    for (const c of st.wardChannels) c.complete = true;
-    nythraxis.updateNythraxisDeathlessRage(ctx, boss, st);
-    expect(st.deathlessStunRemaining).toBeGreaterThan(0);
-
-    st.deathlessStunRemaining = 0.01;
-    nythraxis.updateNythraxisEncounter(ctx, boss);
-    expect(st.heroicSummonChannelRemaining).toBeGreaterThan(0);
-    expect(boss.castingAbility).toBe('nythraxis_heroic_summon');
-
-    const before = boss.summonedIds.length;
-    for (let i = 0; i < 20 * 3 + 1; i++) nythraxis.updateNythraxisHeroicSummon(ctx, boss, st);
-    const spawned = boss.summonedIds
-      .slice(before)
-      .map((id) => ctx.entities.get(id)?.templateId)
-      .sort();
-    expect(spawned).toEqual([
-      'nythraxis_heroic_priest_add',
-      'nythraxis_heroic_rogue_add',
-      'nythraxis_heroic_warrior_add',
-    ]);
+    st.transitionReleased = true;
+    st.soulRendTimer = 999;
+    st.soulRendMarks = [];
+    st.soulRendLockout = 0;
+    st.deathlessTimer = 0;
+    st.gravebreakerTimer = 999;
+    for (let i = 0; i < 20 * 16; i++) nythraxis.updateNythraxisEncounter(ctx, boss);
+    expect(st.heroicSummonChannelRemaining ?? 0).toBe(0);
+    const court = [...ctx.entities.values()].filter(
+      (e) =>
+        e.kind === 'mob' &&
+        !e.dead &&
+        (e.templateId === 'nythraxis_heroic_priest_add' ||
+          e.templateId === 'nythraxis_heroic_rogue_add' ||
+          e.templateId === 'nythraxis_heroic_warrior_add'),
+    );
+    expect(court).toHaveLength(0);
   });
 
   it('a wardstone with no boss in range falls through (overworld Sunken Bastion stone)', () => {
@@ -676,7 +655,15 @@ describe('death mid-wardstone-channel (issue #3400)', () => {
     const { sim, ctx, boss, dps } = kit;
     const st = nythraxis.initNythraxisEncounter(boss);
     st.phase = 2;
-    nythraxis.startNythraxisDeathlessRage(ctx, boss, st);
+    // Exclusive disables startNythraxisDeathlessRage; arm the helper path so
+    // the issue #3400 corpse-channel teardown still has a channel to clear.
+    st.deathlessCastRemaining = 10;
+    st.wardChannels = nythraxis.nythraxisDeathlessChannelObjects(ctx, boss).map((ward) => ({
+      objectId: ward.id,
+      playerId: null,
+      remaining: 5,
+      complete: false,
+    }));
     const ward = nythraxis.nythraxisWardstones(ctx, boss)[0] as AnyEntity;
     const victim = dps[0];
     teleport(sim, victim, ward.pos.x, ward.pos.z, ward.pos.y);

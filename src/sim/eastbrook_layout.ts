@@ -1135,6 +1135,10 @@ const FURY_POSITION = { x: 16, z: -78 } as const;
 // crafting stations (a forge master cannot leave the forge), and service NPCs
 // sit out on the edges. Each group is spread, not clustered.
 const MARSHAL_POSITION = { x: -58, z: -102 } as const;
+// Exclusive fashion welfare merchant: civic green north of the well, a service
+// NPC on the square's edge, facing the well so the vendor window opens toward
+// the square. Re-anchored from the retired (0, 0) civic onto the harbour town.
+const FASHION_WELFARE_POSITION = { x: -10, z: -96 } as const;
 
 const NPCS = [
   makeNpc('the_merchant', MERCHANT_POSITION, MARKET_STALLS[0].rotation, MARKET_STALLS[0].id),
@@ -1175,6 +1179,12 @@ const NPCS = [
   makeNpc('weaver_ottilie', WEAVER_POSITION, WEAVING_HOUSE.rotation, LOOM_STATION.id),
   makeNpc('tinker_gizzel', TINKER_POSITION, TOOLWORKS.rotation, TOOLWORKS_STATION.id),
   makeNpc('fury', FURY_POSITION, facingToward(FURY_POSITION, CIVIC_CENTER), 'eastbrook_chapel'),
+  makeNpc(
+    'da_xiong_fashion_welfare_merchant',
+    FASHION_WELFARE_POSITION,
+    facingToward(FASHION_WELFARE_POSITION, CIVIC_CENTER),
+    'eastbrook_civic_well_beacon',
+  ),
 ] as const;
 
 const BURSAR = NPCS.find((npc) => npc.id === 'bursar_fernando');

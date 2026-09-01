@@ -19,7 +19,7 @@
 process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_phase15_telemetry';
 
 import type * as http from 'node:http';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { recordSitePresence } from '../../server/admin_db';
 import { insertClientPerfReport } from '../../server/db';
 import { compose } from '../../server/http/compose';
@@ -111,6 +111,7 @@ async function runRoute(
 afterEach(() => {
   vi.clearAllMocks();
   vi.restoreAllMocks();
+  vi.unstubAllEnvs();
 });
 
 // ---------------------------------------------------------------------------
@@ -118,6 +119,21 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 
 describe('POST /api/site-presence (public site-presence beacon)', () => {
+  beforeEach(() => {
+    // Exclusive default is off; opt in so these pins exercise the live write path.
+    vi.stubEnv('SITE_PRESENCE_ENABLED', '1');
+  });
+
+  it('200 { ok: true } with no write when SITE_PRESENCE_ENABLED is unset', async () => {
+    vi.stubEnv('SITE_PRESENCE_ENABLED', '');
+    const r = await runRoute('POST', '/api/site-presence', {
+      body: { visitorId: 'a'.repeat(16), page: 'home' },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({ ok: true });
+    expect(vi.mocked(recordSitePresence)).not.toHaveBeenCalled();
+  });
+
   it('200 { ok: true } for a valid visitor id, recording presence once', async () => {
     const r = await runRoute('POST', '/api/site-presence', {
       body: { visitorId: 'a'.repeat(16), page: 'home' },
@@ -181,6 +197,10 @@ describe('POST /api/site-presence (public site-presence beacon)', () => {
 // ---------------------------------------------------------------------------
 
 describe('POST /api/perf-report (public perf beacon)', () => {
+  beforeEach(() => {
+    vi.stubEnv('PERF_REPORT_ENABLED', '1');
+  });
+
   it('200 { ok: true } for a fresh session, inserting one report', async () => {
     // A unique sessionId per perf-report test so the per-session insert throttle in
     // perf_report.ts (module-global) does not swallow a later insert to 200-no-store.

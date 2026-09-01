@@ -311,6 +311,7 @@ export {
 
 import { CRUCIBLE_PROFESSION_ITEMS } from './content/crucible_professions';
 import { DELVE_ITEMS } from './content/delves/items';
+import { FASHION_WEAPON_SKIN_ITEMS, FASHION_WELFARE_NPC } from './content/fashion_welfare_vendor';
 import { HEROIC_ITEMS, RETIRED_HEROIC_ITEMS } from './content/heroic_loot';
 import { buildHeroicVariants } from './content/heroic_variants';
 import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
@@ -366,6 +367,7 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   IGNIVAR_LOOT_ITEMS,
   WARFARE_ITEMS,
   RIFT_ITEMS,
+  FASHION_WEAPON_SKIN_ITEMS,
   REALM_ITEMS,
   DRAKELANDS_ITEMS,
   FROSTVEIL_ITEMS,
@@ -429,6 +431,7 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
   [FURY_NPC.id]: FURY_NPC,
+  [FASHION_WELFARE_NPC.id]: FASHION_WELFARE_NPC,
   brother_halven: BROTHER_HALVEN,
   brother_halven_marsh: BROTHER_HALVEN_MARSH,
   ...REALM_NPCS,

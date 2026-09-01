@@ -34,6 +34,7 @@ export const STAT_GRID: readonly StatId[] = [
   'critRating',
   'hasteRating',
   'hitRating',
+  'versatilityRating',
   'warfare',
 ];
 
@@ -49,6 +50,7 @@ export const STAT_OFFENSE: readonly StatId[] = [
   'critRating',
   'hasteRating',
   'hitRating',
+  'versatilityRating',
 ];
 
 // Defense: mitigation and avoidance, plus the Warfare (PvP) summary line.

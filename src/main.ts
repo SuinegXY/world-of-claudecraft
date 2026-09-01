@@ -426,6 +426,7 @@ import { classIconUrl } from './ui/class_icon_art';
 import { claudiumBalanceAddress, currentWocDiscountBps } from './ui/claudium_view';
 import { isDevGuiCommand } from './ui/dev_command_view';
 import { devTierByIndex, devTierDisplayName } from './ui/dev_tier';
+import { DISCORD_BUILD_ENABLED } from './ui/discord_build';
 import {
   coerceDiscordPresence,
   coerceDiscordStatus,
@@ -505,6 +506,11 @@ import { buildPerfOverlayView, FrameMeter } from './ui/perf_overlay_model';
 import { hydratePortraits, portraitChipHtml } from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
 import { createSpectateBadge } from './ui/spectate_badge';
+import {
+  isSponsorQrPanelOpen,
+  openSponsorQrPanel,
+  wireSponsorTriggers,
+} from './ui/sponsor_qr_panel';
 import { refreshStartSkinPickerPortraits } from './ui/start_skin_picker_portraits';
 import { refreshSteamLinkStatus, wireSteamLink } from './ui/steam_link';
 import { shouldShowStorePromo } from './ui/store_promo_card';
@@ -686,8 +692,16 @@ function saveHomepageMusicMuted(muted: boolean): void {
 // The site key is injected at build time; when it is empty (local/offline dev or
 // a build without the env var) the widget never renders and the token is '', so
 // the server, which also skips verification without its secret, lets requests
-// through unchanged. The api.js <script> is in index.html.
+// through unchanged. Exclusive CN builds leave the sitekey unset and do NOT ship
+// challenges.cloudflare.com in the HTML head (that host hangs DNS/TLS and made
+// login + charselect feel stuck); api.js is injected only when a sitekey exists.
 const TURNSTILE_SITEKEY = String(import.meta.env.VITE_TURNSTILE_SITEKEY ?? '');
+const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+const TURNSTILE_READY_MAX_ATTEMPTS = 50; // 50 * 200ms = 10s, then stop polling
+// Exclusive default-off: hide GitHub link UI and skip status / charselect news
+// fetches (api.github.com is often unreachable in CN). Set VITE_GITHUB_DISABLED=0
+// to restore.
+const GITHUB_BUILD_ENABLED = String(import.meta.env.VITE_GITHUB_DISABLED ?? '1').trim() !== '1';
 
 interface TurnstileApi {
   render: (el: string | HTMLElement, opts: { sitekey: string }) => string;
@@ -695,9 +709,22 @@ interface TurnstileApi {
   reset: (widgetId?: string) => void;
 }
 let turnstileWidgetId: string | undefined;
+let turnstileScriptRequested = false;
+let turnstileReadyAttempts = 0;
 
 function turnstileApi(): TurnstileApi | undefined {
   return (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+}
+
+function ensureTurnstileScript(): void {
+  if (turnstileScriptRequested || typeof document === 'undefined') return;
+  turnstileScriptRequested = true;
+  if (document.querySelector(`script[src="${TURNSTILE_SCRIPT_SRC}"]`)) return;
+  const script = document.createElement('script');
+  script.src = TURNSTILE_SCRIPT_SRC;
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
 }
 
 // Render the widget once, retrying until the async api.js script is ready. Safe to
@@ -708,9 +735,12 @@ function turnstileApi(): TurnstileApi | undefined {
 // the form.
 function ensureTurnstile(): void {
   if (DESKTOP_APP || !TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
+  ensureTurnstileScript();
   const ts = turnstileApi();
   const el = document.getElementById('cf-turnstile-container');
   if (!ts || !el) {
+    if (turnstileReadyAttempts >= TURNSTILE_READY_MAX_ATTEMPTS) return;
+    turnstileReadyAttempts += 1;
     window.setTimeout(ensureTurnstile, 200);
     return;
   }
@@ -1217,6 +1247,9 @@ function mountGameUi(): void {
   // earlier, before any world entry) silently no-ops on it. Re-sync now so the
   // desktop micro-menu entry is revealed the moment the in-game HUD actually exists.
   syncDiscordEntries();
+  // In-game community Donate (`.js-open-sponsor`) is also cloned from this
+  // template. `wireSponsorTriggers` uses document-level delegation, so the
+  // boot-time wire already covers the clone; no re-bind is required here.
 }
 
 // ---------------------------------------------------------------------------
@@ -1578,7 +1611,9 @@ async function startGame(
     initSoftwareRenderNotice(DESKTOP_APP);
     loadPhaseStart('hud-ctor');
     hud = new Hud(world, renderer, keybinds, {
-      dailyRewardsEnabled: NATIVE_APP ? await walletCapabilityReady : true,
+      // Exclusive: Daily Rewards / WOC Store HUD entry is hard-off (zero config).
+      // Restore only by flipping this constant and DAILY_REWARDS_OUTBOUND_ENABLED=1.
+      dailyRewardsEnabled: false,
       devCommandsEnabled: import.meta.env.DEV,
       constrainedMemory: GFX.constrainedMemory,
     });
@@ -2061,7 +2096,7 @@ async function startGame(
     onMenu: () => hud.toggleOptionsMenu(),
     onSocial: () => hud.toggleSocial(),
     onDiscord: () => openDiscordEntry(),
-    onDonate: () => window.open(DONATE_URL, '_blank', 'noopener,noreferrer'),
+    onDonate: () => openSponsorEntry(),
     onWiki: () => hud.openWiki(),
     onEmotes: () => hud.toggleEmoteWheel(),
     onArena: () => hud.toggleArena(),
@@ -2133,7 +2168,8 @@ async function startGame(
     // An action inside More may synchronously open another focus-managed
     // window before this observer microtask runs. In that handoff, release the
     // older More trap without restoring focus behind the destination window.
-    hud.syncMobileMoreDialog(open, open || !hud.isWindowOpen());
+    // Sponsor QR is not a Hud window, so treat it as a destination too.
+    hud.syncMobileMoreDialog(open, open || !(hud.isWindowOpen() || isSponsorQrPanelOpen()));
     if (open) {
       // Treat the touch-only More tray as an explicit interaction: cancel autorun
       // so tapping its controls cannot leave the player moving unexpectedly.
@@ -3248,191 +3284,196 @@ async function startGame(
     // fail closed; the SDK itself returns typed unavailable states, never throws.
     // The game therefore boots and plays with the service OFF: snapshot() resolves
     // to the disabled state and the window renders its empty notice.
-    const economy = new EconomyClient({
-      token: () => api.token,
-      base: api.base,
-    });
-    const wocBalanceBaseUnits = (balance: number | null): string | null => {
-      if (balance === null || !Number.isFinite(balance) || balance < 0) return null;
-      return String(Math.floor(balance * 1_000_000));
-    };
-    const nativePriceCache = new Map<string, { amountBase: string; atMs: number }>();
-    const nativePriceCacheTtlMs = 60_000;
-    const nativeAmountBase = (
-      rail: 'sol' | 'usdc' | 'woc',
-      sku: string,
-      amountBase: string | null | undefined,
-    ): string | null => {
-      const key = `${rail}:${sku}`;
-      if (amountBase) {
-        nativePriceCache.set(key, { amountBase, atMs: Date.now() });
-        return amountBase;
-      }
-      const cached = nativePriceCache.get(key);
-      if (!cached || Date.now() - cached.atMs > nativePriceCacheTtlMs) return null;
-      return cached.amountBase;
-    };
-    const claudiumHooks: ClaudiumHooks = {
-      balance: async () => (await economy.balance()).balance,
-      storeSnapshot: async () => {
-        const snapshot = await economy.storeSnapshot();
-        return {
-          available: snapshot.available,
-          balance: snapshot.balance,
-          storeItems: snapshot.items,
-        };
-      },
-      snapshot: async () => {
-        const pack = await economy.packSnapshot();
-        if (!pack.available) {
-          return {
-            available: false,
-            balance: pack.balance,
-            skus: pack.skus,
-            nativeRails: pack.nativeRails,
-          };
+    // Exclusive: Claudium client is hard-off (zero config). Never attach hooks and
+    // never poll /api/claudium/balance. Restore by flipping this constant and
+    // CLAUDIUM_OUTBOUND_ENABLED=1 with a reachable WOC_ECONOMY_SERVICE_URL.
+    const claudiumClientEnabled = false;
+    if (claudiumClientEnabled) {
+      const economy = new EconomyClient({
+        token: () => api.token,
+        base: api.base,
+      });
+      const wocBalanceBaseUnits = (balance: number | null): string | null => {
+        if (balance === null || !Number.isFinite(balance) || balance < 0) return null;
+        return String(Math.floor(balance * 1_000_000));
+      };
+      const nativePriceCache = new Map<string, { amountBase: string; atMs: number }>();
+      const nativePriceCacheTtlMs = 60_000;
+      const nativeAmountBase = (
+        rail: 'sol' | 'usdc' | 'woc',
+        sku: string,
+        amountBase: string | null | undefined,
+      ): string | null => {
+        const key = `${rail}:${sku}`;
+        if (amountBase) {
+          nativePriceCache.set(key, { amountBase, atMs: Date.now() });
+          return amountBase;
         }
-        const { balance, skus } = pack;
-        const walletEnabled = await walletCapabilityReady;
-        const nativeRails = walletEnabled
-          ? pack.nativeRails
-          : { ...pack.nativeRails, sol: false, usdc: false, woc: false };
-        if (!walletEnabled) {
+        const cached = nativePriceCache.get(key);
+        if (!cached || Date.now() - cached.atMs > nativePriceCacheTtlMs) return null;
+        return cached.amountBase;
+      };
+      const claudiumHooks: ClaudiumHooks = {
+        balance: async () => (await economy.balance()).balance,
+        storeSnapshot: async () => {
+          const snapshot = await economy.storeSnapshot();
+          return {
+            available: snapshot.available,
+            balance: snapshot.balance,
+            storeItems: snapshot.items,
+          };
+        },
+        snapshot: async () => {
+          const pack = await economy.packSnapshot();
+          if (!pack.available) {
+            return {
+              available: false,
+              balance: pack.balance,
+              skus: pack.skus,
+              nativeRails: pack.nativeRails,
+            };
+          }
+          const { balance, skus } = pack;
+          const walletEnabled = await walletCapabilityReady;
+          const nativeRails = walletEnabled
+            ? pack.nativeRails
+            : { ...pack.nativeRails, sol: false, usdc: false, woc: false };
+          if (!walletEnabled) {
+            return {
+              available: true,
+              balance,
+              skus,
+              nativeRails,
+              wocDiscountBps: null,
+              walletBalances: {
+                solLamports: null,
+                usdcBaseUnits: null,
+                wocBaseUnits: null,
+              },
+              nativePrices: skus.map((row) => ({
+                sku: row.sku,
+                solAmountBase: null,
+                usdcAmountBase: null,
+                wocAmountBase: null,
+              })),
+            };
+          }
+          const wallet = await loadWallet();
+          // Read the crypto-rail balances from the actively connected wallet, but fall back
+          // to the account's LINKED (verified) wallet when nothing is connected this session.
+          // The player card shows the linked balance even while the extension is disconnected,
+          // so without this fallback a linked-but-disconnected player sees "130k $WOC" yet
+          // every SOL/USDC/WOC buy button stays disabled (null balance => unaffordable). With
+          // it the button enables on the linked balance; the buy click then surfaces the
+          // existing "connect a wallet first" prompt so they connect to sign, instead of
+          // hitting a dead button. Selection pinned by tests/claudium_view.test.ts.
+          const walletAddress = claudiumBalanceAddress(
+            wallet.currentWallet().address,
+            linkedWalletPubkey,
+          );
+          const [solBalance, usdcBalance, wocBalance] = walletAddress
+            ? await Promise.all([
+                economy.solBalance(walletAddress),
+                economy.usdcBalance(walletAddress),
+                wallet.fetchWocBalance(walletAddress, true),
+              ])
+            : [{ lamports: null }, { amountBase: null }, null];
+          const nativePrices = await Promise.all(
+            skus.map(async (row) => {
+              const [sol, usdc, woc] = await Promise.all([
+                nativeRails.sol ? economy.nativePrice('sol', row.sku) : null,
+                nativeRails.usdc ? economy.nativePrice('usdc', row.sku) : null,
+                nativeRails.woc ? economy.nativePrice('woc', row.sku) : null,
+              ]);
+              return {
+                sku: row.sku,
+                solAmountBase: nativeAmountBase('sol', row.sku, sol?.amountBase),
+                usdcAmountBase: nativeAmountBase('usdc', row.sku, usdc?.amountBase),
+                wocAmountBase: nativeAmountBase('woc', row.sku, woc?.amountBase),
+                wocDiscountBps: woc?.discountBps ?? null,
+              };
+            }),
+          );
+          const wocDiscountBps = currentWocDiscountBps(nativePrices);
           return {
             available: true,
             balance,
             skus,
             nativeRails,
-            wocDiscountBps: null,
+            wocDiscountBps,
             walletBalances: {
-              solLamports: null,
-              usdcBaseUnits: null,
-              wocBaseUnits: null,
+              solLamports: solBalance.lamports,
+              usdcBaseUnits: usdcBalance.amountBase,
+              wocBaseUnits: wocBalanceBaseUnits(wocBalance),
             },
-            nativePrices: skus.map((row) => ({
-              sku: row.sku,
-              solAmountBase: null,
-              usdcAmountBase: null,
-              wocAmountBase: null,
-            })),
+            nativePrices,
           };
-        }
-        const wallet = await loadWallet();
-        // Read the crypto-rail balances from the actively connected wallet, but fall back
-        // to the account's LINKED (verified) wallet when nothing is connected this session.
-        // The player card shows the linked balance even while the extension is disconnected,
-        // so without this fallback a linked-but-disconnected player sees "130k $WOC" yet
-        // every SOL/USDC/WOC buy button stays disabled (null balance => unaffordable). With
-        // it the button enables on the linked balance; the buy click then surfaces the
-        // existing "connect a wallet first" prompt so they connect to sign, instead of
-        // hitting a dead button. Selection pinned by tests/claudium_view.test.ts.
-        const walletAddress = claudiumBalanceAddress(
-          wallet.currentWallet().address,
-          linkedWalletPubkey,
-        );
-        const [solBalance, usdcBalance, wocBalance] = walletAddress
-          ? await Promise.all([
-              economy.solBalance(walletAddress),
-              economy.usdcBalance(walletAddress),
-              wallet.fetchWocBalance(walletAddress, true),
-            ])
-          : [{ lamports: null }, { amountBase: null }, null];
-        const nativePrices = await Promise.all(
-          skus.map(async (row) => {
-            const [sol, usdc, woc] = await Promise.all([
-              nativeRails.sol ? economy.nativePrice('sol', row.sku) : null,
-              nativeRails.usdc ? economy.nativePrice('usdc', row.sku) : null,
-              nativeRails.woc ? economy.nativePrice('woc', row.sku) : null,
-            ]);
-            return {
-              sku: row.sku,
-              solAmountBase: nativeAmountBase('sol', row.sku, sol?.amountBase),
-              usdcAmountBase: nativeAmountBase('usdc', row.sku, usdc?.amountBase),
-              wocAmountBase: nativeAmountBase('woc', row.sku, woc?.amountBase),
-              wocDiscountBps: woc?.discountBps ?? null,
+        },
+        buy: async (rail, sku) => {
+          await (async () => {
+            const refreshClaudiumLater = () => {
+              void hud.refreshClaudium();
             };
-          }),
-        );
-        const wocDiscountBps = currentWocDiscountBps(nativePrices);
-        return {
-          available: true,
-          balance,
-          skus,
-          nativeRails,
-          wocDiscountBps,
-          walletBalances: {
-            solLamports: solBalance.lamports,
-            usdcBaseUnits: usdcBalance.amountBase,
-            wocBaseUnits: wocBalanceBaseUnits(wocBalance),
-          },
-          nativePrices,
-        };
-      },
-      buy: async (rail, sku) => {
-        await (async () => {
-          const refreshClaudiumLater = () => {
-            void hud.refreshClaudium();
-          };
-          const result = await startClaudiumPurchase(economy, rail, sku, {
-            nativePayer:
-              desktopWalletBrowserHandoffAvailable() && linkedWalletPubkey
-                ? linkedWalletPubkey
-                : undefined,
-            stripe: (intent) =>
-              openStripeCheckout(
-                intent,
-                {
-                  title: t('hudChrome.claudium.checkoutTitle'),
-                  close: t('hudChrome.claudium.checkoutClose'),
-                  loading: t('hudChrome.claudium.checkoutLoading'),
-                  failed: t('hudChrome.claudium.checkoutFailed'),
-                },
-                {
-                  onComplete: () => {
-                    refreshClaudiumLater();
-                    window.setTimeout(refreshClaudiumLater, 1500);
-                    window.setTimeout(refreshClaudiumLater, 4000);
-                    window.setTimeout(refreshClaudiumLater, 8000);
+            const result = await startClaudiumPurchase(economy, rail, sku, {
+              nativePayer:
+                desktopWalletBrowserHandoffAvailable() && linkedWalletPubkey
+                  ? linkedWalletPubkey
+                  : undefined,
+              stripe: (intent) =>
+                openStripeCheckout(
+                  intent,
+                  {
+                    title: t('hudChrome.claudium.checkoutTitle'),
+                    close: t('hudChrome.claudium.checkoutClose'),
+                    loading: t('hudChrome.claudium.checkoutLoading'),
+                    failed: t('hudChrome.claudium.checkoutFailed'),
                   },
-                },
-              ),
-            nativeSignAndSend: async (transactionBase64, _rail, reference) => {
-              if (desktopWalletBrowserHandoffAvailable()) {
-                if (!linkedWalletPubkey) throw new Error('connect a wallet first');
-                const result = await authorizeDesktopWalletInBrowser({
-                  kind: 'transaction',
-                  reference,
-                  expectedAddress: linkedWalletPubkey,
-                });
-                if (result.kind !== 'transaction') {
-                  throw new Error('wallet returned an invalid transaction authorization');
+                  {
+                    onComplete: () => {
+                      refreshClaudiumLater();
+                      window.setTimeout(refreshClaudiumLater, 1500);
+                      window.setTimeout(refreshClaudiumLater, 4000);
+                      window.setTimeout(refreshClaudiumLater, 8000);
+                    },
+                  },
+                ),
+              nativeSignAndSend: async (transactionBase64, _rail, reference) => {
+                if (desktopWalletBrowserHandoffAvailable()) {
+                  if (!linkedWalletPubkey) throw new Error('connect a wallet first');
+                  const result = await authorizeDesktopWalletInBrowser({
+                    kind: 'transaction',
+                    reference,
+                    expectedAddress: linkedWalletPubkey,
+                  });
+                  if (result.kind !== 'transaction') {
+                    throw new Error('wallet returned an invalid transaction authorization');
+                  }
+                  desktopWalletBrowserSessionActive = true;
+                  updateWalletButton();
+                  return result.signature;
                 }
-                desktopWalletBrowserSessionActive = true;
-                updateWalletButton();
-                return result.signature;
-              }
-              const wallet = await loadWallet();
-              return wallet.signAndSendTransactionBase64(transactionBase64);
-            },
+                const wallet = await loadWallet();
+                return wallet.signAndSendTransactionBase64(transactionBase64);
+              },
+            });
+            if ('ok' in result && !result.ok) {
+              throw new Error(t('hudChrome.claudium.checkoutUnavailable'));
+            }
+            if ('settled' in result && result.settled) {
+              await hud.refreshClaudium();
+              window.setTimeout(refreshClaudiumLater, 1500);
+              return;
+            }
+            if ('settled' in result && !result.settled) {
+              throw new Error(t('hudChrome.claudium.checkoutNotSettled'));
+            }
+          })().catch((err) => {
+            // Classified in the shared wallet-bridge module; raw log for devs.
+            console.warn('[claudium] checkout failed', err);
+            throw new Error(claudiumCheckoutErrorText(err));
           });
-          if ('ok' in result && !result.ok) {
-            throw new Error(t('hudChrome.claudium.checkoutUnavailable'));
-          }
-          if ('settled' in result && result.settled) {
-            await hud.refreshClaudium();
-            window.setTimeout(refreshClaudiumLater, 1500);
-            return;
-          }
-          if ('settled' in result && !result.settled) {
-            throw new Error(t('hudChrome.claudium.checkoutNotSettled'));
-          }
-        })().catch((err) => {
-          // Classified in the shared wallet-bridge module; raw log for devs.
-          console.warn('[claudium] checkout failed', err);
-          throw new Error(claudiumCheckoutErrorText(err));
-        });
-      },
-      spend: async (itemId, kind, expectedCostClaudium, idempotencyKey) => {
+        },
+        spend: async (itemId, kind, expectedCostClaudium, idempotencyKey) => {
         const result = await economy.spend({
           itemId,
           kind,
@@ -5177,18 +5218,8 @@ async function startGame(
           // greppable line carrying the whole phase breakdown for probes/devices.
           console.info(`[load-profile] ${JSON.stringify(loadProfile.summary)}`);
           perf.reset();
-          startPerfReporter({
-            perf,
-            settings,
-            tokenProvider: () => api.token,
-            characterIdProvider: () => online?.characterId ?? null,
-            worldTelemetryProvider: () => ({
-              zoneId: telemetryZoneId(world.player.pos.x, world.player.pos.z),
-              simEntities: world.entities.size,
-            }),
-            desktopShell: DESKTOP_APP,
-            shellHidden: desktopPresentationHidden,
-          });
+          // Exclusive: client perf-report poster is hard-off (zero config). The server
+          // also drops /api/perf-report unless PERF_REPORT_ENABLED=1.
           // One-time machine-local performance nudge (packet 0 rulings R14-R16):
           // the assembler polls the same PerfMonitor the reporter reads.
           initPerfNudge({ perf, desktopShell: DESKTOP_APP });
@@ -5289,14 +5320,15 @@ async function startGame(
 // ---------------------------------------------------------------------------
 
 // Offline names go straight into innerHTML paths (quest $N text, char window
-// title), so enforce the server's character-name rule client-side too:
-// strip anything outside [A-Za-z' -], then require /^[A-Za-z][A-Za-z' -]{1,15}$/.
+// title), so enforce the server's character-name rule client-side too.
+// Lockstep with server/auth.ts validCharNameShape and
+// src/ui/auth_utils.ts validateCharacterName — all three must use the same pattern.
 function sanitizeOfflineName(raw: string): string {
   const stripped = raw
-    .replace(/[^A-Za-z' -]/g, '')
-    .replace(/^[^A-Za-z]+/, '')
+    .replace(/[^\p{L}' -]/gu, '')
+    .replace(/^[^\p{L}]+/u, '')
     .slice(0, 16);
-  return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(stripped) ? stripped : 'Adventurer';
+  return /^\p{L}[\p{L}' -]{1,15}$/u.test(stripped) ? stripped : 'Adventurer';
 }
 
 async function startOffline(
@@ -5959,9 +5991,15 @@ function show(el: string): void {
 
   // The character-select news panel loads when its screen opens: entry is the
   // moment the player can actually read it, and the NEW-badge marker should
-  // advance only then.
+  // advance only then. Exclusive default skips the request when GitHub UI is
+  // soft-disabled (avoids a hanging /api/releases while the panel is open).
   if (el === '#charselect-panel') {
-    void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    if (GITHUB_BUILD_ENABLED) {
+      void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
+    } else {
+      const feed = $('#charselect-news-feed');
+      if (feed) feed.innerHTML = '';
+    }
   }
 
   // Reset currently rendered classes to force re-render/animation when opening a panel
@@ -7580,7 +7618,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
   if (jsonLd) {
     const sameAs = [
       'https://github.com/levy-street/world-of-claudecraft',
-      'https://discord.com/invite/worldofclaudecraft',
+      ...(DISCORD_BUILD_ENABLED ? ['https://discord.com/invite/worldofclaudecraft'] : []),
       'https://www.youtube.com/@WoClaudeCraft',
       'https://x.com/WoClaudecraft',
       'https://www.instagram.com/worldofclaudecraft/',
@@ -7994,7 +8032,9 @@ async function wocDesktopAuthorize(action: DesktopWalletBrowserAction) {
 // website-distributed Electron shell opts in through a trusted IPC probe.
 let WALLET_ENABLED = false;
 const walletCapabilityReady = resolveWalletCapability({
-  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() === '1',
+  // Exclusive default-off: Solana wallet UI (and its RPC path) stays hidden unless
+  // the build explicitly sets VITE_WALLET_DISABLED=0.
+  disabled: String(import.meta.env.VITE_WALLET_DISABLED ?? '1').trim() !== '0',
   nativeApp: NATIVE_APP,
   desktopApp: DESKTOP_APP,
   bridge: NATIVE_APP ? nativeSolanaMobileBridge : DESKTOP_APP ? desktopBridge() : null,
@@ -8581,12 +8621,19 @@ function flashWalletError(message: string): void {
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
 // Discord UI is available on web and native unless explicitly disabled at build time.
-const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
+// Exclusive server: Discord UI defaults off unless explicitly enabled at build time
+// (DISCORD_BUILD_ENABLED from ui/discord_build.ts).
 // Community links for the mobile More tray. discordInviteUrl() itself now
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
 // gets the fail-open behavior for free.
-const DONATE_URL = 'https://ko-fi.com/worldofclaudecraft';
+// Exclusive server: Donate opens the local Alipay / WeChat Pay QR panel instead
+// of the overseas Ko-fi page.
+const sponsorFocusManager = new FocusManager();
+function openSponsorEntry(): void {
+  openSponsorQrPanel(sponsorFocusManager);
+}
+wireSponsorTriggers(document, sponsorFocusManager);
 const DISCORD_ONBOARD_KEY = 'woc_discord_onboard';
 let discordPopup: Window | null = null;
 
@@ -8800,7 +8847,7 @@ window.addEventListener('message', (e: MessageEvent) => {
 async function refreshGithubLinkStatus(): Promise<void> {
   const group = document.getElementById('cs-github-group');
   if (!group) return;
-  if (!api.token) {
+  if (!GITHUB_BUILD_ENABLED || !api.token) {
     group.hidden = true;
     return;
   }
@@ -8842,6 +8889,11 @@ async function refreshGithubLinkStatus(): Promise<void> {
 }
 
 function wireGithubLink(): void {
+  if (!GITHUB_BUILD_ENABLED) {
+    const group = document.getElementById('cs-github-group');
+    if (group) group.hidden = true;
+    return;
+  }
   document.getElementById('btn-github')?.addEventListener('click', () => startGithubOAuth());
   document.getElementById('btn-github-unlink')?.addEventListener('click', () => {
     void api
@@ -8912,13 +8964,21 @@ function syncDiscordEntries(): void {
   if (mobileBtn) mobileBtn.hidden = !DISCORD_BUILD_ENABLED;
   const desktopBtn = document.getElementById('mm-discord');
   if (desktopBtn) desktopBtn.hidden = !DISCORD_BUILD_ENABLED;
+  // Marketing / footer invite links stay out of the exclusive CN surface when
+  // Discord UI is build-disabled (they dial discord.com, which is unreachable).
+  for (const el of document.querySelectorAll<HTMLElement>(
+    'a.social-link[href*="discord.com"], .uf-discord, #tf-discord',
+  )) {
+    el.hidden = !DISCORD_BUILD_ENABLED;
+  }
 }
 
 // The More tray's Discord tap: the account panel (link / unlink / status) when
 // it is available (build on, server has Discord on, player logged in), else the
 // community invite in a new tab, mirroring the desktop shell's community link.
 function openDiscordEntry(): void {
-  if (DISCORD_BUILD_ENABLED && discordUiEnabled() && api.token) {
+  if (!DISCORD_BUILD_ENABLED) return;
+  if (discordUiEnabled() && api.token) {
     toggleDiscordPanel(true);
     return;
   }
@@ -10726,6 +10786,10 @@ function wireStartScreens(): void {
   setupNavBtn(navBtnNews, '#news-view', () => {
     switchMainView('#news-view');
     void loadNews();
+  });
+  // Exclusive Chinese changelog page (/changelog), sibling of the News panel.
+  setupNavBtn($('#nav-btn-exclusive'), '', () => {
+    window.location.href = '/changelog';
   });
   setupNavBtn(navBtnDownload, '#download-view');
   initDesktopDownload();

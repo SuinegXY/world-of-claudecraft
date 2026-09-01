@@ -45,6 +45,7 @@ import {
   CORPSE_INTERACT_GRACE_SECONDS,
   distributeLootCopper,
   grantAwardedLootItem,
+  grantLootItem,
   hasPendingLootRollForMob,
   killSnapshotEligibility,
   lootSlotVisibleTo,
@@ -161,17 +162,20 @@ export function lootCorpse(
     if (!lootSlotVisibleTo(s, meta.entityId)) continue;
     if (s.openToAll) {
       while (s.count > 0 && ctx.canAddItem(s.itemId, 1, meta.entityId)) {
-        if (s.instance) {
-          ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
-        } else {
-          // Through the shared award grant, NOT a bare addItem: an openToAll
-          // slot is how an everyone-passed (or winner-offline) roll returns a
-          // drop to the corpse, and a soulbound item picked up from it must
-          // carry the same bind-on-pickup party trade window a roll win
-          // would; a bare add minted a permanently untradeable copy from the
-          // most common raid outcome (everyone passes to sort it out later).
-          grantAwardedLootItem(ctx, s.itemId, meta.entityId, killSnapshotEligibility(ctx, mob));
-        }
+        // Through the shared award grant, NOT a bare addItem: an openToAll
+        // slot is how an everyone-passed (or winner-offline) roll returns a
+        // drop to the corpse, and a soulbound item picked up from it must
+        // carry the same bind-on-pickup party trade window a roll win
+        // would; a bare add minted a permanently untradeable copy from the
+        // most common raid outcome (everyone passes to sort it out later).
+        // Pass instance so exclusive secondary / gear-scale payloads survive.
+        grantAwardedLootItem(
+          ctx,
+          s.itemId,
+          meta.entityId,
+          killSnapshotEligibility(ctx, mob),
+          s.instance,
+        );
         s.count--;
         didLoot = true;
       }
@@ -186,7 +190,7 @@ export function lootCorpse(
       if (s.instance) {
         ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
       } else {
-        ctx.addItem(s.itemId, 1, meta.entityId);
+        grantLootItem(ctx, s.itemId, meta.entityId, s.instance);
       }
       s.personalFor = s.personalFor.filter((id) => id !== meta.entityId);
       tookPersonal = true;
@@ -194,16 +198,11 @@ export function lootCorpse(
       continue;
     }
     if (!rights.shared) continue;
-    while (s.count > 0) {
-      if (s.instance) {
-        if (!ctx.canAddItem(s.itemId, 1, meta.entityId)) break;
-        ctx.addItemInstance(s.itemId, cloneItemInstancePayload(s.instance), meta.entityId);
-        s.count--;
-      } else if (awardSharedLootItem(ctx, s.itemId, mob, meta, ffaUnlocked)) {
-        s.count--;
-      } else {
-        break;
-      }
+    // Pass instance so exclusive secondary / gear-scale payloads survive need-greed,
+    // master loot, and round-robin (plain addItem would drop them). Keep the
+    // official FFA unlock so a post-grace looter still takes all.
+    while (s.count > 0 && awardSharedLootItem(ctx, s.itemId, mob, meta, ffaUnlocked, s.instance)) {
+      s.count--;
       didLoot = true;
     }
     if (s.count > 0) bagsFull = true;

@@ -827,7 +827,8 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
   // Round 6 removed eastbrook_home_rise from the layout after live review,
   // dropping its entrance too (31), then appended the harbour quarter's three
   // coastal buildings along the dock road, each bringing its own entrance
-  // back into the proof (34).
+  // back into the proof (34). Exclusive fashion welfare merchant is a 35th
+  // destination on the civic green.
   it('pathfinds bidirectionally from the square to every service, NPC, station, and entrance', () => {
     // Middle of the new market square: inside the civic ring, clear of the
     // well beacon and the benches, and directly connected to the east-road
@@ -855,7 +856,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
         (building) => ({ id: `${building.id}:entrance`, point: building.frontStandingPoint }),
       ),
     ];
-    expect(destinations).toHaveLength(34);
+    expect(destinations).toHaveLength(35);
     const moverProfiles = [
       { id: 'player', bodyRadius: PLAYER_BODY_RADIUS },
       // Pet locomotion deliberately shares PLAYER_BODY_RADIUS; keep this

@@ -22,6 +22,7 @@
 import { devTierIndexForMergedPrs } from '../src/sim/dev_tier';
 import { LEADERBOARD_MAX } from '../src/sim/leaderboard_page';
 import type { DevLeaderboardEntry } from '../src/world_api';
+import { githubOutboundEnabled } from './exclusive_outbound';
 import { recordUsageCacheEvent, recordUsageMetric, setUsageCacheSize } from './provider_usage';
 
 const DEFAULT_GITHUB_REPO = 'levy-street/world-of-claudecraft';
@@ -194,6 +195,8 @@ async function fetchAllContributors(): Promise<ContributorStat[]> {
  * cooldown, deduping concurrent refreshes behind one in-flight promise.
  */
 export async function getContributors(): Promise<ContributorSnapshot> {
+  // Exclusive default-off: never dial api.github.com unless opted in.
+  if (!githubOutboundEnabled()) return EMPTY_SNAPSHOT;
   const now = Date.now();
   if (contributorsCache && now - contributorsCache.at < CONTRIBUTORS_TTL_MS) {
     recordUsageCacheEvent('github.contributors', 'hit');

@@ -45,7 +45,8 @@ import {
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-// The authoritative ordered locale set both build scripts emit (LOCALES). en + 21.
+// Exclusive CN ship set: runtime SUPPORTED / translations / loaders are en + zh_CN.
+// Dense modules are still emitted for every authored overlay (ALL_LOCALES).
 const ALL_LOCALES = [
   'en',
   'es',
@@ -70,8 +71,8 @@ const ALL_LOCALES = [
   'vi_VN',
   'da_DK',
 ];
-// The lazy/pending set: every locale except `en` (and never the en_XA pseudo).
-const NON_EN_LOCALES = ALL_LOCALES.filter((l) => l !== 'en');
+const SHIP_LOCALES = ['en', 'zh_CN'];
+const SHIP_NON_EN = SHIP_LOCALES.filter((l) => l !== 'en');
 
 // Reusable surface assertions over one generated table (game or admin).
 function assertEmitSurface(
@@ -82,16 +83,16 @@ function assertEmitSurface(
   loaders: Record<string, () => Promise<unknown>>,
   supported: readonly string[],
 ) {
-  // Barrel translations map: exactly the 21 locales, in emit order, en_XA EXCLUDED.
-  expect(Object.keys(translations), `${label}: translations key set`).toEqual(ALL_LOCALES);
+  // Barrel translations map: exclusive ship set only (en + zh_CN), en_XA EXCLUDED.
+  expect(Object.keys(translations), `${label}: translations key set`).toEqual(SHIP_LOCALES);
   expect('en_XA' in translations, `${label}: en_XA must NOT be in translations`).toBe(false);
   expect(translations.en, `${label}: en present`).toBeTypeOf('object');
   // en_XA is re-exported by the barrel but lives outside the runtime locale set.
   expect(en_XA, `${label}: en_XA re-export`).toBeTypeOf('object');
 
-  // loaders.ts: one dynamic-import thunk per non-en/non-en_XA locale; SUPPORTED is 14.
+  // loaders.ts: one dynamic-import thunk per shipped non-en locale; SUPPORTED matches ship.
   expect(Object.keys(loaders), `${label}: LOCALE_LOADERS key set (no en, no en_XA)`).toEqual(
-    NON_EN_LOCALES,
+    SHIP_NON_EN,
   );
   for (const [lang, thunk] of Object.entries(loaders)) {
     expect(thunk, `${label}: LOCALE_LOADERS.${lang} is a thunk`).toBeTypeOf('function');
@@ -102,8 +103,8 @@ function assertEmitSurface(
   expect(supported.includes('en'), `${label}: SUPPORTED includes en`).toBe(true);
   expect(supported.includes('en_XA'), `${label}: SUPPORTED excludes en_XA`).toBe(false);
 
-  // pending.ts: keyed by the same non-en set, every value an array.
-  expect(Object.keys(pending), `${label}: pending key set`).toEqual(NON_EN_LOCALES);
+  // pending.ts: keyed by the same shipped non-en set, every value an array.
+  expect(Object.keys(pending), `${label}: pending key set`).toEqual(SHIP_NON_EN);
   for (const [lang, list] of Object.entries(pending)) {
     expect(Array.isArray(list), `${label}: pending.${lang} is an array`).toBe(true);
   }
@@ -125,10 +126,8 @@ describe('i18n emit-split surface (game table)', () => {
   });
 
   it('each LOCALE_LOADERS thunk lazily resolves its own dense slice', async () => {
-    const es = (await uiLoaders.es()) as Record<string, unknown>;
-    expect(es.es, 'ui loader resolves the es slice').toBeTypeOf('object');
-    const ruRu = (await uiLoaders.ru_RU()) as Record<string, unknown>;
-    expect(ruRu.ru_RU, 'ui loader resolves the ru_RU slice').toBeTypeOf('object');
+    const zh = (await uiLoaders.zh_CN()) as Record<string, unknown>;
+    expect(zh.zh_CN, 'ui loader resolves the zh_CN slice').toBeTypeOf('object');
   });
 });
 
@@ -145,8 +144,8 @@ describe('i18n emit-split surface (admin table)', () => {
   });
 
   it('each admin LOCALE_LOADERS thunk lazily resolves its own slice', async () => {
-    const es = (await adminLoaders.es()) as Record<string, unknown>;
-    expect(es.es, 'admin loader resolves the es slice').toBeTypeOf('object');
+    const zh = (await adminLoaders.zh_CN()) as Record<string, unknown>;
+    expect(zh.zh_CN, 'admin loader resolves the zh_CN slice').toBeTypeOf('object');
   });
 });
 

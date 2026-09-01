@@ -2015,6 +2015,7 @@ export const ru_RU: EnTranslations = {
         "healPower": "Сила исцеления",
         "critRating": "Рейтинг крит. удара",
         "hasteRating": "Рейтинг ускорения",
+        "versatilityRating": "Универсальность",
         "parry": "Парирование",
         "hitRating": "Рейтинг меткости",
         "warfare": "Боевая мощь"
@@ -2036,6 +2037,7 @@ export const ru_RU: EnTranslations = {
         "hasteRating": "Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.",
         "parry": "Ваш шанс полностью парировать фронтальную атаку в ближнем бою и не получить урона. Удар со спины парировать нельзя.",
         "hitRating": "Рейтинг меткости от снаряжения и бонусов комплекта снижает частоту промахов ваших атак и сопротивления вашим заклинаниям, особенно против противников более высокого уровня. Примерно 10 рейтинга дают 1% меткости.",
+        "versatilityRating": "Рейтинг универсальности от вторичных аффиксов снаряжения повышает весь наносимый вами урон. Ровно 10 рейтинга дают 1% бонусного урона.",
         "warfare": "Увеличивает урон по игрокам на {increase}% и снижает получаемый от игроков урон на {reduction}%."
       },
       "effects": {
@@ -7294,6 +7296,7 @@ export const ru_RU: EnTranslations = {
     "highscores": "Таблицы рекордов",
     "wiki": "Вики",
     "news": "Новости",
+    "exclusiveUpdates": "Exclusive Updates",
     "download": "Скачать",
     "loginRegister": "Войти / Зарегистрироваться",
     "account": "Аккаунт",
@@ -8556,6 +8559,15 @@ export const ru_RU: EnTranslations = {
     "discordCommunity": "Присоединиться к Discord-сообществу World of ClaudeCraft",
     "donateProject": "Пожертвовать на поддержку World of ClaudeCraft"
   },
+  "sponsor": {
+    "title": "Поддержать Дасюна",
+    "blurb": "Поддержите Дасюна; при спонсорстве можно оставить сообщение.",
+    "alipay": "Алипей",
+    "wechat": "Вичат Пей",
+    "alipayAlt": "QR-код Alipay для поддержки",
+    "wechatAlt": "QR-код WeChat Pay для поддержки",
+    "railLabel": "QR-коды для поддержки"
+  },
   "entryGuard": {
     "title": "Графика снижена",
     "body": "Игра неожиданно закрылась при входе в мир, поэтому графика теперь установлена на {preset}. Вы можете изменить это в переключателе графики ниже или в настройках игры.",
@@ -9777,7 +9789,10 @@ export const ru_RU: EnTranslations = {
       "dps": "Урон/сек",
       "critChance": "Шанс крита",
       "dodge": "Уклонение",
-      "parry": "Парирование"
+      "parry": "Парирование",
+      "versatilityRating": "+{value} Versatility",
+      "secondaryCritRating": "+{value} Critical Strike",
+      "secondaryHasteRating": "+{value} Haste"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",
@@ -13892,6 +13907,93 @@ export const ru_RU: EnTranslations = {
       "wand_of_quenched_sparks": {
         "name": "Жезл угасших искр"
       },
+      "guildmark_arming_sword_skin_unlock": {
+        "name": "Боевой меч с клеймом гильдии"
+      },
+      "brasscap_axe_skin_unlock": {
+        "name": "Топорик с латунным навершием"
+      },
+      "tempered_flanged_mace_skin_unlock": {
+        "name": "Закалённая шестопёрная булава"
+      },
+      "guildmark_dirk_skin_unlock": {
+        "name": "Дирк с клеймом гильдии"
+      },
+      "brasscrown_staff_skin_unlock": {
+        "name": "Трость с латунной короной"
+      },
+      "lacquered_wand_skin_unlock": {
+        "name": "Лакированный жезл"
+      },
+      "fletcher_s_guild_bow_skin_unlock": {
+        "name": "Лук гильдии Fletcher"
+      },
+      "cinderbrand_sword_skin_unlock": {
+        "name": "Синдербренд"
+      },
+      "emberbite_axe_skin_unlock": {
+        "name": "Эмбербайт"
+      },
+      "smoulderfall_mace_skin_unlock": {
+        "name": "Смолдерфолл"
+      },
+      "ashspark_dagger_skin_unlock": {
+        "name": "Заточка Ashspark"
+      },
+      "forgeheart_staff_skin_unlock": {
+        "name": "Посох Forgeheart"
+      },
+      "emberwrought_wand_skin_unlock": {
+        "name": "Жезл Emberwrought"
+      },
+      "cinderlatch_crossbow_skin_unlock": {
+        "name": "Синдерлатч"
+      },
+      "ice_fang_sword_skin_unlock": {
+        "name": "Ice Fang"
+      },
+      "glaciersplit_axe_skin_unlock": {
+        "name": "Глейшерсплит"
+      },
+      "rimecrusher_mace_skin_unlock": {
+        "name": "Раймкрашер"
+      },
+      "frostbite_dagger_skin_unlock": {
+        "name": "Ледяная игла"
+      },
+      "hoarfrost_vigil_staff_skin_unlock": {
+        "name": "Морозный дозор"
+      },
+      "everwinter_wand_skin_unlock": {
+        "name": "Осколок Вечной Зимы"
+      },
+      "winterbite_skin_unlock": {
+        "name": "Уинтербайт"
+      },
+      "solheim_sword_skin_unlock": {
+        "name": "Solheim, Последний свет зари"
+      },
+      "skyrender_axe_skin_unlock": {
+        "name": "Skyrender, Рана небосвода"
+      },
+      "starfall_mace_skin_unlock": {
+        "name": "Starfall, Суд небес"
+      },
+      "astravyr_dagger_skin_unlock": {
+        "name": "Astravyr, Клык падшей звезды"
+      },
+      "cosmarch_staff_skin_unlock": {
+        "name": "Cosmarch, Шпиль бесконечной пустоты"
+      },
+      "emberwish_wand_skin_unlock": {
+        "name": "Emberwish, Искра угасающего солнца"
+      },
+      "encore_bow_skin_unlock": {
+        "name": "Encore, Вторая падшая звезда"
+      },
+      "meteorlatch_crossbow_skin_unlock": {
+        "name": "Meteorlatch, Последний суд небес"
+      },
       "conjured_water4": {
         "name": "Сотворённая родниковая вода"
       },
@@ -15509,6 +15611,11 @@ export const ru_RU: EnTranslations = {
         "name": "Фьюри",
         "title": "Интендант чести",
         "greeting": "Пески поля боя помнят каждую победу. Распорядись своей честью достойно."
+      },
+      "da_xiong_fashion_welfare_merchant": {
+        "name": "Торговец модой Да Сюн",
+        "title": "Портной обликов",
+        "greeting": "По десять золотых штука. Все облики, что уже есть в мире, здесь готовы."
       },
       "warmarshal_draven_kole": {
         "name": "Военный маршал Дравен Коул",

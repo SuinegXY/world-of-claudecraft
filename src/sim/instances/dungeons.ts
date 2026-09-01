@@ -77,10 +77,9 @@ const RAID_ALLOWED_DUNGEON_IDS = new Set([
   'nythraxis_boss_arena',
   ...IGNIVAR_RAID_ROOM_IDS,
 ]);
-export const RAID_REQUIRED_DUNGEON_IDS: ReadonlySet<string> = new Set([
-  'nythraxis_boss_arena',
-  ...IGNIVAR_RAID_ROOM_IDS,
-]);
+// Exclusive server: raid doors do not require a converted raid group. Solo and
+// ordinary parties may enter once attuned; lockouts and the crypt path still apply.
+export const RAID_REQUIRED_DUNGEON_IDS: ReadonlySet<string> = new Set<string>();
 // A claim whose final boss is already dead (inst.clearedBy is non-empty) idles
 // this much longer than INSTANCE_EMPTY_TIMEOUT before the reaper frees it: a
 // clean kill that wipes the whole party, with nobody left to resurrect, must
@@ -383,15 +382,15 @@ export function enterDungeon(
   if (r.e.dead && !r.e.ghost) return false;
   const party = ctx.partyOf(r.meta.entityId);
   const raidAllowed = RAID_ALLOWED_DUNGEON_IDS.has(dungeonId);
-  const raidRequired = RAID_REQUIRED_DUNGEON_IDS.has(dungeonId);
   if (party?.raid && !raidAllowed) {
     ctx.error(r.meta.entityId, 'Raid groups cannot enter standard dungeons.');
     return false;
   }
-  // Dev builds (ALLOW_DEV_COMMANDS) let a solo walker board a raid door so
-  // the maintainer can experience the walk-in; the undersized-party
-  // warning below still fires. Production keeps the hard raid gate.
-  if (!party?.raid && raidRequired && !bypass && !ctx.devCommands) {
+  // Exclusive server: RAID_REQUIRED_DUNGEON_IDS is empty, so solo and ordinary
+  // parties may enter raid doors without converting to a raid group. Attunement,
+  // lockouts, and the crypt path still apply. Official kept a raid-group gate here.
+  // Dev builds (ALLOW_DEV_COMMANDS) still skip the (empty) gate the same way.
+  if (!party?.raid && RAID_REQUIRED_DUNGEON_IDS.has(dungeonId) && !bypass && !ctx.devCommands) {
     ctx.error(r.meta.entityId, 'You must convert your party to a raid group first.');
     return false;
   }

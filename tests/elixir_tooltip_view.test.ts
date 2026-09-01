@@ -11,7 +11,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { ITEMS } from '../src/sim/data';
 import type { ItemDef } from '../src/sim/types';
 import { elixirTooltipLines } from '../src/ui/elixir_tooltip_view';
-import { formatNumber, setLanguage } from '../src/ui/i18n';
+import { ensureLocaleLoaded, formatNumber, setLanguage } from '../src/ui/i18n';
 
 // Synthetic elixir variants: one def spread with a replaced record, so the
 // mapped-stat rows, the formatter options, and the escaping are each pinned
@@ -91,18 +91,18 @@ describe('elixirTooltipLines', () => {
     );
   });
 
-  it('the aura fallback localizes through the buff-bar matcher', () => {
-    // Only the aura fragment is pinned: the surrounding sentence is a new
-    // catalog key, English-pending in de_DE until the release fill, while
-    // the aura name rides the long-standing AURA_NAME_KEY matcher.
+  it('the aura fallback localizes through the buff-bar matcher', async () => {
+    // Only the aura fragment is pinned: the surrounding sentence may still be
+    // English-pending on a PR, while the aura name rides the AURA_NAME_KEY matcher.
     const def = elixirDef({
       aura: 'Might of the Boar',
       kind: 'buff_spellpower',
       value: 5,
       duration: 300,
     });
-    setLanguage('de_DE');
-    expect(elixirTooltipLines(def)).toContain('Macht des Ebers');
+    await ensureLocaleLoaded('zh_CN');
+    setLanguage('zh_CN');
+    expect(elixirTooltipLines(def)).toContain('野猪之力');
   });
 
   it('escapes the interpolated aura name', () => {

@@ -1042,6 +1042,7 @@ describe('static combat-rating/progression scalars ride the delta gate', () => {
     'bval',
     'crat',
     'hrat',
+    'vrat',
     'hirat',
     'xp',
     'lxp',
@@ -1800,8 +1801,13 @@ describe('delta snapshots', () => {
       signer: 'Testa',
       enchant: 'enchant_chest_stamina',
       rolled: { masterwork: true, stats: { int: 2, spi: 1 } },
+      exclusiveScaled: true as const,
     };
-    const legacy = { signer: 'Oldhand', rolled: { quality: 'rare' as const } };
+    const legacy = {
+      signer: 'Oldhand',
+      rolled: { quality: 'rare' as const },
+      exclusiveScaled: true as const,
+    };
     server.sim.addItemInstance('eastbrook_ritual_vestments', masterwork, session.pid);
     server.sim.addItemInstance('apprentice_staff', legacy, session.pid);
 
@@ -1864,12 +1870,16 @@ describe('delta snapshots', () => {
     broadcast(server);
     const snap = lastSnap(fc.sent);
     expect(snap.self).toHaveProperty('buyback');
-    expect(snap.self.buyback).toEqual([{ itemId: 'apprentice_staff', count: 1 }]);
+    expect(snap.self.buyback).toEqual([
+      { itemId: 'apprentice_staff', count: 1, instance: { exclusiveScaled: true } },
+    ]);
 
     const buybackOnly = { ...snap, self: { ...snap.self } };
     delete buybackOnly.self.inv;
     (client as any).applySnapshot(buybackOnly);
-    expect(client.vendorBuyback).toEqual([{ itemId: 'apprentice_staff', count: 1 }]);
+    expect(client.vendorBuyback).toEqual([
+      { itemId: 'apprentice_staff', count: 1, instance: { exclusiveScaled: true } },
+    ]);
     expect(client.consumeInventoryChanged()).toBe(true);
   });
 
@@ -3605,30 +3615,36 @@ describe('active title wire (Book of Deeds)', () => {
     const client = bareClient(1);
     (client as any).connected = true;
     (client as any).ws = { readyState: 1, send: (p: string) => outbox.push(p) };
-    client.setActiveTitle('prog_veteran');
-    // Asserted HERE, between the select and the clear: the send writes NO
-    // optimistic local copy (the mirror only moves when the server echo
-    // lands), so a refused pick can never leave a phantom worn title on the
-    // client. After the trailing clear this would read null either way.
-    expect(client.activeTitle).toBeNull();
-    client.setActiveTitle(null);
-    expect(outbox.map((p) => JSON.parse(p))).toEqual([
-      { t: 'cmd', cmd: 'deed_set_title', deedId: 'prog_veteran' },
-      { t: 'cmd', cmd: 'deed_set_title', deedId: null },
-    ]);
+    const oldWebSocket = (globalThis as { WebSocket?: unknown }).WebSocket;
+    (globalThis as { WebSocket?: unknown }).WebSocket = { OPEN: 1 };
+    try {
+      client.setActiveTitle('prog_veteran');
+      // Asserted HERE, between the select and the clear: the send writes NO
+      // optimistic local copy (the mirror only moves when the server echo
+      // lands), so a refused pick can never leave a phantom worn title on the
+      // client. After the trailing clear this would read null either way.
+      expect(client.activeTitle).toBeNull();
+      client.setActiveTitle(null);
+      expect(outbox.map((p) => JSON.parse(p))).toEqual([
+        { t: 'cmd', cmd: 'deed_set_title', deedId: 'prog_veteran' },
+        { t: 'cmd', cmd: 'deed_set_title', deedId: null },
+      ]);
 
-    const server = new GameServer();
-    const fc = fakeWs();
-    const session = joinServer(server, fc, 1, 'Lockstep');
-    const meta = server.sim.players.get(session.pid)!;
-    const e = server.sim.entities.get(session.pid)!;
-    meta.deedsEarned.set('prog_veteran', '2026-07-08');
-    server.handleMessage(session, outbox[0]); // the client-built select frame
-    expect(meta.activeTitle).toBe('prog_veteran');
-    expect(e.title).toBe('prog_veteran');
-    server.handleMessage(session, outbox[1]); // the client-built clear frame
-    expect(meta.activeTitle).toBeNull();
-    expect(e.title).toBeNull();
+      const server = new GameServer();
+      const fc = fakeWs();
+      const session = joinServer(server, fc, 1, 'Lockstep');
+      const meta = server.sim.players.get(session.pid)!;
+      const e = server.sim.entities.get(session.pid)!;
+      meta.deedsEarned.set('prog_veteran', '2026-07-08');
+      server.handleMessage(session, outbox[0]); // the client-built select frame
+      expect(meta.activeTitle).toBe('prog_veteran');
+      expect(e.title).toBe('prog_veteran');
+      server.handleMessage(session, outbox[1]); // the client-built clear frame
+      expect(meta.activeTitle).toBeNull();
+      expect(e.title).toBeNull();
+    } finally {
+      (globalThis as { WebSocket?: unknown }).WebSocket = oldWebSocket;
+    }
   });
 
   it('a null payload through the server dispatch clears the title and echoes null', () => {
@@ -3874,28 +3890,34 @@ describe('active border wire (Book of Deeds)', () => {
     const client = bareClient(1);
     (client as any).connected = true;
     (client as any).ws = { readyState: 1, send: (p: string) => outbox.push(p) };
-    client.setActiveBorder(BORDER_DEED);
-    // Same as the title arm, and asserted at the same point: no optimistic
-    // local copy, so the mirror stays null between the select and the echo.
-    expect(client.activeBorder).toBeNull();
-    client.setActiveBorder(null);
-    expect(outbox.map((p) => JSON.parse(p))).toEqual([
-      { t: 'cmd', cmd: 'deed_set_border', deedId: BORDER_DEED },
-      { t: 'cmd', cmd: 'deed_set_border', deedId: null },
-    ]);
+    const oldWebSocket = (globalThis as { WebSocket?: unknown }).WebSocket;
+    (globalThis as { WebSocket?: unknown }).WebSocket = { OPEN: 1 };
+    try {
+      client.setActiveBorder(BORDER_DEED);
+      // Same as the title arm, and asserted at the same point: no optimistic
+      // local copy, so the mirror stays null between the select and the echo.
+      expect(client.activeBorder).toBeNull();
+      client.setActiveBorder(null);
+      expect(outbox.map((p) => JSON.parse(p))).toEqual([
+        { t: 'cmd', cmd: 'deed_set_border', deedId: BORDER_DEED },
+        { t: 'cmd', cmd: 'deed_set_border', deedId: null },
+      ]);
 
-    const server = new GameServer();
-    const fc = fakeWs();
-    const session = joinServer(server, fc, 1, 'Lockstep');
-    const meta = server.sim.players.get(session.pid)!;
-    const e = server.sim.entities.get(session.pid)!;
-    meta.deedsEarned.set(BORDER_DEED, '2026-07-08');
-    server.handleMessage(session, outbox[0]); // the client-built select frame
-    expect(meta.activeBorder).toBe(BORDER_DEED);
-    expect(e.border).toBe(BORDER_DEED);
-    server.handleMessage(session, outbox[1]); // the client-built clear frame
-    expect(meta.activeBorder).toBeNull();
-    expect(e.border).toBeNull();
+      const server = new GameServer();
+      const fc = fakeWs();
+      const session = joinServer(server, fc, 1, 'Lockstep');
+      const meta = server.sim.players.get(session.pid)!;
+      const e = server.sim.entities.get(session.pid)!;
+      meta.deedsEarned.set(BORDER_DEED, '2026-07-08');
+      server.handleMessage(session, outbox[0]); // the client-built select frame
+      expect(meta.activeBorder).toBe(BORDER_DEED);
+      expect(e.border).toBe(BORDER_DEED);
+      server.handleMessage(session, outbox[1]); // the client-built clear frame
+      expect(meta.activeBorder).toBeNull();
+      expect(e.border).toBeNull();
+    } finally {
+      (globalThis as { WebSocket?: unknown }).WebSocket = oldWebSocket;
+    }
   });
 
   it('a null payload through the server dispatch clears the border and echoes null', () => {
@@ -4394,7 +4416,11 @@ describe('weapon skin wire (weaponSkinId)', () => {
 // pins delta keys + self scalars only). End-to-end GameServer liveness plus
 // clone-not-alias live in tests/inspect_instances.test.ts.
 describe('equipped instance wire (eqi)', () => {
-  const inst = { rolled: { masterwork: true, stats: { int: 3, spi: 1 } }, signer: 'Aldric' };
+  const inst = {
+    rolled: { masterwork: true, stats: { int: 3, spi: 1 } },
+    signer: 'Aldric',
+    exclusiveScaled: true as const,
+  };
 
   it('carries eqi through wireEntity only while an instanced piece is worn', () => {
     const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
@@ -4440,7 +4466,7 @@ describe('equipped instance wire (eqi)', () => {
     expect(wired.chest.boundTo).toBeUndefined();
     expect(wired.chest.charges).toBeUndefined();
     expect(wired.chest.bindOnTrade).toBeUndefined();
-    expect(Object.keys(wired.chest).sort()).toEqual(['rolled', 'signer']);
+    expect(Object.keys(wired.chest).sort()).toEqual(['exclusiveScaled', 'rolled', 'signer']);
   });
 
   it('restores equippedInstances from a full record, deep-cloned; an eqi-less full record resets', () => {
@@ -4727,14 +4753,20 @@ describe('online mount command and race-event transport', () => {
     (commandClient as any).entities.set(actor.pid, { level: 20 });
     const owned: MountKey[] = ['grag_bear'];
     (commandClient as any).selfOwnedMounts = owned;
-    commandClient.toggleMounted();
-    commandClient.mountRaceStart();
-    commandClient.mountRaceCancel();
-    expect(outbox.map((payload) => JSON.parse(payload))).toEqual([
-      { t: 'cmd', cmd: 'mount_toggle' },
-      { t: 'cmd', cmd: 'mount_race_start' },
-      { t: 'cmd', cmd: 'mount_race_cancel' },
-    ]);
+    const oldWebSocket = (globalThis as { WebSocket?: unknown }).WebSocket;
+    (globalThis as { WebSocket?: unknown }).WebSocket = { OPEN: 1 };
+    try {
+      commandClient.toggleMounted();
+      commandClient.mountRaceStart();
+      commandClient.mountRaceCancel();
+      expect(outbox.map((payload) => JSON.parse(payload))).toEqual([
+        { t: 'cmd', cmd: 'mount_toggle' },
+        { t: 'cmd', cmd: 'mount_race_start' },
+        { t: 'cmd', cmd: 'mount_race_cancel' },
+      ]);
+    } finally {
+      (globalThis as { WebSocket?: unknown }).WebSocket = oldWebSocket;
+    }
 
     // The toggle no longer summons: reins are items, so an unmounted toggle is a
     // no-op and neither player starts a summon channel from it.
@@ -4919,6 +4951,7 @@ const ALL_DELTA_KEYS = [
   'trade',
   'tslot',
   'vault',
+  'vrat',
   'weapon',
   'xp',
 ] as const;
@@ -5028,6 +5061,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   tfocus: 'townFocus',
   tslot: 'toolEffectSlots',
   vault: 'vaultInfo',
+  vrat: 'versatilityRating',
 };
 
 // Year ~2223 in epoch ms. Beats selfWireJson's `until > Date.now()` lockout
@@ -5914,7 +5948,7 @@ describe('gather node cooldown wire round trip (ncd)', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 90 unique keys in sorted order', () => {
+  it('ALL_DELTA_KEYS contains exactly 91 unique keys in sorted order', () => {
     // +1: guildBank (Guild Bank Phase 2), +1: the battleground bg key, +1: the
     // commission order board's corder key (issue #1298), +1: the character
     // sheet's lifetime played-time key ptime, for 67, then +16: the static
@@ -5940,8 +5974,9 @@ describe('delta-key contract pins (anti-drift)', () => {
     // adds offhandWeapon (delta-guarded like weapon/stats: a gear swap, not a
     // per-tick change; dualWielding rides no key of its own, it is always
     // exactly offhandWeapon !== null, so the client derives it), for 90.
-    expect(ALL_DELTA_KEYS).toHaveLength(90);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(90);
+    // Exclusive versatility rating `vrat` is a sibling of crat/hrat, for 91.
+    expect(ALL_DELTA_KEYS).toHaveLength(91);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(91);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -6024,14 +6059,16 @@ describe('delta-key contract pins (anti-drift)', () => {
     // key ptime for 67, then the 16 static combat-rating/progression scalars
     // (ap/sp/sh/crit/dodge/blk/bval/crat/hrat/hirat/xp/lxp/rxp/prk/copper/ddiff)
     // for 83, then reliq (Reliquary Phase 3 sparse blob) for 84, the nameplate
+    // for 83, then reliq (Reliquary Phase 3 sparse blob) for 84, the nameplate
     // border echo aborder for 85, and the authored modular look `app` for 86.
     // The Vale Cup retirement then removes sport/vcup/vcupb, for 83, and the
     // healPower seam adds the derived Healing Power scalar hpw for 84. Bank
     // Storage Phase 2 then adds bpsl, vault, and cvault, for 87. The
     // maybeSerialized arm of the scrape then surfaces the two capability-gated
     // direct emits, auras and de, for 89. The off-hand bar adds offhandWeapon,
-    // for 90.
-    expect(scraped.size).toBe(90);
+    // for 90. Exclusive versatility rating `vrat` is a sibling of crat/hrat,
+    // for 91.
+    expect(scraped.size).toBe(91);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

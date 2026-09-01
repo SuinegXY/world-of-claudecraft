@@ -65,7 +65,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Weapon - Might',
     itemSlot: 'mainhand',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { str: 2 },
+    statBonus: { str: 10 },
   },
   // #1712 round-3 review: str-only weapon/gloves enchants gave casters (int)
   // zero offensive value from either slot. Same magnitude as the sibling
@@ -75,7 +75,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Weapon - Spellpower',
     itemSlot: 'mainhand',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { int: 2 },
+    statBonus: { int: 10 },
   },
   // Offhand: the missing per-slot basic (#2825). Every shipped offhand item
   // (shields such as eastbrook_buckler, held caster offhands such as
@@ -97,21 +97,21 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Helmet - Fortitude',
     itemSlot: 'helmet',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { sta: 3 },
+    statBonus: { sta: 15 },
   },
   enchant_neck_spirit: {
     id: 'enchant_neck_spirit',
     name: 'Enchant Necklace - Spirit',
     itemSlot: 'neck',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { spi: 3 },
+    statBonus: { spi: 15 },
   },
   enchant_shoulder_agility: {
     id: 'enchant_shoulder_agility',
     name: 'Enchant Shoulders - Agility',
     itemSlot: 'shoulder',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { agi: 2 },
+    statBonus: { agi: 10 },
   },
   enchant_chest_stamina: {
     id: 'enchant_chest_stamina',
@@ -121,14 +121,14 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_dust', count: 3 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { sta: 4 },
+    statBonus: { sta: 20 },
   },
   enchant_waist_stamina: {
     id: 'enchant_waist_stamina',
     name: 'Enchant Belt - Stamina',
     itemSlot: 'waist',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { sta: 3 },
+    statBonus: { sta: 15 },
   },
   enchant_legs_stamina: {
     id: 'enchant_legs_stamina',
@@ -138,35 +138,35 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_dust', count: 3 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { sta: 3 },
+    statBonus: { sta: 15 },
   },
   enchant_gloves_agility: {
     id: 'enchant_gloves_agility',
     name: 'Enchant Gloves - Agility',
     itemSlot: 'gloves',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { agi: 3 },
+    statBonus: { agi: 15 },
   },
   enchant_gloves_intellect: {
     id: 'enchant_gloves_intellect',
     name: 'Enchant Gloves - Spellpower',
     itemSlot: 'gloves',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { int: 3 },
+    statBonus: { int: 15 },
   },
   enchant_feet_agility: {
     id: 'enchant_feet_agility',
     name: 'Enchant Boots - Agility',
     itemSlot: 'feet',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { agi: 2 },
+    statBonus: { agi: 10 },
   },
   enchant_ring_spirit: {
     id: 'enchant_ring_spirit',
     name: 'Enchant Ring - Spirit',
     itemSlot: 'ring',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { spi: 2 },
+    statBonus: { spi: 10 },
   },
 
   // --- Base-tier variety: extra stat-axis options so every build has a
@@ -179,7 +179,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Weapon - Agility',
     itemSlot: 'mainhand',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { agi: 2 },
+    statBonus: { agi: 10 },
   },
   // Helmet: a caster (int) option and a tank (armor) option beside Fortitude.
   enchant_helmet_intellect: {
@@ -190,7 +190,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_dust', count: 3 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { int: 4 },
+    statBonus: { int: 20 },
   },
   enchant_helmet_armor: {
     id: 'enchant_helmet_armor',
@@ -200,7 +200,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_dust', count: 3 },
       { itemId: 'arcane_essence', count: 1 },
     ],
-    statBonus: { armor: 15 },
+    statBonus: { armor: 75 },
   },
   // Necklace: caster (int) and physical (agi) options beside Spirit.
   enchant_neck_intellect: {
@@ -208,14 +208,14 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Necklace - Intellect',
     itemSlot: 'neck',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { int: 2 },
+    statBonus: { int: 10 },
   },
   enchant_neck_agility: {
     id: 'enchant_neck_agility',
     name: 'Enchant Necklace - Agility',
     itemSlot: 'neck',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { agi: 2 },
+    statBonus: { agi: 10 },
   },
   // Shoulders: melee (str) and caster (int) options beside Agility.
   enchant_shoulder_strength: {
@@ -223,14 +223,14 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Shoulders - Strength',
     itemSlot: 'shoulder',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { str: 2 },
+    statBonus: { str: 10 },
   },
   enchant_shoulder_intellect: {
     id: 'enchant_shoulder_intellect',
     name: 'Enchant Shoulders - Intellect',
     itemSlot: 'shoulder',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { int: 2 },
+    statBonus: { int: 10 },
   },
   // Chest: a healer (spi) option and a tank (armor) option beside Stamina.
   enchant_chest_spirit: {
@@ -241,7 +241,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_dust', count: 3 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { spi: 4 },
+    statBonus: { spi: 20 },
   },
   enchant_chest_armor: {
     id: 'enchant_chest_armor',
@@ -251,7 +251,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_dust', count: 3 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { armor: 20 },
+    statBonus: { armor: 100 },
   },
   // Belt: melee (str) and physical (agi) options beside Stamina.
   enchant_waist_strength: {
@@ -259,14 +259,14 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Belt - Strength',
     itemSlot: 'waist',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { str: 3 },
+    statBonus: { str: 15 },
   },
   enchant_waist_agility: {
     id: 'enchant_waist_agility',
     name: 'Enchant Belt - Agility',
     itemSlot: 'waist',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { agi: 3 },
+    statBonus: { agi: 15 },
   },
   // Legs: a caster (int) option beside Stamina.
   enchant_legs_intellect: {
@@ -277,7 +277,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_dust', count: 3 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { int: 4 },
+    statBonus: { int: 20 },
   },
   // Gloves: a melee (str) option beside the existing agi and int.
   enchant_gloves_strength: {
@@ -285,7 +285,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Gloves - Strength',
     itemSlot: 'gloves',
     reagents: [{ itemId: 'arcane_dust', count: 5 }],
-    statBonus: { str: 3 },
+    statBonus: { str: 15 },
   },
   // Boots: a melee (str) option and a tank (sta) option beside Agility.
   enchant_feet_strength: {
@@ -293,14 +293,14 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Boots - Strength',
     itemSlot: 'feet',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { str: 2 },
+    statBonus: { str: 10 },
   },
   enchant_feet_stamina: {
     id: 'enchant_feet_stamina',
     name: 'Enchant Boots - Stamina',
     itemSlot: 'feet',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { sta: 2 },
+    statBonus: { sta: 10 },
   },
   // Ring: str/agi/int options beside Spirit (a ring takes exactly one, and
   // ItemDef.slot 'ring' covers both ring1 and ring2 via resolveEquipSlot).
@@ -309,21 +309,21 @@ export const ENCHANTS: Record<string, EnchantDef> = {
     name: 'Enchant Ring - Strength',
     itemSlot: 'ring',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { str: 2 },
+    statBonus: { str: 10 },
   },
   enchant_ring_agility: {
     id: 'enchant_ring_agility',
     name: 'Enchant Ring - Agility',
     itemSlot: 'ring',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { agi: 2 },
+    statBonus: { agi: 10 },
   },
   enchant_ring_intellect: {
     id: 'enchant_ring_intellect',
     name: 'Enchant Ring - Intellect',
     itemSlot: 'ring',
     reagents: [{ itemId: 'arcane_dust', count: 3 }],
-    statBonus: { int: 2 },
+    statBonus: { int: 10 },
   },
 
   // --- Greater tier: the top-end enchants on the highest-impact slots, one of
@@ -338,7 +338,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_shard', count: 1 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { str: 5 },
+    statBonus: { str: 25 },
   },
   enchant_weapon_greater_spellpower: {
     id: 'enchant_weapon_greater_spellpower',
@@ -348,7 +348,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_shard', count: 1 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { int: 5 },
+    statBonus: { int: 25 },
   },
   enchant_helmet_greater_fortitude: {
     id: 'enchant_helmet_greater_fortitude',
@@ -358,7 +358,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_shard', count: 1 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { sta: 6 },
+    statBonus: { sta: 30 },
   },
   enchant_chest_greater_stamina: {
     id: 'enchant_chest_greater_stamina',
@@ -368,7 +368,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_shard', count: 1 },
       { itemId: 'arcane_essence', count: 3 },
     ],
-    statBonus: { sta: 7 },
+    statBonus: { sta: 35 },
   },
   enchant_legs_greater_stamina: {
     id: 'enchant_legs_greater_stamina',
@@ -378,7 +378,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_shard', count: 1 },
       { itemId: 'arcane_essence', count: 3 },
     ],
-    statBonus: { sta: 6 },
+    statBonus: { sta: 30 },
   },
   enchant_gloves_greater_agility: {
     id: 'enchant_gloves_greater_agility',
@@ -388,7 +388,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_shard', count: 1 },
       { itemId: 'arcane_essence', count: 2 },
     ],
-    statBonus: { agi: 6 },
+    statBonus: { agi: 30 },
   },
 
   // --- Runed tier (Professions 2.0): the ONLY sink for the typed
@@ -407,7 +407,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_essence', count: 2 },
       { itemId: 'resonant_steel', count: 1 },
     ],
-    statBonus: { str: 3 },
+    statBonus: { str: 15 },
   },
   enchant_weapon_runed_focus: {
     id: 'enchant_weapon_runed_focus',
@@ -417,7 +417,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_essence', count: 2 },
       { itemId: 'resonant_timber', count: 1 },
     ],
-    statBonus: { int: 3 },
+    statBonus: { int: 15 },
   },
   enchant_chest_runeweave: {
     id: 'enchant_chest_runeweave',
@@ -427,7 +427,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_essence', count: 2 },
       { itemId: 'resonant_thread', count: 1 },
     ],
-    statBonus: { spi: 5 },
+    statBonus: { spi: 25 },
   },
   enchant_legs_runed_hide: {
     id: 'enchant_legs_runed_hide',
@@ -437,7 +437,7 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_essence', count: 2 },
       { itemId: 'resonant_hide', count: 1 },
     ],
-    statBonus: { agi: 4 },
+    statBonus: { agi: 20 },
   },
   enchant_helmet_runed_links: {
     id: 'enchant_helmet_runed_links',
@@ -447,6 +447,6 @@ export const ENCHANTS: Record<string, EnchantDef> = {
       { itemId: 'arcane_essence', count: 2 },
       { itemId: 'resonant_links', count: 1 },
     ],
-    statBonus: { sta: 5 },
+    statBonus: { sta: 25 },
   },
 };

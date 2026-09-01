@@ -10,7 +10,7 @@
 // mirrored value (`s.X ?? e.X`), the one exception being rangedPower, which
 // falls back to 0 (hunters carry it; every other class has none to omit).
 
-import type { Entity } from '../sim/types';
+import { type Entity, versatilityDamageFractionFromRating } from '../sim/types';
 
 // biome-ignore lint/suspicious/noExplicitAny: mirrors online.ts's own LooseJson wire-record idiom
 export function applySelfCombatScalars(e: Entity, s: any): void {
@@ -32,6 +32,8 @@ export function applySelfCombatScalars(e: Entity, s: any): void {
   // the blankEntity 0. Server-recomputed.
   e.critRating = s.crat ?? e.critRating;
   e.hasteRating = s.hrat ?? e.hasteRating;
+  e.versatilityRating = s.vrat ?? e.versatilityRating;
+  e.versatilityDmgBonus = versatilityDamageFractionFromRating(e.versatilityRating);
   e.hitRating = s.hirat ?? e.hitRating;
   e.weapon = s.weapon ?? e.weapon;
   // offhandWeapon can legitimately BE null (unequipped), so it needs the

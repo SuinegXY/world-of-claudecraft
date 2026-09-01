@@ -13,7 +13,10 @@ export interface NativeLanguageEnv {
 const LOCALE_KEY = 'locale';
 const NATIVE_AUTO_LOCALE_KEY = 'woc_native_auto_locale';
 
-const DEFAULT_REGION_BY_LANGUAGE: Readonly<Record<string, SupportedLanguage>> = {
+// Map a bare language subtag to a candidate game locale. Exclusive CN only ships
+// en + zh_CN; other candidates are still listed so device tags can be generated,
+// then resolveSupportedDeviceLanguage filters them through isSupportedLanguage.
+const DEFAULT_REGION_BY_LANGUAGE: Readonly<Record<string, string>> = {
   cs: 'cs_CZ',
   da: 'da_DK',
   de: 'de_DE',
@@ -129,9 +132,10 @@ export function applyNativeDeviceLanguage(env: NativeLanguageEnv): SupportedLang
   }
 
   if (storedSupportedLanguage(env.storage, NATIVE_AUTO_LOCALE_KEY)) {
-    setLanguage('en');
-    rememberNativeAutoLanguage(env.storage, 'en');
-    return 'en';
+    // Exclusive CN default: fall back to Simplified Chinese, not English.
+    setLanguage('zh_CN');
+    rememberNativeAutoLanguage(env.storage, 'zh_CN');
+    return 'zh_CN';
   }
 
   return null;

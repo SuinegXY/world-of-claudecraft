@@ -148,7 +148,7 @@ const NYTHRAXIS_RAID_ENCOUNTERS: readonly FinderEncounter[] = [
   {
     mobId: 'nythraxis_scourge_of_thornpeak',
     final: true,
-    mechanics: ['gravebreaker', 'raise_fallen', 'soul_rend', 'deathless_rage', 'wardstones'],
+    mechanics: ['gravebreaker', 'raise_fallen', 'soul_rend'],
   },
 ];
 

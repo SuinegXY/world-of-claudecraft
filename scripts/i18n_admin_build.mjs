@@ -29,6 +29,7 @@
 import path from 'node:path';
 import * as esbuild from 'esbuild';
 import { pseudoLocalize } from './i18n_pseudo.mjs';
+import { ALL_LOCALES, SHIP_LOCALES } from './i18n_ship_locales.mjs';
 import { writeModuleDir } from './lib/write_module_dir.mjs';
 
 const root = process.cwd();
@@ -39,32 +40,10 @@ const OUT_DIR = process.env.I18N_OUT_DIR
   ? path.resolve(root, process.env.I18N_OUT_DIR)
   : path.join(root, 'src/admin/i18n.resolved.generated');
 
-// Authoritative ordered locale set (mirrors scripts/i18n_build.mjs LOCALES). `en`
-// is the base; the rest are flat overlays. Drives emit order + supportedLanguages.
-const LOCALES = [
-  'en',
-  'es',
-  'es_ES',
-  'fr_FR',
-  'fr_CA',
-  'en_CA',
-  'it_IT',
-  'de_DE',
-  'zh_CN',
-  'zh_TW',
-  'ko_KR',
-  'ja_JP',
-  'pt_BR',
-  'ru_RU',
-  'cs_CZ',
-  'nl_NL',
-  'pl_PL',
-  'id_ID',
-  'tr_TR',
-  'sv_SE',
-  'vi_VN',
-  'da_DK',
-];
+// Authoritative ordered locale set for DENSE emit. SHIP_LOCALES (en + zh_CN by
+// default on this exclusive fork) drives SUPPORTED_LANGUAGES / LOCALE_LOADERS /
+// translations so the admin SPA only ships those two.
+const LOCALES = ALL_LOCALES;
 
 // Dialect locales resolve through a base (base-resolution model): nested en -> base
 // overlay -> dialect overlay. Mirror of scripts/i18n_build.mjs DIALECT_BASE.
@@ -167,27 +146,23 @@ function emitPendingModule(pending) {
 // static. `en` is the eager base and en_XA is the dev-only pseudo-locale, so neither
 // gets a loader. SUPPORTED_LANGUAGES mirrors the runtime `translations` key set
 // (en + the 13 non-en locales, NOT en_XA). Nothing imports this module.
-function emitLoadersModule(locales) {
+function emitLoadersModule(shipLocales) {
   const lines = [fileBanner(), '', 'export const LOCALE_LOADERS = {'];
-  for (const lang of locales) {
+  for (const lang of shipLocales) {
     if (lang === 'en') continue; // en is eager; en_XA is excluded by construction
     lines.push(`  ${lang}: () => import('./${lang}'),`);
   }
   lines.push('};');
   lines.push('');
   lines.push(
-    `export const SUPPORTED_LANGUAGES = [${locales.map((l) => `'${l}'`).join(', ')}] as const;`,
+    `export const SUPPORTED_LANGUAGES = [${shipLocales.map((l) => `'${l}'`).join(', ')}] as const;`,
   );
   lines.push('');
   return lines.join('\n');
 }
 
-// The back-compat barrel. Re-exports every dense ADMIN locale slice + en_XA + pending
-// and assembles the runtime `translations` map. The key order is the LOCALES list, so
-// Object.keys(translations) is unchanged. Preserves the EXACT import surface
-// src/admin/i18n.ts and the tests expect (directory-index resolution of
-// './i18n.resolved.generated' -> index.ts under moduleResolution "Bundler").
-function emitBarrel(locales) {
+// Re-export every dense ADMIN locale for tests; translations map is ship-scoped.
+function emitBarrel(locales, shipLocales) {
   const lines = [fileBanner(), ''];
   for (const lang of locales) lines.push(`import { ${lang} } from './${lang}';`);
   lines.push('');
@@ -196,15 +171,15 @@ function emitBarrel(locales) {
   lines.push("export { pending } from './pending';");
   lines.push('');
   lines.push('export const translations = {');
-  for (const lang of locales) lines.push(`  ${lang},`);
+  for (const lang of shipLocales) lines.push(`  ${lang},`);
   lines.push('};');
   lines.push('');
   return lines.join('\n');
 }
 
-function computePending(enKeys, locales) {
+function computePending(enKeys, locales, shipLocales) {
   const pending = {};
-  for (const lang of LOCALES) {
+  for (const lang of shipLocales) {
     if (lang === 'en') continue;
     const provided = new Set();
     const own = locales[lang] || {};
@@ -256,7 +231,7 @@ async function main() {
     }
     resolved[lang] = out;
   }
-  const pending = computePending(enKeys, locales);
+  const pending = computePending(enKeys, locales, SHIP_LOCALES);
   // Generate en_XA from the resolved (dense) admin `en` and emit it as a separate
   // dev-only export (never in `translations`).
   const enXA = pseudoLocalize(resolved.en);
@@ -267,13 +242,13 @@ async function main() {
   for (const lang of LOCALES) modules[`${lang}.ts`] = emitLocaleModule(lang, resolved[lang]);
   modules['en_XA.ts'] = emitEnXaModule(enXA);
   modules['pending.ts'] = emitPendingModule(pending);
-  modules['loaders.ts'] = emitLoadersModule(LOCALES);
-  modules['index.ts'] = emitBarrel(LOCALES);
+  modules['loaders.ts'] = emitLoadersModule(SHIP_LOCALES);
+  modules['index.ts'] = emitBarrel(LOCALES, SHIP_LOCALES);
 
   const { totalBytes, rewritten, total } = writeModuleDir(OUT_DIR, modules);
   const pendingTotal = Object.values(pending).reduce((n, ks) => n + ks.length, 0);
   console.log(
-    `generated ${path.relative(root, OUT_DIR)}/ (${LOCALES.length} locales + en_XA pseudo + barrel + loaders + pending, ` +
+    `generated ${path.relative(root, OUT_DIR)}/ (${LOCALES.length} dense, ship=${SHIP_LOCALES.join('+')}, en_XA + barrel + loaders + pending, ` +
       `${enKeys.length} keys, pending=${pendingTotal}, ${totalBytes} bytes, ${rewritten}/${total} rewritten)`,
   );
 }

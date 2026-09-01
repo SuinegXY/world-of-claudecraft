@@ -1128,6 +1128,8 @@ export const VOICE_ALIAS = {
   // Keeper of the Strand tallying shells and salvage: the harbor captain's
   // weathered, water-wise authority.
   tidewarden_nel: 'captain_thessaly',
+  // Exclusive Eastbrook fashion vendor: provisioner register, borrows Wilkes.
+  da_xiong_fashion_welfare_merchant: 'trader_wilkes',
 };
 
 /** Resolve any NPC content id to the id of the voice that should speak for it. */

@@ -52,6 +52,7 @@ export type StatId =
   | 'critRating'
   | 'hasteRating'
   | 'hitRating'
+  | 'versatilityRating'
   | 'parry'
   | 'warfare';
 
@@ -157,6 +158,8 @@ export interface StatTooltipInput {
   hasteRating: number;
   /** entity.hitRating, the accumulated hit rating from gear + set bonuses. */
   hitRating: number;
+  /** entity.versatilityRating, from exclusive secondary affixes on gear. */
+  versatilityRating: number;
   /** The warrior's front-arc parry chance, 0..1 (warriorParryChance from
    *  Strength); every other class stays at 0. */
   parryChance: number;
@@ -377,6 +380,11 @@ export function buildStatTooltip(stat: StatId, input: StatTooltipInput): StatToo
       statValue = input.hitRating;
       break;
     }
+    case 'versatilityRating': {
+      isPrimary = false;
+      statValue = input.versatilityRating;
+      break;
+    }
     case 'warfare': {
       isPrimary = false;
       statValue = stats.pvpOffense * 100;
@@ -544,6 +552,7 @@ export function buildStatSources(stat: StatId, input: StatTooltipInput): StatSou
     case 'critRating':
     case 'hasteRating':
     case 'hitRating':
+    case 'versatilityRating':
     case 'warfare':
       return sources;
   }
